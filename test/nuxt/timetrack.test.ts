@@ -1,10 +1,19 @@
-import { describe, expect, it, test } from 'vitest'
+import { beforeAll, describe, expect, it, test } from 'vitest'
 import type { ITimeTrack } from '~/types/tableTimeTrack'
+import type { ITokenAuth } from '~/types/tokenAuth'
 import { fetchCreateTimeTrack, fetchDeleteTimeTrack, fetchTimeTracks, fetchUpdateTimeTrack } from '~/utils/useFetchTimeTrack'
 
 describe('baserow time tracker', () => {
   let TEST_TT:ITimeTrack
-  const TEST_UID:number = 133013
+  const login = import.meta.env.VITE_BASEROW_LOGIN
+  const mdp = import.meta.env.VITE_BASEROW_MDP
+  let user_id:number = 0
+
+  beforeAll(async () => {
+    const  authUser:ITokenAuth= await fetchSignInUser(login, mdp)
+    useAuthUser().value = authUser
+    user_id = getUserIdFromToken(authUser.token)
+  })
 
   // count all times
   it('count all times form baserow', async () => {
@@ -18,7 +27,7 @@ describe('baserow time tracker', () => {
 
   // count all times for an uid
   it('count all times for an uid', async () => {
-    const tts:ITimeTrack[] = await fetchTimeTracksUid(TEST_UID)
+    const tts:ITimeTrack[] = await fetchTimeTracksUid(user_id)
     console.log("tts="+tts.length)
     tts.forEach(tt => {
       console.log(tt.id,", ",tt.UID, ", ", tt.UID[0].id, ", ", tt.UID[0].name, ", ", tt.Start, ", ", tt.End, ', ', tt.Duration)
@@ -31,26 +40,26 @@ describe('baserow time tracker', () => {
     const now = new Date()
     const ct = {
       "UID":[
-        {"id":TEST_UID}
+        {"id":user_id}
       ],
       "Start": now
     }
     const tt = await fetchCreateTimeTrack(ct as ITimeTrack)
     TEST_TT = tt
     console.log(tt.id,", ",tt.UID, ", ", tt.UID[0].id, ", ", tt.UID[0].name, ", ", tt.Start, ", ", tt.End, ', ', tt.Duration)
-    expect(tt.UID[0].id).toEqual(TEST_UID)
+    expect(tt.UID[0].id).toEqual(user_id)
   })
 
   // read test time track
   it('get one row form baserow', async () => {
     const tt:ITimeTrack = await fetchTimeTrack(1)
     console.log(tt.id,", ",tt.UID, ", ", tt.UID[0].id, ", ", tt.UID[0].name, ", ", tt.Start, ", ", tt.End, ', ', tt.Duration)
-    expect(tt.UID[0].id).toEqual(TEST_UID)
+    expect(tt.UID[0].id).toEqual(user_id)
   })
 
   // get  last open time tracks
   it('get last open time track for an uid', async () => {
-    const tt:ITimeTrack = await fetchLastOpenTimeTrack(TEST_UID)
+    const tt:ITimeTrack = await fetchLastOpenTimeTrack(user_id)
     console.log(tt.id,", ",tt.UID, ", ", tt.UID[0].id, ", ", tt.UID[0].name, ", ", tt.Start, ", ", tt.End, ', ', tt.Duration)
     expect(tt.id).toEqual(TEST_TT.id)
     expect(tt.End).toBeNull()

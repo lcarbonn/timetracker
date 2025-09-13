@@ -32,23 +32,3 @@ export const signOutUser = () :Promise<void> => {
         resolve()
     })
   }
-
-  /**
-   * 
-   * @returns 
-   */
-export const getAuthUserId = (authUser:ITokenAuth) :Promise<ITokenAuth> => {
-    return new Promise((resolve, reject) => {
-        // const authUser = useAuthUser().value
-        if(authUser) {
-            fetchWorkspaceUsers(authUser.token)
-            .then((users) => {
-                users.forEach(user => {
-                    if(user.email==authUser.user.username) authUser.user.user_id = user.user_id
-                    resolve(authUser)
-                });
-            })
-        }
-        // useAuthUser().value = authUser
-    })
-  }

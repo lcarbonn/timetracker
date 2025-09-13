@@ -1,3 +1,4 @@
+import type { IBrConf } from "~/types/baserow";
 import type { ListResponse, ITimeTrack } from "~/types/tableTimeTrack";
 
 /**
@@ -7,6 +8,7 @@ import type { ListResponse, ITimeTrack } from "~/types/tableTimeTrack";
 export const fetchTimeTracks = () : Promise<ITimeTrack[]> => {
   return new Promise((resolve, reject) => {
     const { $baserowConfig } = useNuxtApp()
+    const user = useAuthUser().value
     const config = $baserowConfig as IBrConf
     let uri = `${config.url}/api/database/rows/table/${config.tableTimeTrack}/?user_field_names=true`
     const params = 
@@ -21,7 +23,7 @@ export const fetchTimeTracks = () : Promise<ITimeTrack[]> => {
       {
         query: params,
         headers: {
-          Authorization: `Token ${config.token}`,
+          Authorization: `JWT ${user?.token}`,
         },
       }
     ).then(({data, error}) => {
@@ -42,6 +44,7 @@ export const fetchTimeTracks = () : Promise<ITimeTrack[]> => {
 export const fetchTimeTrack = (id:number) : Promise<ITimeTrack> => {
   return new Promise((resolve, reject) => {
     const { $baserowConfig } = useNuxtApp()
+    const user = useAuthUser().value
     const config = $baserowConfig as IBrConf
     let uri = `${config.url}/api/database/rows/table/${config.tableTimeTrack}/${id}/?user_field_names=true`
    // Use fetch with the runtime config values
@@ -49,7 +52,7 @@ export const fetchTimeTrack = (id:number) : Promise<ITimeTrack> => {
      uri,
      {
        headers: {
-         Authorization: `Token ${config.token}`,
+         Authorization: `JWT ${user?.token}`,
        },
      }
    ).then(({data, error}) => {
@@ -71,6 +74,8 @@ export const fetchTimeTrack = (id:number) : Promise<ITimeTrack> => {
 export const fetchCreateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack> => {
   return new Promise((resolve, reject) => {
     const { $baserowConfig } = useNuxtApp()
+    const user = useAuthUser().value
+
     const config = $baserowConfig as IBrConf
     let uri = `${config.url}/api/database/rows/table/${config.tableTimeTrack}/?user_field_names=true`
    // Use fetch with the runtime config values
@@ -79,7 +84,7 @@ export const fetchCreateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack>
      {
         method:"POST",
         headers: {
-          Authorization: `Token ${config.token}`,
+          Authorization: `JWT ${user?.token}`,
           "Content-Type": "application/json"
         },
         body:JSON.stringify(timeTrack),
@@ -103,6 +108,8 @@ export const fetchCreateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack>
 export const fetchUpdateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack> => {
   return new Promise((resolve, reject) => {
     const { $baserowConfig } = useNuxtApp()
+    const user = useAuthUser().value
+
     const config = $baserowConfig as IBrConf
     let uri = `${config.url}/api/database/rows/table/${config.tableTimeTrack}/${timeTrack.id}/?user_field_names=true`
    // Use fetch with the runtime config values
@@ -111,7 +118,7 @@ export const fetchUpdateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack>
      {
         method:"PATCH",
         headers: {
-          Authorization: `Token ${config.token}`,
+          Authorization: `JWT ${user?.token}`,
           "Content-Type": "application/json"
         },
         body:JSON.stringify(timeTrack),
@@ -135,6 +142,8 @@ export const fetchUpdateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack>
 export const fetchLastOpenTimeTrack = (uid:number) : Promise<ITimeTrack> => {
   return new Promise((resolve, reject) => {
     const { $baserowConfig } = useNuxtApp()
+    const user = useAuthUser().value
+
     const config = $baserowConfig as IBrConf
     let uri = `${config.url}/api/database/rows/table/${config.tableTimeTrack}/?user_field_names=true`
     const params = 
@@ -164,7 +173,7 @@ export const fetchLastOpenTimeTrack = (uid:number) : Promise<ITimeTrack> => {
      {
       query: params,
        headers: {
-         Authorization: `Token ${config.token}`,
+         Authorization: `JWT ${user?.token}`,
        },
      }
    ).then(({data, error}) => {
@@ -186,6 +195,8 @@ export const fetchLastOpenTimeTrack = (uid:number) : Promise<ITimeTrack> => {
 export const fetchDeleteTimeTrack = (id:number) : Promise<number> => {
   return new Promise((resolve, reject) => {
     const { $baserowConfig } = useNuxtApp()
+    const user = useAuthUser().value
+
     const config = $baserowConfig as IBrConf
     let uri = `${config.url}/api/database/rows/table/${config.tableTimeTrack}/${id}/`
    // Use fetch with the runtime config values
@@ -194,7 +205,7 @@ export const fetchDeleteTimeTrack = (id:number) : Promise<number> => {
      {
         method:"DELETE",
         headers: {
-          Authorization: `Token ${config.token}`,
+          Authorization: `JWT ${user?.token}`,
         }
      },
    ).then(({error}) => {
@@ -214,6 +225,8 @@ export const fetchDeleteTimeTrack = (id:number) : Promise<number> => {
 export const fetchTimeTracksUid = (uid:number) : Promise<ITimeTrack[]> => {
   return new Promise((resolve, reject) => {
     const { $baserowConfig } = useNuxtApp()
+    const user = useAuthUser().value
+
     const config = $baserowConfig as IBrConf
     let uri = `${config.url}/api/database/rows/table/${config.tableTimeTrack}/?user_field_names=true`
     const params = 
@@ -238,7 +251,7 @@ export const fetchTimeTracksUid = (uid:number) : Promise<ITimeTrack[]> => {
      {
       query: params,
        headers: {
-         Authorization: `Token ${config.token}`,
+         Authorization: `JWT ${user?.token}`,
        },
      }
    ).then(({data, error}) => {

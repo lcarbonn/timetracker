@@ -1,3 +1,5 @@
+import { SnackMessage } from "~/types/snackMessage"
+
 /**
  * Send message to snackbar
  * @param message - the message
