@@ -121,7 +121,11 @@ export const fetchUpdateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack>
           Authorization: `JWT ${user?.token}`,
           "Content-Type": "application/json"
         },
-        body:JSON.stringify(timeTrack),
+        // body:JSON.stringify(timeTrack),
+        body:{
+          "Start":timeTrack.Start,
+          "End":timeTrack.End
+        }
      },
    ).then(({data, error}) => {
     if(data.value) {
@@ -220,9 +224,10 @@ export const fetchDeleteTimeTrack = (id:number) : Promise<number> => {
 /**
  * Get trime tracks for an uid
  * @param uid, the uid
+ * @param year, the year
  * @returns Promise - the time trak or the error
  */
-export const fetchTimeTracksUid = (uid:number) : Promise<ITimeTrack[]> => {
+export const fetchTimeTracksUid = (uid:number, year:number) : Promise<ITimeTrack[]> => {
   return new Promise((resolve, reject) => {
     const { $baserowConfig } = useNuxtApp()
     const user = useAuthUser().value
@@ -241,6 +246,11 @@ export const fetchTimeTracksUid = (uid:number) : Promise<ITimeTrack[]> => {
               field:"UID",
               type: "multiple_collaborators_has",
               value: uid
+            },
+            {
+              field:"Year",
+              type: "equal",
+              value: year
             }
           ]
         }

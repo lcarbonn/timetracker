@@ -23,7 +23,6 @@
       :per-page="perPage">
       <template #cell(id)="data">
         <BButton class="mx-1" @click="deleteTrack(data.item as ITimeTrack)" size="sm" ><Trash/></BButton>
-        <!-- <BButton @click="copyFacture(data.item as IFacture)" size="sm"><Copy/></BButton> -->
       </template>
       <template #table-busy>
         <div class="text-center text-danger my-2">
@@ -39,9 +38,7 @@
 import type { TableField } from 'bootstrap-vue-next';
 
   // icons
-  import Pen from '~icons/bi/pen'
   import Trash from '~icons/bi/trash'
-  import Copy from '~icons/bi/copy'
 import type { ITimeTrack } from '~/types/tableTimeTrack';
 
   // props
@@ -104,7 +101,7 @@ import type { ITimeTrack } from '~/types/tableTimeTrack';
      * @param item - The track
      */
     const getFormatedDate = (date:Date, item:any) : string => {
-    let text = "not yet competed"
+    let text = "not yet completed"
     if(date) {
       const start = new Date(date)
       text = start.toLocaleDateString() +" - "+start.toLocaleTimeString()
@@ -125,8 +122,4 @@ import type { ITimeTrack } from '~/types/tableTimeTrack';
     const deleteTrack = (track:ITimeTrack) => {
       emit('deleteTrack', track)
     }
-
-    // const copyFacture = (facture:IFacture) => {
-    //   emit('copyFacture', facture)
-    // } 
 </script>

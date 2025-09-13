@@ -3,7 +3,7 @@
       <BCard :title="authUser?.user.first_name">
         <BButton v-if="track && !track.End" class="m-3" @click="closeTrack">Stop track</BButton>
         <BButton v-else class="m-3" variant="primary" @click="openTrack">Start track</BButton>
-        <BCardText v-if="track"> Start : {{ startDate }}</BCardText>
+        <BCardText v-if="track"> Track started at : {{ startDate }}</BCardText>
       </BCard>
       <DomainTimeTracksTable :tracks="tracks" @delete-track="deleteTrack"/>
       <BModal v-model="modal" title="Delete track" @ok="confirmDelete"> Really ? </BModal>
@@ -43,7 +43,7 @@ import type { ITimeTrack } from '~/types/tableTimeTrack'
   // methods
   const openTrack = () => {
     if(authUser.value) {
-      openTimeTrack(authUser.value?.user.user_id)
+      openTimeTrack(authUser.value.user.user_id)
     }
   }
 

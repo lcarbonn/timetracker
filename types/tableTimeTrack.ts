@@ -14,6 +14,7 @@ export interface ITimeTrack {
   Start:Date
   End:Date
   Duration:number
+  Year:number
 }
 
 export interface ListResponse {
