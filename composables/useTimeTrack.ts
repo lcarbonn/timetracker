@@ -4,7 +4,7 @@ import type { ITimeTrack } from "~/types/tableTimeTrack"
  * get all times for the user and set state
  */
 export const getStateTimeTracksUid = (user_id:number) => {
-    fetchTimeTracksUid(user_id).then((list) => {
+    fetchTimeTracksUid(user_id, useYear().value).then((list) => {
         useTimeTracks().value = list
     })
 }

@@ -2,9 +2,11 @@
     <div>
       <BCard :title="authUser?.user.first_name">
         <BButton v-if="track && !track.End" class="m-3" @click="closeTrack">Stop track</BButton>
-        <BButton v-else class="m-3" variant="primary" @click="openTrack">Start track</BButton>
+        <BButton v-else class="m-3" @click="openTrack">Start track</BButton>
         <BCardText v-if="track"> Track started at : {{ startDate }}</BCardText>
+        <BCardText> for year : {{ year }}</BCardText>
       </BCard>
+      <DomainTimeTracksFilter @emit-filter="emitFilter"></DomainTimeTracksFilter>
       <DomainTimeTracksTable :tracks="tracks" @delete-track="deleteTrack"/>
       <BModal v-model="modal" title="Delete track" @ok="confirmDelete"> Really ? </BModal>
 
@@ -14,6 +16,9 @@
 <script setup lang="ts">
 import type { ITimeTrack } from '~/types/tableTimeTrack'
 
+  // const
+  const year:number = new Date().getFullYear()
+  useYear().value = year
 
   // local refs
   const authUser = useAuthUser()
@@ -60,6 +65,10 @@ import type { ITimeTrack } from '~/types/tableTimeTrack'
   const confirmDelete = () => {
     if(track4Delete.value) deleteStateTrack(track4Delete.value)
     track4Delete.value = null
+  }
+
+  const emitFilter = () => {
+    if(authUser.value) getStateTimeTracksUid(authUser.value.user.user_id)
   }
 
 </script>

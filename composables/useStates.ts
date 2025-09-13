@@ -20,3 +20,8 @@ export const useTimeTracks = () => useState<ITimeTrack[]>("timeTracks");
  * State for Time Track
  */
 export const useTimeTrack = () => useState<ITimeTrack|undefined>("timeTrack");
+
+/**
+ * State for year
+ */
+export const useYear = () => useState<number>("year");
