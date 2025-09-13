@@ -2,6 +2,9 @@
   <div>
     <BRow>
       <BCol lg="4" class="my-1">
+          <DomainTimeTracksFilter @emit-filter="emitFilter"></DomainTimeTracksFilter>
+      </BCol>
+      <BCol lg="4" class="my-1">
         <BPagination
               v-model="currentPage"
               :total-rows="totalRows"
@@ -50,7 +53,7 @@ import type { ITimeTrack } from '~/types/tableTimeTrack';
   })
 
   // // emits declaration
-  const emit = defineEmits(['deleteTrack'])
+  const emit = defineEmits(['deleteTrack', 'emitFilter'])
 
   // const fields
   const fields = [
@@ -122,4 +125,9 @@ import type { ITimeTrack } from '~/types/tableTimeTrack';
     const deleteTrack = (track:ITimeTrack) => {
       emit('deleteTrack', track)
     }
+
+    const emitFilter = () => {
+      emit('emitFilter')
+    }
+
 </script>

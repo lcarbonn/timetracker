@@ -1,13 +1,13 @@
 <template>
     <div>
       <BCard :title="authUser?.user.first_name">
-        <BButton v-if="track && !track.End" class="m-3" @click="closeTrack">Stop track</BButton>
+        <BButton v-if="track && !track.End" class="m-3" @click="closeTrack">End track</BButton>
         <BButton v-else class="m-3" @click="openTrack">Start track</BButton>
         <BCardText v-if="track"> Track started at : {{ startDate }}</BCardText>
-        <BCardText> for year : {{ year }}</BCardText>
       </BCard>
-      <DomainTimeTracksFilter @emit-filter="emitFilter"></DomainTimeTracksFilter>
-      <DomainTimeTracksTable :tracks="tracks" @delete-track="deleteTrack"/>
+      <BCard title="Your Tracks">
+        <DomainTimeTracksTable :tracks="tracks" @delete-track="deleteTrack" @emit-filter="emitFilter"/>
+      </BCard>
       <BModal v-model="modal" title="Delete track" @ok="confirmDelete"> Really ? </BModal>
 
     </div>

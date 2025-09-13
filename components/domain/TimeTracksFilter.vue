@@ -1,10 +1,11 @@
 <template>
   <div>
-    <BRow>
-      <BCol lg="4" class="my-1">
+    <!-- <BRow>
+      <BCol lg="4" class="my-1"> -->
         <BFormGroup
-          label="Year"
+          label="Filter on Year :"
           label-for="filter-year"
+          label-cols-sm="4"
         >
           <BInputGroup size="sm">
             <BFormSelect
@@ -21,8 +22,8 @@
             </template>
           </BInputGroup>
         </BFormGroup>
-      </BCol>
-    </BRow>
+      <!-- </BCol>
+    </BRow> -->
   </div>
 </template>
 
