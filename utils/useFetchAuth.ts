@@ -1,3 +1,4 @@
+import type { IBrConf } from "~/types/baserow";
 import type { ITokenAuth } from "~/types/tokenAuth";
 
 /**

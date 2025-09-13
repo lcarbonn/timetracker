@@ -1,3 +1,4 @@
+import type { ISnackMessage } from "~/types/snackMessage";
 import type { ITimeTrack } from "~/types/tableTimeTrack";
 import type { ITokenAuth } from "~/types/tokenAuth";
 

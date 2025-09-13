@@ -9,7 +9,7 @@
               size="sm"></BPagination>
       </BCol>
       <BCol lg="4" class="my-1">
-        <span>Total Hours : {{ totalHours }}</span>
+        <span>Total Hours : <b>{{ totalHours }}</b></span>
       </BCol>
     </BRow>    
 
@@ -21,11 +21,10 @@
       :items="tracks"
       :current-page="currentPage"
       :per-page="perPage">
-      <!-- <template #cell(id)="data">
-        <BButton @click="navigateTo('/facture/'+data.value)" size="sm" tilte="Détail"><Pen/></BButton>
-        <BButton class="mx-1" @click="deleteFacture(data.item as IFacture)" size="sm" ><Trash/></BButton>
-        <BButton @click="copyFacture(data.item as IFacture)" size="sm"><Copy/></BButton>
-      </template> -->
+      <template #cell(id)="data">
+        <BButton class="mx-1" @click="deleteTrack(data.item as ITimeTrack)" size="sm" ><Trash/></BButton>
+        <!-- <BButton @click="copyFacture(data.item as IFacture)" size="sm"><Copy/></BButton> -->
+      </template>
       <template #table-busy>
         <div class="text-center text-danger my-2">
           <BSpinner class="align-middle" />
@@ -54,7 +53,7 @@ import type { ITimeTrack } from '~/types/tableTimeTrack';
   })
 
   // // emits declaration
-  // const emit = defineEmits(['deleteFacture', 'copyFacture'])
+  const emit = defineEmits(['deleteTrack'])
 
   // const fields
   const fields = [
@@ -78,10 +77,10 @@ import type { ITimeTrack } from '~/types/tableTimeTrack';
         key: 'Duration',
         label: 'Duration',
       },
-      // {
-      //   key: 'id',
-      //   label: 'Actions'
-      //   }
+      {
+        key: 'id',
+        label: 'Actions'
+        }
     ]
 
     // local ref
@@ -93,9 +92,9 @@ import type { ITimeTrack } from '~/types/tableTimeTrack';
     // nuxt cycle hook
     watch(() => props.tracks, async(newTracks) => {
       if(newTracks) {
-              // totalRows.value = newFactures.length
-              totalHours.value = sumTotalHours(newTracks)
-            }
+          totalRows.value = newTracks.length
+          totalHours.value = sumTotalHours(newTracks)
+        }
       }
     )
 
@@ -123,9 +122,9 @@ import type { ITimeTrack } from '~/types/tableTimeTrack';
       return sum.toLocaleString()
     }
 
-    // const deleteFacture = (facture:IFacture) => {
-    //   emit('deleteFacture', facture)
-    // }
+    const deleteTrack = (track:ITimeTrack) => {
+      emit('deleteTrack', track)
+    }
 
     // const copyFacture = (facture:IFacture) => {
     //   emit('copyFacture', facture)

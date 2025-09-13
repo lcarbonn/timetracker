@@ -1,7 +1,7 @@
 import type { ITimeTrack } from "~/types/tableTimeTrack"
 
 /**
- * get all times and set state
+ * get all times for the user and set state
  */
 export const getStateTimeTracksUid = (user_id:number) => {
     fetchTimeTracksUid(user_id).then((list) => {
@@ -32,6 +32,9 @@ export const openTimeTrack = (user_id:number) => {
       const authUser = useAuthUser().value
       if(authUser) getStateTimeTracksUid(authUser.user.user_id)      
     })
+    .catch((error) => {
+        useTimeTrack().value = undefined
+    })
 }
 
 export const closeTimeTrack = (id:number) => {
@@ -45,4 +48,18 @@ export const closeTimeTrack = (id:number) => {
       const authUser = useAuthUser().value
       if(authUser) getStateTimeTracksUid(authUser.user.user_id)      
     })
+    .catch((error) => {
+        useTimeTrack().value = undefined
+    })
+}
+
+export const deleteStateTrack = (track:ITimeTrack) => {
+    fetchDeleteTimeTrack(track.id)
+    .then ((tt) => {
+      const authUser = useAuthUser().value
+      if(authUser) getStateTimeTracksUid(authUser.user.user_id)      
+    })
+  if(useTimeTrack().value?.id == track.id) {
+    useTimeTrack().value = undefined
+  }
 }
