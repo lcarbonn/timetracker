@@ -65,7 +65,7 @@
   const signOut = async () => {
     show.value = false
     signOutUser()
-    await navigateTo('/')
+    await navigateTo('/login')
   }
 
 </script>

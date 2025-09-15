@@ -1,6 +1,6 @@
 <template>
     <div>
-      <BCard :title="authUser?.user.first_name">
+      <BCard :title="'Time Tracks for ' + authUser?.user.first_name" body-class="text-center">
         <BButton v-if="track && !track.End" class="m-3" @click="closeTrack">End track</BButton>
         <BButton v-else class="m-3" @click="openTrack">Start track</BButton>
         <BCardText v-if="track"> Track started at : {{ startDate }}</BCardText>
@@ -16,6 +16,10 @@
 <script setup lang="ts">
 import type { ITimeTrack } from '~/types/tableTimeTrack'
 
+  // middleware
+  definePageMeta({
+    middleware: 'auth'
+  })
   // const
   const year:number = new Date().getFullYear()
   useYear().value = year

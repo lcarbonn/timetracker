@@ -4,8 +4,7 @@
     <div>
       <BaseNavBar></BaseNavBar>
       <BaseSnackToast></BaseSnackToast>
-      <BaseLoginForm v-if="!authUser"/>
-      <BContainer v-if="authUser">
+      <BContainer>
         <NuxtPage />
       </BContainer>
     </div>
@@ -19,9 +18,6 @@
   // imports
   import { name, version } from '~/package.json';
 
-  // state ref
-  const authUser = useAuthUser()
-  
   // nuxt cycle hooks
   onMounted(() => {
     console.log("starting app : "+name + ", appVersion:" +version)

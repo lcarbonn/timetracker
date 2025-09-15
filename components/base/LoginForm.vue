@@ -46,10 +46,13 @@
     // emits declaration
     const emit = defineEmits(['submit', 'resetPassword'])
 
-    const onSubmit = (event:Event) => {
+    const onSubmit = async (event:Event) => {
         event.preventDefault()
         if(form.value.email && form.value.password) {
-            signInUser(form.value.email, form.value.password)
+            await signInUser(form.value.email, form.value.password)
+            .then(() => {
+                navigateTo('/')
+            })
         }
     }
 
