@@ -12,12 +12,14 @@ describe('baserow time tracker', () => {
   let TEST_TT:ITimeTrack
   const login = import.meta.env.VITE_BASEROW_LOGIN
   const mdp = import.meta.env.VITE_BASEROW_MDP
-  let user_id:number = 0
 
-  beforeAll(async () => {
-    const  authUser:ITokenAuth= await fetchSignInUser(login, mdp)
-    useAuthUser().value = authUser
-    user_id = getUserIdFromToken(authUser.token)
+  let tokenAuth:ITokenAuth
+  let user_id:number
+
+  beforeAll( async () => {
+    // TODO : get env for server
+    tokenAuth = await fetchSignInUser(login, mdp)
+    user_id = tokenAuth.user.id
   })
 
   // count all times

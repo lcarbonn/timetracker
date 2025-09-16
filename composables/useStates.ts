@@ -1,11 +1,5 @@
 import type { ISnackMessage } from "~/types/snackMessage";
 import type { ITimeTrack } from "~/types/tableTimeTrack";
-import type { ITokenAuth } from "~/types/tokenAuth";
-
-/**
- * State for AuthUser
- */
-export const useAuthUser = () => useState<ITokenAuth|undefined>("authUser");
 /**
  * State for snackbar message
  */

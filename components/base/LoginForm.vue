@@ -1,16 +1,16 @@
 <template>
     <BContainer>
         <BCard>
-            <BForm @submit="onSubmit">
+            <BForm @submit.prevent="login">
                 <BFormGroup
                     id="input-email"
                     label="Email address:"
                     label-for="email"
-                    description="We'll never share your email with anyone else."
+                    description="You're baserow credentials"
                     >
                     <BFormInput
                         id="email"
-                        v-model="form.email"
+                        v-model="credentials.email"
                         type="email"
                         placeholder="Enter email"
                         autocomplete="false"
@@ -23,7 +23,7 @@
                     >
                     <BFormInput
                         id="password"
-                        v-model="form.password"
+                        v-model="credentials.password"
                         type="password"
                         placeholder="Enter password"
                         autocomplete="false"
@@ -36,29 +36,18 @@
     </BContainer>
 </template>
 <script setup lang="ts">
-
+    const { loggedIn, user, fetch: refreshSession } = useUserSession()
     //local ref
-    const form = ref({
-        email: null,
-        password: null,
+    const credentials = reactive({
+        email: '',
+        password: '',
     })
 
     // emits declaration
-    const emit = defineEmits(['submit', 'resetPassword'])
+    const emit = defineEmits(['submit'])
 
-    const onSubmit = async (event:Event) => {
-        event.preventDefault()
-        if(form.value.email && form.value.password) {
-            await signInUser(form.value.email, form.value.password)
-            .then(() => {
-                navigateTo('/')
-            })
-        }
+    const login = async () => {
+        // TODO : emit to login page and move code to useAuthUSer
+        signInUser(credentials.email, credentials.password)
     }
-
-    // // const methods
-    // const resetPassword = () => {
-    //     if(form.value.email) sendPasswordReset(form.value.email)
-    // }
-
 </script>

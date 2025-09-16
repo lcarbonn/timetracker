@@ -21,7 +21,8 @@ export default defineNuxtConfig({
     '@bootstrap-vue-next/nuxt',
     'unplugin-icons/nuxt',
     '@vite-pwa/nuxt',
-    '@nuxt/test-utils/module'
+    '@nuxt/test-utils/module',
+    "nuxt-auth-utils"
   ],
 
   css: [

@@ -31,20 +31,21 @@
 
 <script setup lang="ts">
 
+  // get user session
+  const { loggedIn, user, clear: clearSession } = useUserSession()
+
   // icons
   import Person from '~icons/bi/person'
   
   //local ref
   const show = ref(false)
-  // global states
-  const authUser = useAuthUser()
 
   // computed properties
   const isConnected = computed(() => {
-    return !!authUser.value?.user
+    return loggedIn.value
   })
   const userEmail = computed(() => {
-    return authUser.value?.user.username
+    return user.value?.username
   })
   const baseId = computed(() => {
     return import.meta.env.VITE_BASEROW_BASE_ID
@@ -56,15 +57,11 @@
     return import.meta.env.VITE_BASEROW_TIMETRACK
   })
 
-  //   // methods
-  // const resetFilter = () => {
-  //   resetStatedFilter()
-  // }
-
   // methods
   const signOut = async () => {
     show.value = false
-    signOutUser()
+    // signOutUser()
+    await clearSession()
     await navigateTo('/login')
   }
 

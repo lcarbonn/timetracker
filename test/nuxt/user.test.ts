@@ -1,23 +1,23 @@
-import { describe, expect, it } from 'vitest'
+import { beforeAll, describe, expect, it } from 'vitest'
 import type { ITokenAuth } from '~/types/tokenAuth'
-import { getUserIdFromToken } from '~/utils/jwtDecoder'
+import { fetchSignInUser } from '~/utils/useFetchAuth'
 
-describe('baserow user', () => {
+describe('baserow user', async () => {
   const login = import.meta.env.VITE_BASEROW_LOGIN
   const mdp = import.meta.env.VITE_BASEROW_MDP
+  let tokenAuth:ITokenAuth
+
+  beforeAll( async () => {
+    // TODO : get env for server
+    tokenAuth = await fetchSignInUser(login, mdp)
+  })
 
   // login
   it('login to baserow', async () => {
-    const  authUser:ITokenAuth= await fetchSignInUser(login, mdp)
-    console.log("firstName:", authUser.user.first_name, ", userName", authUser.user.username, ", language", authUser.user.language)
-    console.log("token:", authUser.token, ", access_token:", authUser.access_token, ", refresh_token:", authUser.refresh_token)
-    expect(authUser.user.username).toEqual(login)
-  })
+    console.log("firstName:", tokenAuth.user.first_name, ", userName", tokenAuth.user.username, ", language", tokenAuth.user.language)
+    console.log("token:", tokenAuth.token, ", access_token:", tokenAuth.access_token, ", refresh_token:", tokenAuth.refresh_token)
+    expect(tokenAuth.user.username).toEqual(login)
+    expect(tokenAuth.user.id).toEqual(133013)
 
-  it('get user id', async () => {
-    const  authUser:ITokenAuth= await fetchSignInUser(login, mdp)
-    const user_id = getUserIdFromToken(authUser.token)
-    console.log("user_id:", user_id)
-    expect(user_id).toEqual(133013)
   })
 })

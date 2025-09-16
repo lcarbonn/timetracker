@@ -1,0 +1,14 @@
+import { fetchLastOpenTimeTrack} from '~/utils/useFetchTimeTrack'
+
+export default defineEventHandler(async (event) => {
+  try {
+    const { user } = await requireUserSession(event)
+
+    const timeTrack = await fetchLastOpenTimeTrack(user.id)
+    
+    return (timeTrack)
+  } catch (error) {
+    console.error(error)
+    return (error)    
+  }
+})

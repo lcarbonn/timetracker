@@ -1,5 +1,4 @@
-import type { IBrConf } from "~/types/baserow";
-import type { ITokenAuth } from "~/types/tokenAuth";
+import type { IBaserowAuth } from "~/types/baserowAuth";
 
 /**
  * Sign in user with email and password
@@ -7,27 +6,18 @@ import type { ITokenAuth } from "~/types/tokenAuth";
  * @param password - the password
  * @returns A Promise that resolve the auth user
  */
-export const fetchSignInUser = (email:string, password:string) :Promise<ITokenAuth> => {
-  return new Promise((resolve, reject) => {
-    const { $baserowConfig } = useNuxtApp()
-    const config = $baserowConfig as IBrConf
-    let uri = `${config.url}/api/user/token-auth/`
-    // Use fetch with the runtime config values
-    useFetch<ITokenAuth>(
-      uri,
-      {
-        method:"POST",
-        body: {
-          email:email,
-          password:password
+export const fetchSignInUser = async (email:string, password:string) :Promise<IBaserowAuth> => {
+    const url = import.meta.env.VITE_BASEROW_URL
+    const uri = `${url}/api/user/token-auth/`
+    const tokenAuth = await $fetch<IBaserowAuth>(
+        uri,
+        {
+          method:"POST",
+          body: {
+            email:email,
+            password:password
+          }
         }
-      }
-    ).then(({data, error}) => {
-      if(data.value)
-        resolve(data.value)
-      if(error.value)
-        reject(error)
-    }
     )
-  })
+  return tokenAuth
 }

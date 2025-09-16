@@ -1,4 +1,3 @@
-import type { IBrConf } from "~/types/baserow";
 import type { ListResponse, ITimeTrack } from "~/types/tableTimeTrack";
 
 /**
@@ -7,10 +6,11 @@ import type { ListResponse, ITimeTrack } from "~/types/tableTimeTrack";
  */
 export const fetchTimeTracks = () : Promise<ITimeTrack[]> => {
   return new Promise((resolve, reject) => {
-    const { $baserowConfig } = useNuxtApp()
-    const user = useAuthUser().value
-    const config = $baserowConfig as IBrConf
-    let uri = `${config.url}/api/database/rows/table/${config.tableTimeTrack}/?user_field_names=true`
+    const url = import.meta.env.VITE_BASEROW_URL
+    const tableTimeTrack = import.meta.env.VITE_BASEROW_TIMETRACK
+    const token = import.meta.env.VITE_BASEROW_TOKEN
+
+    let uri = `${url}/api/database/rows/table/${tableTimeTrack}/?user_field_names=true`
     const params = 
       {
         page:1,
@@ -18,21 +18,21 @@ export const fetchTimeTracks = () : Promise<ITimeTrack[]> => {
         order_by:'-UID'
       }
     // Use fetch with the runtime config values
-    useFetch<ListResponse>(
+    $fetch<ListResponse>(
       uri,
       {
         query: params,
         headers: {
-          Authorization: `JWT ${user?.token}`,
+          //Authorization: `JWT ${user?.token}`,
+          Authorization: `Token ${token}`
         },
       }
-    ).then(({data, error}) => {
-      if(data.value)
-        resolve(data.value.results)
-      if(error.value)
-        reject(error)
-    }
-    )
+    ).then((res) => {
+        resolve(res.results)
+    })
+   .catch((error) => {
+     reject(error)
+   })
   })
 }
 
@@ -43,26 +43,24 @@ export const fetchTimeTracks = () : Promise<ITimeTrack[]> => {
  */
 export const fetchTimeTrack = (id:number) : Promise<ITimeTrack> => {
   return new Promise((resolve, reject) => {
-    const { $baserowConfig } = useNuxtApp()
-    const user = useAuthUser().value
-    const config = $baserowConfig as IBrConf
-    let uri = `${config.url}/api/database/rows/table/${config.tableTimeTrack}/${id}/?user_field_names=true`
+    const url = import.meta.env.VITE_BASEROW_URL
+    const tableTimeTrack = import.meta.env.VITE_BASEROW_TIMETRACK
+    const token = import.meta.env.VITE_BASEROW_TOKEN
+    let uri = `${url}/api/database/rows/table/${tableTimeTrack}/${id}/?user_field_names=true`
    // Use fetch with the runtime config values
-   useFetch<ITimeTrack>(
+   $fetch<ITimeTrack>(
      uri,
      {
        headers: {
-         Authorization: `JWT ${user?.token}`,
+         Authorization: `Token ${token}`
        },
      }
-   ).then(({data, error}) => {
-    if(data.value) {
-      resolve(data.value)
-    }
-    if(error.value)
-      reject(error)
-   }
-  )
+   ).then((data) => {
+        resolve(data)
+    })
+   .catch((error) => {
+     reject(error)
+   })
   })
 }
 
@@ -73,30 +71,27 @@ export const fetchTimeTrack = (id:number) : Promise<ITimeTrack> => {
  */
 export const fetchCreateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack> => {
   return new Promise((resolve, reject) => {
-    const { $baserowConfig } = useNuxtApp()
-    const user = useAuthUser().value
-
-    const config = $baserowConfig as IBrConf
-    let uri = `${config.url}/api/database/rows/table/${config.tableTimeTrack}/?user_field_names=true`
+    const url = import.meta.env.VITE_BASEROW_URL
+    const tableTimeTrack = import.meta.env.VITE_BASEROW_TIMETRACK
+    const token = import.meta.env.VITE_BASEROW_TOKEN
+    let uri = `${url}/api/database/rows/table/${tableTimeTrack}/?user_field_names=true`
    // Use fetch with the runtime config values
-   useFetch<ITimeTrack>(
+   $fetch<ITimeTrack>(
     uri,
      {
         method:"POST",
         headers: {
-          Authorization: `JWT ${user?.token}`,
+          Authorization: `Token ${token}`,
           "Content-Type": "application/json"
         },
         body:JSON.stringify(timeTrack),
      },
-   ).then(({data, error}) => {
-    if(data.value) {
-      resolve(data.value)
-    }
-    if(error.value)
-      reject(error)
-   }
-  )
+   ).then((res) => {
+        resolve(res)
+   })
+   .catch((error) => {
+     reject(error)
+   })
   })
 }
 
@@ -107,34 +102,30 @@ export const fetchCreateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack>
  */
 export const fetchUpdateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack> => {
   return new Promise((resolve, reject) => {
-    const { $baserowConfig } = useNuxtApp()
-    const user = useAuthUser().value
-
-    const config = $baserowConfig as IBrConf
-    let uri = `${config.url}/api/database/rows/table/${config.tableTimeTrack}/${timeTrack.id}/?user_field_names=true`
+    const url = import.meta.env.VITE_BASEROW_URL
+    const tableTimeTrack = import.meta.env.VITE_BASEROW_TIMETRACK
+    const token = import.meta.env.VITE_BASEROW_TOKEN
+    let uri = `${url}/api/database/rows/table/${tableTimeTrack}/${timeTrack.id}/?user_field_names=true`
    // Use fetch with the runtime config values
-   useFetch<ITimeTrack>(
+   $fetch<ITimeTrack>(
     uri,
      {
         method:"PATCH",
         headers: {
-          Authorization: `JWT ${user?.token}`,
+          Authorization: `Token ${token}`,
           "Content-Type": "application/json"
         },
-        // body:JSON.stringify(timeTrack),
         body:{
           "Start":timeTrack.Start,
           "End":timeTrack.End
         }
      },
-   ).then(({data, error}) => {
-    if(data.value) {
-      resolve(data.value)
-    }
-    if(error.value)
-      reject(error)
-   }
-  )
+   ).then((res) => {
+      resolve(res)
+   })
+   .catch((error) => {
+     reject(error)
+   })
   })
 }
 
@@ -145,11 +136,10 @@ export const fetchUpdateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack>
  */
 export const fetchLastOpenTimeTrack = (uid:number) : Promise<ITimeTrack> => {
   return new Promise((resolve, reject) => {
-    const { $baserowConfig } = useNuxtApp()
-    const user = useAuthUser().value
-
-    const config = $baserowConfig as IBrConf
-    let uri = `${config.url}/api/database/rows/table/${config.tableTimeTrack}/?user_field_names=true`
+    const url = import.meta.env.VITE_BASEROW_URL
+    const tableTimeTrack = import.meta.env.VITE_BASEROW_TIMETRACK
+    const token = import.meta.env.VITE_BASEROW_TOKEN
+    let uri = `${url}/api/database/rows/table/${tableTimeTrack}/?user_field_names=true`
     const params = 
       {
         page:1,
@@ -172,22 +162,21 @@ export const fetchLastOpenTimeTrack = (uid:number) : Promise<ITimeTrack> => {
         }
       }
    // Use fetch with the runtime config values
-   useFetch<ListResponse>(
+   $fetch<ListResponse>(
      uri,
      {
       query: params,
        headers: {
-         Authorization: `JWT ${user?.token}`,
+         Authorization: `Token ${token}`,
        },
      }
-   ).then(({data, error}) => {
-    if(data.value) {
-      resolve(data.value.results[0])
+   ).then((res) => {
+      resolve(res.results[0])
     }
-    if(error.value)
-      reject(error)
-   }
   )
+   .catch((error) => {
+     reject(error)
+   })
   })
 }
 
@@ -198,42 +187,41 @@ export const fetchLastOpenTimeTrack = (uid:number) : Promise<ITimeTrack> => {
  */
 export const fetchDeleteTimeTrack = (id:number) : Promise<number> => {
   return new Promise((resolve, reject) => {
-    const { $baserowConfig } = useNuxtApp()
-    const user = useAuthUser().value
-
-    const config = $baserowConfig as IBrConf
-    let uri = `${config.url}/api/database/rows/table/${config.tableTimeTrack}/${id}/`
+    const url = import.meta.env.VITE_BASEROW_URL
+    const tableTimeTrack = import.meta.env.VITE_BASEROW_TIMETRACK
+    const token = import.meta.env.VITE_BASEROW_TOKEN
+    let uri = `${url}/api/database/rows/table/${tableTimeTrack}/${id}/`
    // Use fetch with the runtime config values
-   useFetch(
+   $fetch(
     uri,
      {
         method:"DELETE",
         headers: {
-          Authorization: `JWT ${user?.token}`,
+          Authorization: `Token ${token}`,
         }
      },
-   ).then(({error}) => {
-    if(error.value)
-      reject(error)
-    else resolve(id)
-   }
-  )
+   ).then(() => {
+    resolve(id)
+   })
+   .catch((error) => {
+     reject(error)
+   })
   })
 }
 
 /**
- * Get trime tracks for an uid
+ * Get trime tracks for an uid for a year
  * @param uid, the uid
  * @param year, the year
  * @returns Promise - the time trak or the error
  */
 export const fetchTimeTracksUid = (uid:number, year:number) : Promise<ITimeTrack[]> => {
   return new Promise((resolve, reject) => {
-    const { $baserowConfig } = useNuxtApp()
-    const user = useAuthUser().value
+    const url = import.meta.env.VITE_BASEROW_URL
+    const tableTimeTrack = import.meta.env.VITE_BASEROW_TIMETRACK
+    const token = import.meta.env.VITE_BASEROW_TOKEN
 
-    const config = $baserowConfig as IBrConf
-    let uri = `${config.url}/api/database/rows/table/${config.tableTimeTrack}/?user_field_names=true`
+    let uri = `${url}/api/database/rows/table/${tableTimeTrack}/?user_field_names=true`
     const params = 
       {
         page:1,
@@ -256,21 +244,21 @@ export const fetchTimeTracksUid = (uid:number, year:number) : Promise<ITimeTrack
         }
       }
    // Use fetch with the runtime config values
-   useFetch<ListResponse>(
+   $fetch<ListResponse>(
      uri,
      {
       query: params,
        headers: {
-         Authorization: `JWT ${user?.token}`,
+         Authorization: `Token ${token}`,
        },
      }
-   ).then(({data, error}) => {
-    if(data.value) {
-      resolve(data.value.results)
+   ).then((res) => {
+    if(res.results) {
+      resolve(res.results)
     }
-    if(error.value)
-      reject(error)
-   }
-  )
+   })
+   .catch((error) => {
+     reject(error)
+   })
   })
 }
