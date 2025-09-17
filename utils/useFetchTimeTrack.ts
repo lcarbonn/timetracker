@@ -1,16 +1,16 @@
 import type { ListResponse, ITimeTrack } from "~/types/tableTimeTrack";
 
+    const URL = import.meta.env.VITE_BASEROW_URL
+    const TIMETRACK_ID = import.meta.env.VITE_BASEROW_TIMETRACK
+    const TOKEN = import.meta.env.VITE_BASEROW_TOKEN
+
 /**
  * Get time tracks
  * @returns Promise - the time traks or the error
  */
 export const fetchTimeTracks = () : Promise<ITimeTrack[]> => {
   return new Promise((resolve, reject) => {
-    const url = import.meta.env.VITE_BASEROW_URL
-    const tableTimeTrack = import.meta.env.VITE_BASEROW_TIMETRACK
-    const token = import.meta.env.VITE_BASEROW_TOKEN
-
-    let uri = `${url}/api/database/rows/table/${tableTimeTrack}/?user_field_names=true`
+    const uri = `${URL}/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
     const params = 
       {
         page:1,
@@ -24,7 +24,7 @@ export const fetchTimeTracks = () : Promise<ITimeTrack[]> => {
         query: params,
         headers: {
           //Authorization: `JWT ${user?.token}`,
-          Authorization: `Token ${token}`
+          Authorization: `Token ${TOKEN}`
         },
       }
     ).then((res) => {
@@ -43,16 +43,13 @@ export const fetchTimeTracks = () : Promise<ITimeTrack[]> => {
  */
 export const fetchTimeTrack = (id:number) : Promise<ITimeTrack> => {
   return new Promise((resolve, reject) => {
-    const url = import.meta.env.VITE_BASEROW_URL
-    const tableTimeTrack = import.meta.env.VITE_BASEROW_TIMETRACK
-    const token = import.meta.env.VITE_BASEROW_TOKEN
-    let uri = `${url}/api/database/rows/table/${tableTimeTrack}/${id}/?user_field_names=true`
+    const uri = `${URL}/api/database/rows/table/${TIMETRACK_ID}/${id}/?user_field_names=true`
    // Use fetch with the runtime config values
    $fetch<ITimeTrack>(
      uri,
      {
        headers: {
-         Authorization: `Token ${token}`
+         Authorization: `Token ${TOKEN}`
        },
      }
    ).then((data) => {
@@ -71,17 +68,14 @@ export const fetchTimeTrack = (id:number) : Promise<ITimeTrack> => {
  */
 export const fetchCreateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack> => {
   return new Promise((resolve, reject) => {
-    const url = import.meta.env.VITE_BASEROW_URL
-    const tableTimeTrack = import.meta.env.VITE_BASEROW_TIMETRACK
-    const token = import.meta.env.VITE_BASEROW_TOKEN
-    let uri = `${url}/api/database/rows/table/${tableTimeTrack}/?user_field_names=true`
+    const uri = `${URL}/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
    // Use fetch with the runtime config values
    $fetch<ITimeTrack>(
     uri,
      {
         method:"POST",
         headers: {
-          Authorization: `Token ${token}`,
+          Authorization: `Token ${TOKEN}`,
           "Content-Type": "application/json"
         },
         body:JSON.stringify(timeTrack),
@@ -102,17 +96,14 @@ export const fetchCreateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack>
  */
 export const fetchUpdateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack> => {
   return new Promise((resolve, reject) => {
-    const url = import.meta.env.VITE_BASEROW_URL
-    const tableTimeTrack = import.meta.env.VITE_BASEROW_TIMETRACK
-    const token = import.meta.env.VITE_BASEROW_TOKEN
-    let uri = `${url}/api/database/rows/table/${tableTimeTrack}/${timeTrack.id}/?user_field_names=true`
+   const uri = `${URL}/api/database/rows/table/${TIMETRACK_ID}/${timeTrack.id}/?user_field_names=true`
    // Use fetch with the runtime config values
    $fetch<ITimeTrack>(
     uri,
      {
         method:"PATCH",
         headers: {
-          Authorization: `Token ${token}`,
+          Authorization: `Token ${TOKEN}`,
           "Content-Type": "application/json"
         },
         body:{
@@ -136,10 +127,7 @@ export const fetchUpdateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack>
  */
 export const fetchLastOpenTimeTrack = (uid:number) : Promise<ITimeTrack> => {
   return new Promise((resolve, reject) => {
-    const url = import.meta.env.VITE_BASEROW_URL
-    const tableTimeTrack = import.meta.env.VITE_BASEROW_TIMETRACK
-    const token = import.meta.env.VITE_BASEROW_TOKEN
-    let uri = `${url}/api/database/rows/table/${tableTimeTrack}/?user_field_names=true`
+    const uri = `${URL}/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
     const params = 
       {
         page:1,
@@ -167,7 +155,7 @@ export const fetchLastOpenTimeTrack = (uid:number) : Promise<ITimeTrack> => {
      {
       query: params,
        headers: {
-         Authorization: `Token ${token}`,
+         Authorization: `Token ${TOKEN}`,
        },
      }
    ).then((res) => {
@@ -187,17 +175,14 @@ export const fetchLastOpenTimeTrack = (uid:number) : Promise<ITimeTrack> => {
  */
 export const fetchDeleteTimeTrack = (id:number) : Promise<number> => {
   return new Promise((resolve, reject) => {
-    const url = import.meta.env.VITE_BASEROW_URL
-    const tableTimeTrack = import.meta.env.VITE_BASEROW_TIMETRACK
-    const token = import.meta.env.VITE_BASEROW_TOKEN
-    let uri = `${url}/api/database/rows/table/${tableTimeTrack}/${id}/`
+   const uri = `${URL}/api/database/rows/table/${TIMETRACK_ID}/${id}/`
    // Use fetch with the runtime config values
    $fetch(
     uri,
      {
         method:"DELETE",
         headers: {
-          Authorization: `Token ${token}`,
+          Authorization: `Token ${TOKEN}`,
         }
      },
    ).then(() => {
@@ -210,18 +195,14 @@ export const fetchDeleteTimeTrack = (id:number) : Promise<number> => {
 }
 
 /**
- * Get trime tracks for an uid for a year
+ * Get time tracks for an uid for a year
  * @param uid, the uid
  * @param year, the year
  * @returns Promise - the time trak or the error
  */
 export const fetchTimeTracksUid = (uid:number, year:number) : Promise<ITimeTrack[]> => {
   return new Promise((resolve, reject) => {
-    const url = import.meta.env.VITE_BASEROW_URL
-    const tableTimeTrack = import.meta.env.VITE_BASEROW_TIMETRACK
-    const token = import.meta.env.VITE_BASEROW_TOKEN
-
-    let uri = `${url}/api/database/rows/table/${tableTimeTrack}/?user_field_names=true`
+    const uri = `${URL}/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
     const params = 
       {
         page:1,
@@ -249,7 +230,7 @@ export const fetchTimeTracksUid = (uid:number, year:number) : Promise<ITimeTrack
      {
       query: params,
        headers: {
-         Authorization: `Token ${token}`,
+         Authorization: `Token ${TOKEN}`,
        },
      }
    ).then((res) => {
