@@ -41,7 +41,7 @@ import X from '~icons/bi/x'
     const opts:any[] = []
     const currentWeek = getWeekNumber(new Date())
     opts.push(
-      { value: currentWeek, text: 'current '+currentWeek }
+      { value: currentWeek, text: 'Current '+currentWeek }
     )
     for (let index = currentWeek-1; index > currentWeek-10; index--) {
       opts.push(

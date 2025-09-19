@@ -1,11 +1,11 @@
 import type { ITimeTrack } from "~/types/tableTimeTrack"
 
 /**
- * get all times for the user and set state
+ * get time tracks for the user and the week and set state
  * @param user_id
+ * @param week
  */
-export const getStateTimeTracksUid = (user_id:number) => {
-  const week = useWeek().value
+export const getStateTimeTracksWeekUid = (user_id:number, week:number) => {
   $fetch<ITimeTrack[]>('/api/timetracks', {
     method: 'GET',
       params: {
@@ -13,7 +13,23 @@ export const getStateTimeTracksUid = (user_id:number) => {
       }
   })
   .then((list) => {
-      useTimeTracks().value = list
+      useTimeTracksWeek().value = list
+  })
+}
+
+/**
+ * get time tracks for the user for today and set state
+ * @param user_id
+ */
+export const getStateTimeTracksTodayUid = (user_id:number) => {
+  $fetch<ITimeTrack[]>('/api/timetracks', {
+    method: 'GET',
+      params: {
+          today:true,
+      }
+  })
+  .then((list) => {
+      useTimeTracksToday().value = list
   })
 }
 
@@ -51,7 +67,10 @@ export const openTimeTrack = (user_id:number) => {
     .then ((tt) => {
       useTimeTrack().value = tt
       
-      if(user.value) getStateTimeTracksUid(user.value.id)
+      if(user.value) {
+        getStateTimeTracksWeekUid(user.value.id, useWeek().value)
+        getStateTimeTracksTodayUid(user.value.id)
+      }
     })
     .catch((error) => {
         useTimeTrack().value = undefined
@@ -73,7 +92,10 @@ export const closeTimeTrack = (id:number) => {
   })
   .then ((tt) => {
     useTimeTrack().value = undefined
-    if(user.value) getStateTimeTracksUid(user.value.id)      
+      if(user.value) {
+        getStateTimeTracksWeekUid(user.value.id, useWeek().value)
+        getStateTimeTracksTodayUid(user.value.id)
+      }
   })
   .catch((error) => {
     useTimeTrack().value = undefined
@@ -93,7 +115,10 @@ export const deleteStateTrack = (id:number) => {
     }
   })
   .then((tt) => {
-      if(user.value) getStateTimeTracksUid(user.value.id)      
+      if(user.value) {
+        getStateTimeTracksWeekUid(user.value.id, useWeek().value)
+        getStateTimeTracksTodayUid(user.value.id)
+      }
   })
   if(useTimeTrack().value?.id == id) {
     useTimeTrack().value = undefined

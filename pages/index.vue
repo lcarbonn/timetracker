@@ -5,8 +5,11 @@
         <BButton v-else class="m-3" @click="openTrack">Start track</BButton>
         <BCardText v-if="track"> Track started at : {{ startDate }}</BCardText>
       </BCard>
+      <BCard :title="'Your tracks for today ' + now.toLocaleDateString().substring(0,10)">
+        <DomainTimeTracksTableToday :tracks="tracksToday" @delete-track="deleteTrack" @emit-filter="emitFilter"/>
+      </BCard>
       <BCard :title="'Your tracks for week ' + currentWeek">
-        <DomainTimeTracksTable :tracks="tracks" @delete-track="deleteTrack" @emit-filter="emitFilter"/>
+        <DomainTimeTracksTableWeek :tracks="tracksWeek" @delete-track="deleteTrack" @emit-filter="emitFilter"/>
       </BCard>
       <BModal v-model="modal" title="Delete track" @ok="confirmDelete"> Really ? </BModal>
 
@@ -24,8 +27,8 @@
   const { user } = useUserSession()
 
   // const
-  // const year:number = new Date().getFullYear()
-  const currentWeek:number = getWeekNumber(new Date())
+  const now = new Date()
+  const currentWeek:number = getWeekNumber(now)
 
   useWeek().value = currentWeek
 
@@ -33,7 +36,8 @@
 
   // local refs
   const track = useTimeTrack()
-  const tracks = useTimeTracks()
+  const tracksWeek = useTimeTracksWeek()
+  const tracksToday = useTimeTracksToday()
 
   // local refs
   const modal = ref(false)
@@ -42,7 +46,8 @@
   if(user.value) {
     // console.log("start user:", authUser?.value.user.user_id)
     getLastOpenTimeTrack(user.value.id)
-    getStateTimeTracksUid(user.value.id)
+    getStateTimeTracksWeekUid(user.value.id, useWeek().value)
+    getStateTimeTracksTodayUid(user.value.id)
   }
 
   // computed properties
@@ -78,7 +83,7 @@
   }
 
   const emitFilter = () => {
-    if(user.value) getStateTimeTracksUid(user.value.id)
+    if(user.value) getStateTimeTracksWeekUid(user.value.id, useWeek().value)
   }
 
 </script>

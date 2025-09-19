@@ -195,12 +195,12 @@ export const fetchDeleteTimeTrack = (id:number) : Promise<number> => {
 }
 
 /**
- * Get time tracks for an uid for a year
+ * Get time tracks for an uid for a week
  * @param uid, the uid
- * @param year, the year
+ * @param week, the week number
  * @returns Promise - the time trak or the error
  */
-export const fetchTimeTracksUid = (uid:number, year:number) : Promise<ITimeTrack[]> => {
+export const fetchTimeTracksWeekUid = (uid:number, week:number) : Promise<ITimeTrack[]> => {
   return new Promise((resolve, reject) => {
     const uri = `${URL}/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
     const params = 
@@ -219,7 +219,56 @@ export const fetchTimeTracksUid = (uid:number, year:number) : Promise<ITimeTrack
             {
               field:"Week",
               type: "equal",
-              value: year
+              value: week
+            }
+          ]
+        }
+      }
+   // Use fetch with the runtime config values
+   $fetch<ListResponse>(
+     uri,
+     {
+      query: params,
+       headers: {
+         Authorization: `Token ${TOKEN}`,
+       },
+     }
+   ).then((res) => {
+    if(res.results) {
+      resolve(res.results)
+    }
+   })
+   .catch((error) => {
+     reject(error)
+   })
+  })
+}
+
+/**
+ * Get time tracks for an uid for today
+ * @param uid, the uid
+ * @returns Promise - the time trak or the error
+ */
+export const fetchTimeTracksTodayUid = (uid:number) : Promise<ITimeTrack[]> => {
+  return new Promise((resolve, reject) => {
+    const uri = `${URL}/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
+    const params = 
+      {
+        page:1,
+        size:200,
+        order_by:'-Start',
+        filters: {
+          filter_type:"AND",
+          filters: [
+            {
+              field:"UID",
+              type: "multiple_collaborators_has",
+              value: uid
+            },
+            {
+              field:"Start",
+              type: "date_is",
+              value: "UTC??today"
             }
           ]
         }

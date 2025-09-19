@@ -6,9 +6,14 @@ import type { ITimeTrack } from "~/types/tableTimeTrack";
 export const useSnackBarMessage = () => useState<ISnackMessage>("snackBarMessage");
 
 /**
- * State for Time Tracks
+ * State for Time Tracks of a week
  */
-export const useTimeTracks = () => useState<ITimeTrack[]>("timeTracks");
+export const useTimeTracksWeek = () => useState<ITimeTrack[]>("timeTracksWeek");
+
+/**
+ * State for Time Tracks of the day
+ */
+export const useTimeTracksToday = () => useState<ITimeTrack[]>("timeTracksToday");
 
 /**
  * State for Time Track
