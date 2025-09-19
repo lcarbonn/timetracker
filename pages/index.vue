@@ -1,8 +1,8 @@
 <template>
     <div>
       <BCard :title="'Time Tracks for ' + user?.first_name" body-class="text-center">
-        <BButton v-if="track && !track.End" class="m-3" @click="closeTrack">End track</BButton>
-        <BButton v-else class="m-3" @click="openTrack">Start track</BButton>
+        <BButton v-if="track && !track.End" size="lg" class="mx-1" @click="closeTrack">End track</BButton>
+        <BButton v-else size="lg" class="m-1" @click="openTrack">Start track</BButton>
         <BCardText v-if="track"> Track started at : {{ startDate }}</BCardText>
       </BCard>
       <BCard :title="'Your tracks for today ' + now.toLocaleDateString().substring(0,10)">
