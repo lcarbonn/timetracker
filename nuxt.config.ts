@@ -33,7 +33,7 @@ export default defineNuxtConfig({
   pwa: {
     /* PWA options */
     manifest: {
-      name: 'Noco Lowco Time Tracker',
+      name: 'Time Tracker',
       short_name: 'TimeTracker',
       display: 'standalone',
       description: 'Noco Lowco Time Tracker',
