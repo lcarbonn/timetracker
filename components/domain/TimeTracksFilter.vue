@@ -3,22 +3,19 @@
     <!-- <BRow>
       <BCol lg="4" class="my-1"> -->
         <BFormGroup
-          label="Filter on Year :"
-          label-for="filter-year"
+          label="Filter on Week :"
+          label-for="filter-week"
           label-cols-sm="4"
         >
           <BInputGroup size="sm">
             <BFormSelect
-              id="filter-year"
-              v-model="filterYear"
-              :options="yearOptions"
+              id="filter-week"
+              v-model="filterWeek"
+              :options="weekOptions"
             >
-            <!-- <template #first>
-              <BFormSelectOption :value="2025" disabled>-- Choose a year --</BFormSelectOption>
-            </template> -->
             </BFormSelect>
             <template #append>
-              <BButton :disabled="!filterYear" @click="filterYear = year" ><X/></BButton>
+              <BButton :disabled="!filterWeek" @click="filterWeek = week" ><X/></BButton>
             </template>
           </BInputGroup>
         </BFormGroup>
@@ -36,20 +33,35 @@ import X from '~icons/bi/x'
   const emit = defineEmits(['emitFilter'])
 
   // local ref properties
-  const year = useYear().value
-  const filterYear = ref(year)
+  const week = useWeek().value
+  const filterWeek = ref(week)
 
   // computed properties
-  const yearOptions = computed(() => {
-    return [
-      { value: year, text: ''+year },
-      { value: 2024, text: '2024' },
-    ]
+  const weekOptions = computed(() => {
+    const opts:any[] = []
+    const currentWeek = getWeekNumber(new Date())
+    opts.push(
+      { value: currentWeek, text: 'current '+currentWeek }
+    )
+    for (let index = currentWeek-1; index > currentWeek-10; index--) {
+      opts.push(
+        { value: index, text: index }
+      )
+      
+    }
+    return opts
+    // return [
+    //   { value: year, text: ''+year },
+    //   { value: 38, text: '38' },
+    //   { value: 37, text: '37' },
+    //   { value: 36, text: '36' },
+    //   { value: 2024, text: '2024' },
+    // ]
   })
 
   // watch local refs udpates
-  watch(filterYear, (newValue) => {
-    if(newValue) useYear().value = newValue
+  watch(filterWeek, (newValue) => {
+    if(newValue) useWeek().value = newValue
     emit('emitFilter')
   })
 </script>

@@ -5,11 +5,11 @@ import type { ITimeTrack } from "~/types/tableTimeTrack"
  * @param user_id
  */
 export const getStateTimeTracksUid = (user_id:number) => {
-  const year = useYear().value
+  const week = useWeek().value
   $fetch<ITimeTrack[]>('/api/timetracks', {
     method: 'GET',
       params: {
-          year:year,
+          week:week,
       }
   })
   .then((list) => {
@@ -22,7 +22,6 @@ export const getStateTimeTracksUid = (user_id:number) => {
  * @param user_id
  */
 export const getLastOpenTimeTrack = (user_id:number) => {
-  const year = useYear().value
   $fetch<ITimeTrack>('/api/lasttrack', {
     method: 'GET',
     params:{
@@ -86,7 +85,7 @@ export const closeTimeTrack = (id:number) => {
  * @param id, the time track id
  */
 export const deleteStateTrack = (id:number) => {
-    const { user } = useUserSession()
+  const { user } = useUserSession()
   $fetch<ITimeTrack>('/api/timetrack', {
     method: 'DELETE',
     params:{

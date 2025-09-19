@@ -217,7 +217,7 @@ export const fetchTimeTracksUid = (uid:number, year:number) : Promise<ITimeTrack
               value: uid
             },
             {
-              field:"Year",
+              field:"Week",
               type: "equal",
               value: year
             }

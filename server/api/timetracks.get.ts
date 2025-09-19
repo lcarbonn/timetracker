@@ -5,10 +5,10 @@ export default defineEventHandler(async (event) => {
     const { user } = await requireUserSession(event)
     const query = getQuery(event)
     let timeTracks
-    if(user.id && query.year) {
-      const year = new Number(query.year).valueOf()
+    if(user.id && query.week) {
+      const week = new Number(query.week).valueOf()
     // TODO : get env for server
-      timeTracks = await fetchTimeTracksUid(user.id, year)
+      timeTracks = await fetchTimeTracksUid(user.id, week)
     } else {
       timeTracks = await fetchTimeTracks()
     }

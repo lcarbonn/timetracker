@@ -5,14 +5,14 @@
           <DomainTimeTracksFilter @emit-filter="emitFilter"></DomainTimeTracksFilter>
       </BCol>
       <BCol lg="4" class="my-1">
+        <span>Total Hours : <b>{{ totalHours }}</b></span>
+      </BCol>
+      <BCol lg="4" class="my-1">
         <BPagination
               v-model="currentPage"
               :total-rows="totalRows"
               :per-page="perPage"
               size="sm"></BPagination>
-      </BCol>
-      <BCol lg="4" class="my-1">
-        <span>Total Hours : <b>{{ totalHours }}</b></span>
       </BCol>
     </BRow>    
 

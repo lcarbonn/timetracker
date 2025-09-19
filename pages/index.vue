@@ -5,7 +5,7 @@
         <BButton v-else class="m-3" @click="openTrack">Start track</BButton>
         <BCardText v-if="track"> Track started at : {{ startDate }}</BCardText>
       </BCard>
-      <BCard title="Your Tracks">
+      <BCard :title="'Your tracks for week ' + currentWeek">
         <DomainTimeTracksTable :tracks="tracks" @delete-track="deleteTrack" @emit-filter="emitFilter"/>
       </BCard>
       <BModal v-model="modal" title="Delete track" @ok="confirmDelete"> Really ? </BModal>
@@ -24,8 +24,12 @@
   const { user } = useUserSession()
 
   // const
-  const year:number = new Date().getFullYear()
-  useYear().value = year
+  // const year:number = new Date().getFullYear()
+  const currentWeek:number = getWeekNumber(new Date())
+
+  useWeek().value = currentWeek
+
+
 
   // local refs
   const track = useTimeTrack()

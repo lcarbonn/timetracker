@@ -15,6 +15,7 @@ export interface ITimeTrack {
   End:Date
   Duration:number
   Year:number
+  Week:number
 }
 
 export interface ListResponse {

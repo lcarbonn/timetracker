@@ -16,6 +16,6 @@ export const useTimeTracks = () => useState<ITimeTrack[]>("timeTracks");
 export const useTimeTrack = () => useState<ITimeTrack|undefined>("timeTrack");
 
 /**
- * State for year
+ * State for week
  */
-export const useYear = () => useState<number>("year");
+export const useWeek = () => useState<number>("week");
