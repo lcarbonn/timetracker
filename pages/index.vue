@@ -3,8 +3,8 @@
       <BCard :title="'Time Tracks for ' + user?.first_name" body-class="text-center">
         <BButton v-if="track && !track.End" size="lg" class="mx-1" @click="closeTrack">End track</BButton>
         <BButton v-else size="lg" class="m-1" @click="openTrack">Start track</BButton>
-        <BCardText v-if="track"> Track started at : {{ startDate }}</BCardText>
-        <BCardText v-if="track"> Timer : {{ timer }}</BCardText>
+        <BCardText v-if="track"> Track started at : <b>{{ startDate }}</b></BCardText>
+        <BCardText v-if="track"> Timer : <b>{{ timer }}</b></BCardText>
       </BCard>
       <BCard :title="'Your tracks for today ' + now.toLocaleDateString().substring(0,10)">
         <DomainTimeTracksTableToday :tracks="tracksToday" @delete-track="deleteTrack" @reopen-track="reopenTrack"/>
@@ -12,8 +12,8 @@
       <BCard :title="'Your tracks for week ' + currentWeek">
         <DomainTimeTracksTableWeek :tracks="tracksWeek" @delete-track="deleteTrack" @emit-filter="emitFilter"/>
       </BCard>
-      <BModal v-model="modal" title="Delete track" @ok="confirmDelete"> Really ? </BModal>
-      <BModal v-model="modal" title="Restart track" @ok="confirmRestart"> Really ? </BModal>
+      <BModal v-model="modalDelete" title="Delete track" @ok="confirmDelete"> Really ? </BModal>
+      <BModal v-model="modalRestart" title="Restart track" @ok="confirmRestart"> Really ? </BModal>
 
     </div>
 </template>
@@ -43,7 +43,8 @@ import type { ITimeTrack } from '~/types/tableTimeTrack'
   const tracksToday = useTimeTracksToday()
 
   // local refs
-  const modal = ref(false)
+  const modalDelete = ref(false)
+  const modalRestart = ref(false)
   const selectedTrack = ref()
 
   if(user.value) {
@@ -106,7 +107,7 @@ import type { ITimeTrack } from '~/types/tableTimeTrack'
   // ask for modal before delete
   const deleteTrack = (track:ITimeTrack) => {
     selectedTrack.value = track
-    modal.value = !modal.value
+    modalDelete.value = !modalDelete.value
   }
   // confirm delete received
   const confirmDelete = () => {
@@ -117,12 +118,11 @@ import type { ITimeTrack } from '~/types/tableTimeTrack'
   // reopen track
   const reopenTrack = (track:ITimeTrack) => {
     selectedTrack.value = track
-    modal.value = !modal.value
+    modalRestart.value = !modalDelete.value
   }
   // confirm restart received
   const confirmRestart = () => {
     if(selectedTrack.value) reopenTimeTrack(selectedTrack.value.id)
-    selectedTrack.value = null
   }
 
   const emitFilter = () => {

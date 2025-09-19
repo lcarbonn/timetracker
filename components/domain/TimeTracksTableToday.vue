@@ -25,7 +25,7 @@
       :per-page="perPage">
       <template #cell(id)="data">
         <BButton class="mx-1" @click="deleteTrack(data.item as ITimeTrack)" size="sm" ><Trash/></BButton>
-        <BButton class="mx-1" @click="reopenTrack(data.item as ITimeTrack)" size="sm" ><Pen/></BButton>
+        <BButton v-if="data.index==0 && data.item.End!=null" class="mx-1" @click="reopenTrack(data.item as ITimeTrack)" size="sm" >Restart</BButton>
       </template>
       <template #table-busy>
         <div class="text-center text-danger my-2">
@@ -42,7 +42,7 @@ import type { TableField } from 'bootstrap-vue-next';
 
   // icons
   import Trash from '~icons/bi/trash'
-  import Pen from '~icons/bi/pen'  
+  import Reset from '~icons/bi/arrow-counterclockwise'
   import type { ITimeTrack } from '~/types/tableTimeTrack';
 
   // props
