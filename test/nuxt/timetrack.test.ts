@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it, test } from 'vitest'
+import type { IBaserowAuth } from '~/types/baserowAuth'
 import type { ITimeTrack } from '~/types/tableTimeTrack'
-import type { ITokenAuth } from '~/types/tokenAuth'
+
 import { fetchCreateTimeTrack, fetchDeleteTimeTrack, fetchTimeTracks, fetchUpdateTimeTrack } from '~/utils/useFetchTimeTrack'
 
 
@@ -13,7 +14,7 @@ describe('baserow time tracker', () => {
   const login = import.meta.env.VITE_BASEROW_LOGIN
   const mdp = import.meta.env.VITE_BASEROW_MDP
 
-  let tokenAuth:ITokenAuth
+  let tokenAuth:IBaserowAuth
   let user_id:number
 
   beforeAll( async () => {
@@ -33,9 +34,9 @@ describe('baserow time tracker', () => {
   })
 
   // count all times for an uid
-  it('count all times for an uid', async () => {
+  it('count times for an uid week 36', async () => {
     const date = new Date()
-    const tts:ITimeTrack[] = await fetchTimeTracksUid(user_id, date.getFullYear())
+    const tts:ITimeTrack[] = await fetchTimeTracksWeekUid(user_id, 36)
     console.log("tts="+tts.length)
     tts.forEach(tt => {
       logTrack(tt)
@@ -80,6 +81,15 @@ describe('baserow time tracker', () => {
     logTrack(TEST_TT)
     const tt = await fetchUpdateTimeTrack(TEST_TT)
     expect(tt.End).toBeDefined()
+  })
+
+  // reset test time track
+  it('reset one row form baserow', async () => {
+    const now = new Date()
+    TEST_TT.End = null
+    logTrack(TEST_TT)
+    const tt = await fetchUpdateTimeTrack(TEST_TT)
+    expect(tt.End).toEqual(null)
   })
 
     // Delete new time track

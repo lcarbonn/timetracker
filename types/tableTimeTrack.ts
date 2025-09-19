@@ -12,7 +12,7 @@ export interface ITimeTrack {
   id:number
   UID:IUID[]
   Start:Date
-  End:Date
+  End:Date|null
   Duration:number
   Year:number
   Week:number

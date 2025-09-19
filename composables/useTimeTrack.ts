@@ -103,6 +103,31 @@ export const closeTimeTrack = (id:number) => {
 }
 
 /**
+ * Reopenthe time track
+ * @param id, the time track id
+ */
+export const reopenTimeTrack = (id:number) => {
+  const { user } = useUserSession()
+  $fetch<ITimeTrack>('/api/timetrack', {
+      method: 'PATCH',
+      body: {
+          id:id,
+          End:null
+      }
+  })
+  .then ((tt) => {
+    useTimeTrack().value = tt
+      if(user.value) {
+        getStateTimeTracksWeekUid(user.value.id, useWeek().value)
+        getStateTimeTracksTodayUid(user.value.id)
+      }
+  })
+  .catch((error) => {
+    useTimeTrack().value = undefined
+  })
+}
+
+/**
  * Delete the time track
  * @param id, the time track id
  */

@@ -7,18 +7,20 @@
         <BCardText v-if="track"> Timer : {{ timer }}</BCardText>
       </BCard>
       <BCard :title="'Your tracks for today ' + now.toLocaleDateString().substring(0,10)">
-        <DomainTimeTracksTableToday :tracks="tracksToday" @delete-track="deleteTrack" @emit-filter="emitFilter"/>
+        <DomainTimeTracksTableToday :tracks="tracksToday" @delete-track="deleteTrack" @reopen-track="reopenTrack"/>
       </BCard>
       <BCard :title="'Your tracks for week ' + currentWeek">
         <DomainTimeTracksTableWeek :tracks="tracksWeek" @delete-track="deleteTrack" @emit-filter="emitFilter"/>
       </BCard>
       <BModal v-model="modal" title="Delete track" @ok="confirmDelete"> Really ? </BModal>
+      <BModal v-model="modal" title="Restart track" @ok="confirmRestart"> Really ? </BModal>
 
     </div>
 </template>
 
 <script setup lang="ts">
-  import type { ITimeTrack } from '~/types/tableTimeTrack'
+  import { reopenTimeTrack } from '~/composables/useTimeTrack'
+import type { ITimeTrack } from '~/types/tableTimeTrack'
 
   // middleware
   definePageMeta({
@@ -42,7 +44,7 @@
 
   // local refs
   const modal = ref(false)
-  const track4Delete = ref()
+  const selectedTrack = ref()
 
   if(user.value) {
     // console.log("start user:", authUser?.value.user.user_id)
@@ -103,13 +105,24 @@
 
   // ask for modal before delete
   const deleteTrack = (track:ITimeTrack) => {
-    track4Delete.value = track
+    selectedTrack.value = track
     modal.value = !modal.value
   }
   // confirm delete received
   const confirmDelete = () => {
-    if(track4Delete.value) deleteStateTrack(track4Delete.value.id)
-    track4Delete.value = null
+    if(selectedTrack.value) deleteStateTrack(selectedTrack.value.id)
+    selectedTrack.value = null
+  }
+
+  // reopen track
+  const reopenTrack = (track:ITimeTrack) => {
+    selectedTrack.value = track
+    modal.value = !modal.value
+  }
+  // confirm restart received
+  const confirmRestart = () => {
+    if(selectedTrack.value) reopenTimeTrack(selectedTrack.value.id)
+    selectedTrack.value = null
   }
 
   const emitFilter = () => {

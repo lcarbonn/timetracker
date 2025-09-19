@@ -42,7 +42,8 @@ import type { TableField } from 'bootstrap-vue-next';
 
   // icons
   import Trash from '~icons/bi/trash'
-import type { ITimeTrack } from '~/types/tableTimeTrack';
+
+  import type { ITimeTrack } from '~/types/tableTimeTrack';
 
   // props
   const props = defineProps({

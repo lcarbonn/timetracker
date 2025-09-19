@@ -25,6 +25,7 @@
       :per-page="perPage">
       <template #cell(id)="data">
         <BButton class="mx-1" @click="deleteTrack(data.item as ITimeTrack)" size="sm" ><Trash/></BButton>
+        <BButton class="mx-1" @click="reopenTrack(data.item as ITimeTrack)" size="sm" ><Pen/></BButton>
       </template>
       <template #table-busy>
         <div class="text-center text-danger my-2">
@@ -41,7 +42,8 @@ import type { TableField } from 'bootstrap-vue-next';
 
   // icons
   import Trash from '~icons/bi/trash'
-import type { ITimeTrack } from '~/types/tableTimeTrack';
+  import Pen from '~icons/bi/pen'  
+  import type { ITimeTrack } from '~/types/tableTimeTrack';
 
   // props
   const props = defineProps({
@@ -52,7 +54,7 @@ import type { ITimeTrack } from '~/types/tableTimeTrack';
   })
 
   // // emits declaration
-  const emit = defineEmits(['deleteTrack', 'emitFilter'])
+  const emit = defineEmits(['deleteTrack', 'reopenTrack'])
 
   // const fields
   const fields = [
@@ -125,8 +127,8 @@ import type { ITimeTrack } from '~/types/tableTimeTrack';
       emit('deleteTrack', track)
     }
 
-    const emitFilter = () => {
-      emit('emitFilter')
+    const reopenTrack = (track:ITimeTrack) => {
+      emit('reopenTrack', track)
     }
 
 </script>
