@@ -4,11 +4,11 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   app:{
     head: {
-      title: 'Noco Lowco Time Tracker',
+      title: 'NocoLowco Time Tracker',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Noco Lowco Time Tracker' },
+        { name: 'description', content: 'NocoLowco Time Tracker' },
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -36,7 +36,7 @@ export default defineNuxtConfig({
       name: 'Time Tracker',
       short_name: 'Time Tracker',
       display: 'standalone',
-      description: 'Noco Lowco Time Tracker',
+      description: 'NocoLowco Time Tracker',
       lang: 'fr-FR',
       theme_color: '#17a2b8',
       icons: [

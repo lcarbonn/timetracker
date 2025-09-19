@@ -48,7 +48,6 @@ import type { ITimeTrack } from '~/types/tableTimeTrack'
   const selectedTrack = ref()
 
   if(user.value) {
-    // console.log("start user:", authUser?.value.user.user_id)
     getLastOpenTimeTrack(user.value.id)
     getStateTimeTracksWeekUid(user.value.id, useWeek().value)
     getStateTimeTracksTodayUid(user.value.id)

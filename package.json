@@ -1,7 +1,7 @@
 {
   "name": "timetracker",
-  "version": "0.1.5",
-  "description": "Noco Lowco Time Tracker",
+  "version": "0.1.6",
+  "description": "NocoLowco Time Tracker",
   "author": "laurent",
   "private": true,
   "type": "module",

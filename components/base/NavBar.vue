@@ -12,7 +12,7 @@
         isNav
         v-model="show"
         placement="start"
-        title="Noco Lowco Time Tracker"
+        title="NocoLowco Time Tracker"
         style="background-color:var(--bs-primary);color:var(--bs-white)"
        >
       <BNavbarNav class="ms-auto mb-2 mb-lg-0">
