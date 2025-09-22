@@ -6,3 +6,4 @@ VITE_BASEROW_TOKEN = 'your baserow token'
 # for tests only
 VITE_BASEROW_LOGIN = "your email only for test"
 VITE_BASEROW_MDP = "your password only for test"
+VITE_BASEROW_ID = 123456
