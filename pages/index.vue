@@ -59,7 +59,6 @@ import type { IPauseTrack } from '~/types/tablePauseTrack'
 
   if(user.value) {
     getStateTodayTimeTrack(user.value.id)
-    getStateTimeTracksWeekUid(user.value.id, useWeek().value)
   }
 
   // computed properties
@@ -114,28 +113,10 @@ import type { IPauseTrack } from '~/types/tablePauseTrack'
   const chrono = ref()
   
   const startChrono = () => {
-      chrono.value = setInterval(() => {
-        getChrono()
+    chrono.value = setInterval(() => {
+      if(todayTrack.value?.Start)
+        timer.value = getDuration(new Date(todayTrack.value.Start), new Date())
       }, 1000);
-  }
-
-  // methods
-  const getChrono = ()  => {
-    const thousand = 1000;
-    const sixty = 60;
-    const twentyfour = 24;    
-    let duration:string
-    if(todayTrack.value?.Start) {
-      const start = new Date(todayTrack.value.Start)
-      const now = new Date()
-      const t = now.getTime()-start.getTime()
-      const days = Math.floor(t / (thousand * sixty * sixty * twentyfour));
-      const hours = Math.floor((t % (thousand * sixty * sixty * twentyfour)) / (thousand * sixty * sixty));
-      const minutes = Math.floor((t % (thousand * sixty * sixty)) / (thousand * sixty));
-      const seconds = Math.floor((t % (thousand * sixty)) / thousand);
-      duration = days +"d:"+hours+"h:"+minutes+"m:"+seconds+"s"
-      timer.value = duration
-    }
   }
 
   // starting the day
