@@ -13,8 +13,8 @@
         <BCardText v-if="todayTrack && !todayTrack.End"> Timer : <b>{{ dayTimer }}</b></BCardText>
       </BCard>
       <BCard title="Current pause" v-if="todayTrack && !todayTrack.End" body-class="text-center">
-        <BButton v-if="!currentPause" size="lg" class="mx-1" @click="startPause">Have a break</BButton>
-        <BButton v-if="currentPause && !currentPause.End" size="lg" class="mx-1" @click="endPause">Back to work</BButton>
+        <BButton v-if="!currentPause" size="lg" class="mx-1" @click="startPause" variant="primary">Have a break</BButton>
+        <BButton v-if="currentPause && !currentPause.End" size="lg" class="mx-1" @click="endPause" variant="primary">Back to work</BButton>
         <BCardText v-if="currentPause">  Pause started at : <b>{{ currentPauseStartTime }}</b></BCardText>
         <BCardText v-if="currentPause"> Duration : <b>{{ pauseTimer }}</b></BCardText>
       </BCard>
