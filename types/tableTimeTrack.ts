@@ -17,6 +17,7 @@ export interface ITimeTrack {
   Year:number
   Week:number
   PauseDuration:number
+  EffectiveDuration:number
 }
 
 export interface ListTimeResponse {

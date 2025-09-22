@@ -23,7 +23,7 @@
       :items="pauses"
       :current-page="currentPage"
       :per-page="perPage">
-      <template #cell(id)="data">
+      <template #cell(id)="data" v-if="!disabled">
         <BButton class="mx-1" @click="deletePause(data.item as IPauseTrack)" size="sm" ><Trash/></BButton>
         <BButton v-if="data.index==0 && data.item.End!=null" class="mx-1" @click="reopenPause(data.item as IPauseTrack)" size="sm" >Restart</BButton>
       </template>
@@ -49,6 +49,10 @@ import type { TableField } from 'bootstrap-vue-next';
       pauses: {
           type: Array<IPauseTrack>,
           default: undefined
+      },
+      disabled: {
+        type:Boolean,
+        default:false
       }
   })
 

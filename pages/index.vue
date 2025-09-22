@@ -9,6 +9,7 @@
         <BCardText v-if="todayTrack && todayTrack.End">  Day started at : <b>{{ todayStartTime }}</b> - ended at : <b>{{ todayEndTime }}</b></BCardText>
         <BCardText v-if="todayTrack && todayTrack.End"> Duration : <b>{{ todayTrack.Duration }}</b></BCardText>
         <BCardText v-if="todayTrack && todayTrack.End"> Pause Duration : <b>{{ todayTrack.PauseDuration }}</b></BCardText>
+        <BCardText v-if="todayTrack && todayTrack.End"> Effective Duration : <b>{{ todayTrack.EffectiveDuration }}</b></BCardText>
         <BCardText v-if="todayTrack && !todayTrack.End"> Timer : <b>{{ timer }}</b></BCardText>
       </BCard>
       <BCard title="Current pause" v-if="todayTrack && !todayTrack.End" body-class="text-center">
@@ -17,7 +18,7 @@
         <BCardText v-if="currentPause">  Pause started at : <b>{{ currentPauseStartTime }}</b></BCardText>
       </BCard>
       <BCard title="Pauses for today">
-        <DomainPauseTracksTable :pauses="todayPauses" @delete-pause="deletePause" @reopen-pause="restartPause"/>
+        <DomainPauseTracksTable :disabled="disabled" :pauses="todayPauses" @delete-pause="deletePause" @reopen-pause="restartPause"/>
       </BCard>
       <BModal v-model="modalRestartDay" title="Restart day" @ok="confirmRestartDay"> Really ? </BModal>
       <BModal v-model="modalDeletePause" title="Delete pause" @ok="confirmDeletePause"> Really ? </BModal>
@@ -101,6 +102,11 @@ import type { IPauseTrack } from '~/types/tablePauseTrack'
   // display for today
   const today = computed(() => {
     return now.toLocaleDateString().substring(0,10)
+  })
+
+    // disabled for pause compoenent
+  const disabled = computed(() => {
+    return todayTrack.value?.End!=null
   })
 
   // const for chrono
