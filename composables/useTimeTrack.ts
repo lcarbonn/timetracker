@@ -33,12 +33,28 @@ export const getStateTimeTracksTodayUid = (user_id:number) => {
   })
 }
 
+// /**
+//  * Get the last open time track for the user
+//  * @param user_id
+//  */
+// export const getLastOpenTimeTrack = (user_id:number) => {
+//   $fetch<ITimeTrack>('/api/lasttrack', {
+//     method: 'GET',
+//     params:{
+//       user_id:user_id
+//     }
+//   })
+//   .then((tt) => {
+//       useTimeTrack().value = tt
+//   })
+// }
+
 /**
- * Get the last open time track for the user
+ * Get the today time track for the user
  * @param user_id
  */
-export const getLastOpenTimeTrack = (user_id:number) => {
-  $fetch<ITimeTrack>('/api/lasttrack', {
+export const getStateTodayTimeTrack = (user_id:number) => {
+  $fetch<ITimeTrack>('/api/todaytrack', {
     method: 'GET',
     params:{
       user_id:user_id
@@ -46,6 +62,7 @@ export const getLastOpenTimeTrack = (user_id:number) => {
   })
   .then((tt) => {
       useTimeTrack().value = tt
+      getStatePauseTracks(tt.id)
   })
 }
 
@@ -69,7 +86,6 @@ export const openTimeTrack = (user_id:number) => {
       
       if(user.value) {
         getStateTimeTracksWeekUid(user.value.id, useWeek().value)
-        getStateTimeTracksTodayUid(user.value.id)
       }
     })
     .catch((error) => {
@@ -83,7 +99,7 @@ export const openTimeTrack = (user_id:number) => {
  */
 export const closeTimeTrack = (id:number) => {
   const { user } = useUserSession()
-  $fetch('/api/timetrack', {
+  $fetch<ITimeTrack>('/api/timetrack', {
       method: 'PATCH',
       body: {
           id:id,
@@ -91,10 +107,9 @@ export const closeTimeTrack = (id:number) => {
       }
   })
   .then ((tt) => {
-    useTimeTrack().value = undefined
+      useTimeTrack().value = tt
       if(user.value) {
         getStateTimeTracksWeekUid(user.value.id, useWeek().value)
-        getStateTimeTracksTodayUid(user.value.id)
       }
   })
   .catch((error) => {
@@ -119,7 +134,6 @@ export const reopenTimeTrack = (id:number) => {
     useTimeTrack().value = tt
       if(user.value) {
         getStateTimeTracksWeekUid(user.value.id, useWeek().value)
-        getStateTimeTracksTodayUid(user.value.id)
       }
   })
   .catch((error) => {
@@ -142,7 +156,6 @@ export const deleteStateTrack = (id:number) => {
   .then((tt) => {
       if(user.value) {
         getStateTimeTracksWeekUid(user.value.id, useWeek().value)
-        getStateTimeTracksTodayUid(user.value.id)
       }
   })
   if(useTimeTrack().value?.id == id) {

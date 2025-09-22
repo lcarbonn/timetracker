@@ -1,4 +1,5 @@
 import type { ISnackMessage } from "~/types/snackMessage";
+import type { IPauseTrack } from "~/types/tablePauseTrack";
 import type { ITimeTrack } from "~/types/tableTimeTrack";
 /**
  * State for snackbar message
@@ -16,9 +17,19 @@ export const useTimeTracksWeek = () => useState<ITimeTrack[]>("timeTracksWeek");
 export const useTimeTracksToday = () => useState<ITimeTrack[]>("timeTracksToday");
 
 /**
+ * State for Pause Tracks
+ */
+export const usePauseTracks = () => useState<IPauseTrack[]>("pauseTracks");
+
+/**
  * State for Time Track
  */
 export const useTimeTrack = () => useState<ITimeTrack|undefined>("timeTrack");
+
+/**
+ * State for Pause Track
+ */
+export const usePauseTrack = () => useState<IPauseTrack|undefined>("pauseTrack");
 
 /**
  * State for week

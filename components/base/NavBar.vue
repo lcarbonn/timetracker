@@ -22,6 +22,7 @@
           </template>
           <BDropdownItem  @click="signOut()">Sign Out</BDropdownItem>
         </BNavItemDropdown>
+        <BDropdownItem  href="/weeks">Weeks</BDropdownItem>
         <BaseThemeItemDropdown @clicked="show=!show"/>
       </BNavbarNav>
     </BOffcanvas>

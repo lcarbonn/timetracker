@@ -1,0 +1,17 @@
+import { fetchPauseTracksForTimeTrack } from "~/utils/useFetchPauseTrack"
+
+export default defineEventHandler(async (event) => {
+  try {
+    const { user } = await requireUserSession(event)
+    const query = getQuery(event)
+    let pauseTracks
+    if(query.timeId) {
+        const timeId = new Number(query.timeId).valueOf()
+        pauseTracks = await fetchPauseTracksForTimeTrack(timeId)
+    }    
+    return (pauseTracks)
+  } catch (error) {
+    console.error(error)
+    return (error)    
+  }
+})

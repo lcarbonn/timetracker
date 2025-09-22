@@ -20,12 +20,12 @@
       hover
       stacked="md"
       :fields="(fields as TableField[])"
-      :items="tracks"
+      :items="pauses"
       :current-page="currentPage"
       :per-page="perPage">
       <template #cell(id)="data">
-        <BButton class="mx-1" @click="deleteTrack(data.item as ITimeTrack)" size="sm" ><Trash/></BButton>
-        <BButton v-if="data.index==0 && data.item.End!=null" class="mx-1" @click="reopenTrack(data.item as ITimeTrack)" size="sm" >Restart</BButton>
+        <BButton class="mx-1" @click="deletePause(data.item as IPauseTrack)" size="sm" ><Trash/></BButton>
+        <BButton v-if="data.index==0 && data.item.End!=null" class="mx-1" @click="reopenPause(data.item as IPauseTrack)" size="sm" >Restart</BButton>
       </template>
       <template #table-busy>
         <div class="text-center text-danger my-2">
@@ -42,18 +42,18 @@ import type { TableField } from 'bootstrap-vue-next';
 
   // icons
   import Trash from '~icons/bi/trash'
-  import type { ITimeTrack } from '~/types/tableTimeTrack';
+  import type { IPauseTrack } from '~/types/tablePauseTrack';
 
   // props
   const props = defineProps({
-      tracks: {
-          type: Array<ITimeTrack>,
+      pauses: {
+          type: Array<IPauseTrack>,
           default: undefined
       }
   })
 
   // // emits declaration
-  const emit = defineEmits(['deleteTrack', 'reopenTrack'])
+  const emit = defineEmits(['deletePause', 'reopenPause'])
 
   // const fields
   const fields = [
@@ -90,7 +90,7 @@ import type { TableField } from 'bootstrap-vue-next';
     const totalHours = ref()
     
     // nuxt cycle hook
-    watch(() => props.tracks, async(newTracks) => {
+    watch(() => props.pauses, async(newTracks) => {
       if(newTracks) {
           totalRows.value = newTracks.length
           totalHours.value = sumTotalHours(newTracks)
@@ -114,7 +114,7 @@ import type { TableField } from 'bootstrap-vue-next';
     return text
     }
     
-    const sumTotalHours = (tracks:ITimeTrack[]) : string => {
+    const sumTotalHours = (tracks:IPauseTrack[]) : string => {
       let sum = 0
       tracks.forEach(track => {
         sum = sum + Number(track.Duration)
@@ -122,12 +122,12 @@ import type { TableField } from 'bootstrap-vue-next';
       return sum.toLocaleString()
     }
 
-    const deleteTrack = (track:ITimeTrack) => {
-      emit('deleteTrack', track)
+    const deletePause = (track:IPauseTrack) => {
+      emit('deletePause', track)
     }
 
-    const reopenTrack = (track:ITimeTrack) => {
-      emit('reopenTrack', track)
+    const reopenPause = (track:IPauseTrack) => {
+      emit('reopenPause', track)
     }
 
 </script>

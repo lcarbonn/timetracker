@@ -1,7 +1,8 @@
 VITE_BASEROW_URL = 'https://api.baserow.io'
 VITE_BASEROW_BASE_NAME ='TimeTracker'
-VITE_BASEROW_BASE_ID = '11111'
-VITE_BASEROW_TIMETRACK = "2222"
+VITE_BASEROW_BASE_ID = 'baserow base id'
+VITE_BASEROW_TIMETRACK = "timetrack table id"
+VITE_BASEROW_PAUSETRACK = "pausetrack table id"
 VITE_BASEROW_TOKEN = 'your baserow token'
 # for tests only
 VITE_BASEROW_LOGIN = "your email only for test"

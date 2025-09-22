@@ -66,15 +66,15 @@ describe('baserow time tracker', () => {
     expect(tt.UID[0].id).toEqual(user_id)
   })
 
-  // get  last open time tracks
-  it('get last open time track for an uid', async () => {
-    const tt:ITimeTrack = await fetchLastOpenTimeTrack(user_id)
+  // get  time track of the day
+  it('get time track of the day for an uid', async () => {
+    const tt:ITimeTrack = await fetchTodayTimeTrack(user_id)
     logTrack(tt)
     expect(tt.id).toEqual(TEST_TT.id)
     expect(tt.End).toBeNull()
   })
 
-    // update test time track
+  // update test time track
   it('update one row form baserow', async () => {
     const now = new Date()
     TEST_TT.End = now

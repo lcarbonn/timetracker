@@ -16,9 +16,10 @@ export interface ITimeTrack {
   Duration:number
   Year:number
   Week:number
+  PauseDuration:number
 }
 
-export interface ListResponse {
+export interface ListTimeResponse {
   count:number
   next:string|null
   previous:string|null

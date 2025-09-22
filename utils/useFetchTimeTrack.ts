@@ -1,4 +1,4 @@
-import type { ListResponse, ITimeTrack } from "~/types/tableTimeTrack";
+import type { ListTimeResponse, ITimeTrack } from "~/types/tableTimeTrack";
 
     const URL = import.meta.env.VITE_BASEROW_URL
     const TIMETRACK_ID = import.meta.env.VITE_BASEROW_TIMETRACK
@@ -18,7 +18,7 @@ export const fetchTimeTracks = () : Promise<ITimeTrack[]> => {
         order_by:'-UID'
       }
     // Use fetch with the runtime config values
-    $fetch<ListResponse>(
+    $fetch<ListTimeResponse>(
       uri,
       {
         query: params,
@@ -121,11 +121,11 @@ export const fetchUpdateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack>
 }
 
 /**
- * Get last open time track for an uid
+ * Get time track for an uid of the today
  * @param uid, the uid
  * @returns Promise - the time trak or the error
  */
-export const fetchLastOpenTimeTrack = (uid:number) : Promise<ITimeTrack> => {
+export const fetchTodayTimeTrack = (uid:number) : Promise<ITimeTrack> => {
   return new Promise((resolve, reject) => {
     const uri = `${URL}/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
     const params = 
@@ -142,15 +142,15 @@ export const fetchLastOpenTimeTrack = (uid:number) : Promise<ITimeTrack> => {
               value: uid
             },
             {
-              field:"End",
-              type: "empty",
-              value: ""
+              field:"Start",
+              type: "date_is",
+              value: "Europe/Paris??today"
             }
           ]
         }
       }
    // Use fetch with the runtime config values
-   $fetch<ListResponse>(
+   $fetch<ListTimeResponse>(
      uri,
      {
       query: params,
@@ -225,7 +225,7 @@ export const fetchTimeTracksWeekUid = (uid:number, week:number) : Promise<ITimeT
         }
       }
    // Use fetch with the runtime config values
-   $fetch<ListResponse>(
+   $fetch<ListTimeResponse>(
      uri,
      {
       query: params,
@@ -274,7 +274,7 @@ export const fetchTimeTracksTodayUid = (uid:number) : Promise<ITimeTrack[]> => {
         }
       }
    // Use fetch with the runtime config values
-   $fetch<ListResponse>(
+   $fetch<ListTimeResponse>(
      uri,
      {
       query: params,
