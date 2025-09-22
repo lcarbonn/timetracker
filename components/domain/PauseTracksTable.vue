@@ -4,7 +4,7 @@
       <BCol lg="4" class="my-1">
       </BCol>
       <BCol lg="4" class="my-1">
-        <span>Total Hours : <b>{{ totalHours }}</b></span>
+        <span>Total Hours : <b>{{ formatDuration(totalHours) }}</b></span>
       </BCol>
       <BCol lg="4" class="my-1">
         <BPagination
@@ -80,6 +80,9 @@ import type { TableField } from 'bootstrap-vue-next';
       {
         key: 'Duration',
         label: 'Duration',
+        formatter: (value: any, key: any, item: any) => {
+          return formatDuration(value)
+        },
       },
       {
         key: 'id',
@@ -118,12 +121,12 @@ import type { TableField } from 'bootstrap-vue-next';
     return text
     }
     
-    const sumTotalHours = (tracks:IPauseTrack[]) : string => {
-      let sum = 0
+    const sumTotalHours = (tracks:IPauseTrack[]) : number => {
+      let sum:number = 0
       tracks.forEach(track => {
         sum = sum + Number(track.Duration)
-      });
-      return sum.toLocaleString()
+      })
+      return sum
     }
 
     const deletePause = (track:IPauseTrack) => {

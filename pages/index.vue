@@ -7,9 +7,9 @@
         <BButton v-if="todayTrack && todayTrack.End" class="mx-1" @click="restartDay">Restart my day</BButton>
         <BCardText v-if="todayTrack && !todayTrack.End"> Day started at : <b>{{ todayStartTime }}</b></BCardText>
         <BCardText v-if="todayTrack && todayTrack.End">  Day started at : <b>{{ todayStartTime }}</b> - ended at : <b>{{ todayEndTime }}</b></BCardText>
-        <BCardText v-if="todayTrack && todayTrack.End"> Duration : <b>{{ todayTrack.Duration }}</b></BCardText>
-        <BCardText v-if="todayTrack && todayTrack.End"> Pause Duration : <b>{{ todayTrack.PauseDuration }}</b></BCardText>
-        <BCardText v-if="todayTrack && todayTrack.End"> Effective Duration : <b>{{ todayTrack.EffectiveDuration }}</b></BCardText>
+        <BCardText v-if="todayTrack && todayTrack.End"> Duration : <b>{{ formatDuration(todayTrack.Duration) }}</b></BCardText>
+        <BCardText v-if="todayTrack && todayTrack.End"> Pause Duration : <b>{{ formatDuration(todayTrack.PauseDuration) }}</b></BCardText>
+        <BCardText v-if="todayTrack && todayTrack.End"> Effective Duration : <b>{{ formatDuration(todayTrack.EffectiveDuration) }}</b></BCardText>
         <BCardText v-if="todayTrack && !todayTrack.End"> Timer : <b>{{ dayTimer }}</b></BCardText>
       </BCard>
       <BCard title="Current pause" v-if="todayTrack && !todayTrack.End" body-class="text-center">
@@ -115,7 +115,7 @@ import type { IPauseTrack } from '~/types/tablePauseTrack'
   const startDayChrono = () => {
     dayChrono.value = setInterval(() => {
       if(todayTrack.value?.Start)
-        dayTimer.value = getDuration(new Date(todayTrack.value.Start), new Date())
+        dayTimer.value = formatTimer(new Date(todayTrack.value.Start))
       }, 1000);
   }
 
@@ -125,7 +125,7 @@ import type { IPauseTrack } from '~/types/tablePauseTrack'
   const startPauseChrono = () => {
     pauseChrono.value = setInterval(() => {
       if(currentPause.value?.Start)
-        pauseTimer.value = getDuration(new Date(currentPause.value.Start), new Date())
+        pauseTimer.value = formatTimer(new Date(currentPause.value.Start))
       }, 1000);
   }
 
