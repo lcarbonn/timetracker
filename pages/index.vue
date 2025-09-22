@@ -10,12 +10,13 @@
         <BCardText v-if="todayTrack && todayTrack.End"> Duration : <b>{{ todayTrack.Duration }}</b></BCardText>
         <BCardText v-if="todayTrack && todayTrack.End"> Pause Duration : <b>{{ todayTrack.PauseDuration }}</b></BCardText>
         <BCardText v-if="todayTrack && todayTrack.End"> Effective Duration : <b>{{ todayTrack.EffectiveDuration }}</b></BCardText>
-        <BCardText v-if="todayTrack && !todayTrack.End"> Timer : <b>{{ timer }}</b></BCardText>
+        <BCardText v-if="todayTrack && !todayTrack.End"> Timer : <b>{{ dayTimer }}</b></BCardText>
       </BCard>
       <BCard title="Current pause" v-if="todayTrack && !todayTrack.End" body-class="text-center">
         <BButton v-if="!currentPause" size="lg" class="mx-1" @click="startPause">Have a break</BButton>
         <BButton v-if="currentPause && !currentPause.End" size="lg" class="mx-1" @click="endPause">Back to work</BButton>
         <BCardText v-if="currentPause">  Pause started at : <b>{{ currentPauseStartTime }}</b></BCardText>
+        <BCardText v-if="currentPause"> Duration : <b>{{ pauseTimer }}</b></BCardText>
       </BCard>
       <BCard title="Pauses for today">
         <DomainPauseTracksTable :disabled="disabled" :pauses="todayPauses" @delete-pause="deletePause" @reopen-pause="restartPause"/>
@@ -27,7 +28,6 @@
 </template>
 
 <script setup lang="ts">
-import { getStateTodayTimeTrack, reopenTimeTrack } from '~/composables/useTimeTrack'
 import type { IPauseTrack } from '~/types/tablePauseTrack'
 
   // middleware
@@ -70,7 +70,7 @@ import type { IPauseTrack } from '~/types/tablePauseTrack'
       text = start.toLocaleDateString() +" - "+start.toLocaleTimeString()
     }
     if(!todayTrack.value?.End) {
-      startChrono()
+      startDayChrono()
     }
     return text
   })
@@ -92,9 +92,9 @@ import type { IPauseTrack } from '~/types/tablePauseTrack'
       const start = new Date(currentPause.value.Start)
       text = start.toLocaleDateString() +" - "+start.toLocaleTimeString()
     }
-    // if(!todayTrack.value?.End) {
-    //   startChrono()
-    // }
+    if(!currentPause.value?.End) {
+      startPauseChrono()
+    }
     return text
   })
 
@@ -109,13 +109,23 @@ import type { IPauseTrack } from '~/types/tablePauseTrack'
   })
 
   // const for chrono
-  const timer = ref()
-  const chrono = ref()
+  const dayTimer = ref()
+  const dayChrono = ref()
   
-  const startChrono = () => {
-    chrono.value = setInterval(() => {
+  const startDayChrono = () => {
+    dayChrono.value = setInterval(() => {
       if(todayTrack.value?.Start)
-        timer.value = getDuration(new Date(todayTrack.value.Start), new Date())
+        dayTimer.value = getDuration(new Date(todayTrack.value.Start), new Date())
+      }, 1000);
+  }
+
+  const pauseTimer = ref()
+  const pauseChrono = ref()
+  
+  const startPauseChrono = () => {
+    pauseChrono.value = setInterval(() => {
+      if(currentPause.value?.Start)
+        pauseTimer.value = getDuration(new Date(currentPause.value.Start), new Date())
       }, 1000);
   }
 
@@ -129,7 +139,7 @@ import type { IPauseTrack } from '~/types/tablePauseTrack'
   // ending the day
   const endDay = () => {
     if(todayTrack.value) closeTimeTrack(todayTrack.value.id)
-    clearInterval(chrono.value)
+    clearInterval(dayChrono.value)
   }
 
   // staring a pause
@@ -142,6 +152,7 @@ import type { IPauseTrack } from '~/types/tablePauseTrack'
   const endPause = () => {
     if(currentPause.value) {
       closePauseTrack(currentPause.value.id)
+      clearInterval(pauseChrono.value)
     }
   }
 
