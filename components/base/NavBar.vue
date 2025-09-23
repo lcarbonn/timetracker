@@ -16,13 +16,13 @@
         style="background-color:var(--bs-primary);color:var(--bs-white)"
        >
       <BNavbarNav class="ms-auto mb-2 mb-lg-0">
+        <BNavItem  href="/weeks">My tracks of the Week</BNavItem>
         <BNavItemDropdown v-if="isConnected" right>
           <template #button-content>
             <em>{{userEmail}}<Person/></em>
           </template>
           <BDropdownItem  @click="signOut()">Sign Out</BDropdownItem>
         </BNavItemDropdown>
-        <BDropdownItem  href="/weeks">Weeks</BDropdownItem>
         <BaseThemeItemDropdown @clicked="show=!show"/>
       </BNavbarNav>
     </BOffcanvas>

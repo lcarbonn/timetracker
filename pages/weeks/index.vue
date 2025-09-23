@@ -1,7 +1,7 @@
 <template>
     <div>
       <BCard :title="'Your tracks for week ' + currentWeek">
-        <DomainTimeTracksTableWeek :tracks="tracksWeek" @delete-track="deleteDay" @emit-filter="emitFilter"/>
+        <DomainTimeTracksTable :tracks="tracksWeek" @delete-track="deleteDay" @emit-filter="emitFilter"/>
       </BCard>
       <BModal v-model="modalDeleteDay" title="Delete day" @ok="confirmDeleteDay"> Really ? </BModal>
       <BModal v-model="modalRestartDay" title="Restart day" @ok="confirmRestartDay"> Really ? </BModal>

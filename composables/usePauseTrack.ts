@@ -120,6 +120,8 @@ export const deleteStatePause = (id:number) => {
     const tt = useTimeTrack().value
       if(tt?.id) {
         getStatePauseTracks(tt.id)
+        const { user } = useUserSession()
+        // getStateTodayTimeTrack()
       }
   })
   if(usePauseTrack().value?.id == id) {
