@@ -62,7 +62,11 @@ export const getStateTodayTimeTrack = (user_id:number) => {
   })
   .then((tt) => {
       useTimeTrack().value = tt
-      getStatePauseTracks(tt.id)
+      if(tt) {
+        getStatePauseTracks(tt.id)
+      } else {
+        usePauseTracks().value = undefined
+      }
   })
 }
 

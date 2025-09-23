@@ -19,6 +19,8 @@
       striped
       hover
       stacked="md"
+      empty-text="No pause"
+      show-empty
       :fields="(fields as TableField[])"
       :items="pauses"
       :current-page="currentPage"

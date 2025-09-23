@@ -91,13 +91,13 @@
       },    
       headerToolbar: {
         left: "myPrevButton,myTodayButton,myNextButton",
-        center: "title",
-        right: "timeGridWeek,timeGridDay",
+        center: "",
+        right: "",
       },
       footerToolbar: {
         left: "myPrevButton,myTodayButton,myNextButton",
         center: "",
-        right: "timeGridWeek,timeGridDay",
+        right: "",
       },
       events: calendarEvents.value,
     };

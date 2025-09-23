@@ -1,9 +1,9 @@
 <template>
     <div>
-      <BCard>
-        <DomainCalendarWeek :tracks="tracksWeek" @emit-filter="emitFilter"/>
+      <BCard :title="'Your week '+useWeek().value+' tracks for ' + user?.first_name" body-class="text-center">
       </BCard>
-      <BCard :title="'Your tracks for week ' + useWeek().value">
+      <DomainCalendarWeek :tracks="tracksWeek" @emit-filter="emitFilter"/>
+      <BCard>
         <DomainTimeTracksTable :tracks="tracksWeek" @delete-track="deleteDay" @emit-filter="emitFilter"/>
       </BCard>
       <BModal v-model="modalDeleteDay" title="Delete day" @ok="confirmDeleteDay"> Really ? </BModal>

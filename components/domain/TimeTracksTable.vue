@@ -17,6 +17,8 @@
       striped
       hover
       stacked="md"
+      empty-text="No track"
+      show-empty
       :fields="(fields as TableField[])"
       :items="tracks"
       :current-page="currentPage"

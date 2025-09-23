@@ -19,7 +19,7 @@ export const useTimeTracksToday = () => useState<ITimeTrack[]>("timeTracksToday"
 /**
  * State for Pause Tracks
  */
-export const usePauseTracks = () => useState<IPauseTrack[]>("pauseTracks");
+export const usePauseTracks = () => useState<IPauseTrack[]|undefined>("pauseTracks");
 
 /**
  * State for Time Track

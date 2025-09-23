@@ -50,13 +50,6 @@
       
     }
     return opts
-    // return [
-    //   { value: year, text: ''+year },
-    //   { value: 38, text: '38' },
-    //   { value: 37, text: '37' },
-    //   { value: 36, text: '36' },
-    //   { value: 2024, text: '2024' },
-    // ]
   })
 
   // watch local refs udpates

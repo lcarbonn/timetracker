@@ -18,9 +18,7 @@
         <BCardText v-if="currentPause">  Pause started at : <b>{{ currentPauseStartTime }}</b></BCardText>
         <BCardText v-if="currentPause"> Duration : <b>{{ pauseTimer }}</b></BCardText>
       </BCard>
-      <BCard>
-        <DomainCalendarDay :today-track="todayTrack" :today-pauses="todayPauses"/>
-      </BCard>
+      <DomainCalendarDay :today-track="todayTrack" :today-pauses="todayPauses"/>
       <BCard title="Pauses for today">
         <DomainPauseTracksTable :disabled="disabled" :pauses="todayPauses" @delete-pause="deletePause" @reopen-pause="restartPause"/>
       </BCard>
