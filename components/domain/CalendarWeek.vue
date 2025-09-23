@@ -38,7 +38,7 @@
   // set events
   const calendarEvents = computed (() => {
     const events:any[] = []
-    if(props.tracks) {
+    if(props.tracks && props.tracks.length>0) {
       props.tracks.forEach(track => {
         events.push( {
           title: track.End?"Day of effective "+formatDuration(track.EffectiveDuration):"Day not yet completed",

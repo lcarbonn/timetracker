@@ -2,7 +2,7 @@
     <div>
       <BCard :title="'Your week '+useWeek().value+' tracks for ' + user?.first_name" body-class="text-center">
       </BCard>
-      <DomainCalendarWeek :tracks="tracksWeek" @emit-filter="emitFilter"/>
+      <DomainCalendarWeek v-if="tracksWeek" :tracks="tracksWeek" @emit-filter="emitFilter"/>
       <BCard>
         <DomainTimeTracksTable :tracks="tracksWeek" @delete-track="deleteDay" @emit-filter="emitFilter"/>
       </BCard>
