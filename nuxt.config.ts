@@ -30,6 +30,11 @@ export default defineNuxtConfig({
     '~/assets/css/custom-theme.scss'
   ],
 
+  build: {
+    transpile: [
+      '/@fullcalendar.*/'
+    ]
+  },
   pwa: {
     /* PWA options */
     manifest: {

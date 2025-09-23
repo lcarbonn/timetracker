@@ -1,6 +1,6 @@
 {
   "name": "timetracker",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "NocoLowco Time Tracker",
   "author": "laurent",
   "private": true,
@@ -15,6 +15,10 @@
   },
   "dependencies": {
     "@bootstrap-vue-next/nuxt": "^0.28.0",
+    "@fullcalendar/core": "^6.1.19",
+    "@fullcalendar/interaction": "^6.1.19",
+    "@fullcalendar/timegrid": "^6.1.19",
+    "@fullcalendar/vue3": "^6.1.19",
     "@nuxtjs/i18n": "^9.3.1",
     "@vite-pwa/nuxt": "^0.10.6",
     "@vuepic/vue-datepicker": "^7.4.0",

@@ -1,7 +1,7 @@
 <template>
     <div>
       <BCard :title="'Today track for ' + user?.first_name" body-class="text-center">
-        <BCardText><b>{{ today }}</b></BCardText>
+        <!-- <BCardText><b>{{ today }}</b></BCardText> -->
         <BButton v-if="!todayTrack" size="lg" class="m-1" @click="startDay">Start my day</BButton>
         <BButton v-if="todayTrack && !todayTrack.End" size="lg" class="mx-1" @click="endDay">End my day</BButton>
         <BButton v-if="todayTrack && todayTrack.End" class="mx-1" @click="restartDay">Restart my day</BButton>
@@ -11,12 +11,15 @@
         <BCardText v-if="todayTrack && todayTrack.End"> Pause Duration : <b>{{ formatDuration(todayTrack.PauseDuration) }}</b></BCardText>
         <BCardText v-if="todayTrack && todayTrack.End"> Effective Duration : <b>{{ formatDuration(todayTrack.EffectiveDuration) }}</b></BCardText>
         <BCardText v-if="todayTrack && !todayTrack.End"> Timer : <b>{{ dayTimer }}</b></BCardText>
-      </BCard>
-      <BCard title="Current pause" v-if="todayTrack && !todayTrack.End" body-class="text-center">
         <BButton v-if="!currentPause" size="lg" class="mx-1" @click="startPause" variant="primary">Have a break</BButton>
         <BButton v-if="currentPause && !currentPause.End" size="lg" class="mx-1" @click="endPause" variant="primary">Back to work</BButton>
+      </BCard>
+      <BCard title="Current pause" v-if="currentPause" body-class="text-center">
         <BCardText v-if="currentPause">  Pause started at : <b>{{ currentPauseStartTime }}</b></BCardText>
         <BCardText v-if="currentPause"> Duration : <b>{{ pauseTimer }}</b></BCardText>
+      </BCard>
+      <BCard>
+        <DomainCalendar :today-track="todayTrack" :today-pauses="todayPauses"/>
       </BCard>
       <BCard title="Pauses for today">
         <DomainPauseTracksTable :disabled="disabled" :pauses="todayPauses" @delete-pause="deletePause" @reopen-pause="restartPause"/>
@@ -28,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import type { IPauseTrack } from '~/types/tablePauseTrack'
+  import type { IPauseTrack } from '~/types/tablePauseTrack'
 
   // middleware
   definePageMeta({
@@ -187,10 +190,6 @@ import type { IPauseTrack } from '~/types/tablePauseTrack'
   // confirm restart received
   const confirmRestartPause = () => {
     if(selectedPause.value) reopenPauseTrack(selectedPause.value.id)
-  }
-
-  const emitFilter = () => {
-    if(user.value) getStateTimeTracksWeekUid(user.value.id, useWeek().value)
   }
 
 </script>

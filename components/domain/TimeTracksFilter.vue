@@ -27,7 +27,7 @@
 <script setup lang="ts">
 
   // icons
-import X from '~icons/bi/x'
+  import X from '~icons/bi/x'
 
   // emits declaration
   const emit = defineEmits(['emitFilter'])
