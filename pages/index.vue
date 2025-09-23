@@ -11,8 +11,8 @@
         <BCardText v-if="todayTrack && todayTrack.End"> Pause Duration : <b>{{ formatDuration(todayTrack.PauseDuration) }}</b></BCardText>
         <BCardText v-if="todayTrack && todayTrack.End"> Effective Duration : <b>{{ formatDuration(todayTrack.EffectiveDuration) }}</b></BCardText>
         <BCardText v-if="todayTrack && !todayTrack.End"> Timer : <b>{{ dayTimer }}</b></BCardText>
-        <BButton v-if="!currentPause" size="lg" class="mx-1" @click="startPause" variant="primary">Have a break</BButton>
-        <BButton v-if="currentPause && !currentPause.End" size="lg" class="mx-1" @click="endPause" variant="primary">Back to work</BButton>
+        <BButton v-if="todayTrack && !todayTrack.End && !currentPause" size="lg" class="mx-1" @click="startPause" variant="primary">Have a break</BButton>
+        <BButton v-if="todayTrack && !todayTrack.End && currentPause && !currentPause.End" size="lg" class="mx-1" @click="endPause" variant="primary">Back to work</BButton>
       </BCard>
       <BCard title="Current pause" v-if="currentPause" body-class="text-center">
         <BCardText v-if="currentPause">  Pause started at : <b>{{ currentPauseStartTime }}</b></BCardText>

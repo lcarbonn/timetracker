@@ -62,7 +62,7 @@
       scrollTime:"07:00:00",
       stickyHeaderDates: true,
       allDaySlot:false,
-
+      firstDay:1,
       customButtons: {
         myPrevButton: {
           icon: 'chevron-left',
