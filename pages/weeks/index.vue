@@ -1,6 +1,9 @@
 <template>
     <div>
-      <BCard :title="'Your tracks for week ' + currentWeek">
+      <BCard>
+        <DomainCalendarWeek :tracks="tracksWeek" @emit-filter="emitFilter"/>
+      </BCard>
+      <BCard :title="'Your tracks for week ' + useWeek().value">
         <DomainTimeTracksTable :tracks="tracksWeek" @delete-track="deleteDay" @emit-filter="emitFilter"/>
       </BCard>
       <BModal v-model="modalDeleteDay" title="Delete day" @ok="confirmDeleteDay"> Really ? </BModal>
@@ -28,7 +31,6 @@ import type { ITimeTrack } from '~/types/tableTimeTrack'
 
 
   // local refs
-  const todayTrack = useTimeTrack()
   const tracksWeek = useTimeTracksWeek()
   
   // local refs

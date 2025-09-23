@@ -2,9 +2,6 @@
   <div>
     <BRow>
       <BCol lg="4" class="my-1">
-          <DomainTimeTracksFilter @emit-filter="emitFilter"></DomainTimeTracksFilter>
-      </BCol>
-      <BCol lg="4" class="my-1">
         <span>Total Hours : <b>{{ formatDuration(totalHours) }}</b></span>
       </BCol>
       <BCol lg="4" class="my-1">

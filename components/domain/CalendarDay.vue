@@ -1,5 +1,5 @@
 <template>
-    <FullCalendar :options="calendarOptions" />
+    <FullCalendar :options="calendarOptions"/>
 </template>
 
 <script setup lang="ts">
@@ -51,54 +51,37 @@
   // calendar configuration
   const calendarOptions = computed(() => {
     const cal:CalendarOptions = {
-    plugins: [timeGridPlugin, interactionPlugin],
-    locale:"fr-fr",
-    initialView: "timeGridDay",
-    // editable: true,
-    nowIndicator: true,
-    scrollTime:"07:00:00",
-    // dateClick(arg) {
-    //   useSonner("Date clicked", {
-    //     description: dayjs(arg.dateStr).format("dddd, MMMM D, YYYY h:mm A"),
-    //   });
-    // },
-    // eventClick(arg) {
-    //   useSonner("Event clicked", {
-    //     description: arg.event.title,
-    //   });
-    // },
-    stickyHeaderDates: true,
-    allDaySlot:false,
-    headerToolbar: {
-      left: "",
-      center: "title",
-      right: "",
-    },
-    // footerToolbar: {
-    //   left: "prevYear,prev,today,next,nextYear",
-    //   center: "",
-    //   right: "timeGridWeek,timeGridDay",
-    // },
-    events: calendarEvents.value,
-    // events: [
-    //   {
-    //     title: "Attend Data Protection Act Webinar",
-    //     start:new Date(),
-    //     url: "https://ui-thing.behonbaker.com/",
-    //   },
-    //   {
-    //     title: "Travel to Kingston for Manager's Meeting",
-    //     start:new Date(),
-    //   },
-    //   {
-    //     title: "Vacation in Montego Bay",
-    //     allDay: true,
-    //     color: "green",
-    //     start:new Date(),
-    //     end: new Date(),
-    //   },
-    // ],
-  };
+      plugins: [timeGridPlugin, interactionPlugin],
+      locale:"fr-fr",
+      initialView: "timeGridDay",
+      // editable: true,
+      nowIndicator: true,
+      scrollTime:"07:00:00",
+      dayHeaders:false,
+      // dateClick(arg) {
+      //   useSonner("Date clicked", {
+      //     description: dayjs(arg.dateStr).format("dddd, MMMM D, YYYY h:mm A"),
+      //   });
+      // },
+      // eventClick(arg) {
+      //   useSonner("Event clicked", {
+      //     description: arg.event.title,
+      //   });
+      // },
+      stickyHeaderDates: true,
+      allDaySlot:false,
+      headerToolbar: {
+        left: "",
+        center: "title",
+        right: "",
+      },
+      // footerToolbar: {
+      //   left: "prevYear,prev,today,next,nextYear",
+      //   center: "",
+      //   right: "timeGridWeek,timeGridDay",
+      // },
+      events: calendarEvents.value,
+    };
   return cal
   })
 
