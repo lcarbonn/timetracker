@@ -166,3 +166,30 @@ export const deleteStateTrack = (id:number) => {
     useTimeTrack().value = undefined
   }
 }
+
+/**
+ * Update the time track
+ * @param id, the time track id
+ * @param start, the start date
+ * @param end, the end date
+ */
+export const updateTimeTrack = (id:number, start:Date, end:Date) => {
+  const { user } = useUserSession()
+  $fetch<ITimeTrack>('/api/timetrack', {
+      method: 'PATCH',
+      body: {
+          id:id,
+          Start:start,
+          End:end?end:null
+      }
+  })
+  .then ((tt) => {
+    useTimeTrack().value = tt
+      if(user.value) {
+        getStateTimeTracksWeekUid(user.value.id, useWeek().value)
+      }
+  })
+  .catch((error) => {
+    useTimeTrack().value = undefined
+  })
+}

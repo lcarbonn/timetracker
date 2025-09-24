@@ -2,7 +2,7 @@
     <div>
       <BCard :title="'Your week '+useWeek().value+' tracks for ' + user?.first_name" body-class="text-center">
       </BCard>
-      <DomainCalendarWeek :tracks="tracksWeek" @emit-filter="emitFilter"/>
+      <DomainCalendarWeek :tracks="tracksWeek" @emit-filter="emitFilter" @update-track="updateTrack"/>
       <BCard>
         <DomainTimeTracksTable :tracks="tracksWeek" @delete-track="deleteDay" @emit-filter="emitFilter"/>
       </BCard>
@@ -60,6 +60,17 @@ import type { ITimeTrack } from '~/types/tableTimeTrack'
 
   const emitFilter = () => {
     if(user.value) getStateTimeTracksWeekUid(user.value.id, useWeek().value)
+  }
+
+  const updateTrack = (track:any) => {
+    // get the original end time of the track
+    useTimeTracksWeek().value.forEach(tt => {
+      if(tt.id==track.id) {
+        if(!tt.End) track.end = null
+      }
+    });
+    alert("track end " + track.end)
+    if(track) updateTimeTrack(track.id, track.start, track.end )
   }
 
 </script>

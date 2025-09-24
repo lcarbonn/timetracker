@@ -8,7 +8,7 @@
   import FullCalendar from '@fullcalendar/vue3'
   import interactionPlugin from '@fullcalendar/interaction'
   import timeGridPlugin from '@fullcalendar/timegrid'
-  import type { CalendarOptions } from '@fullcalendar/core/index.js'
+  import type { CalendarOptions, EventDropArg } from '@fullcalendar/core/index.js'
   import { TimeTrack } from '~/types/tableTimeTrack'
 
   // props
@@ -20,7 +20,7 @@
   })
 
   // emits declaration
-  const emit = defineEmits(['emitFilter'])
+  const emit = defineEmits(['emitFilter', 'updateTrack'])
 
   const fullCalendar = ref()
   const todayWeek = useWeek().value
@@ -44,7 +44,9 @@
           title: track.End?"Day of effective "+formatDuration(track.EffectiveDuration):"Day not yet completed",
           start:track.Start,
           end:track.End?track.End:new Date(),
-          color:'#378006'
+          // end:track.End,
+          color:'#378006',
+          id:track.id
         })
       });
     }
@@ -56,7 +58,7 @@
     const cal:CalendarOptions = {
       plugins: [timeGridPlugin, interactionPlugin],
       locale:"fr-fr",
-      // editable: true,
+      editable: true,
       nowIndicator: true,
       scrollTime:"07:00:00",
       stickyHeaderDates: true,
@@ -65,7 +67,6 @@
       businessHours: {
         // days of week. an array of zero-based day of week integers (0=Sunday)
         daysOfWeek: [ 1, 2, 3, 4, 5 ], // Monday - Friday
-
         startTime: '07:00', // a start time (10am in this example)
         endTime: '18:00', // an end time (6pm in this example)
       },
@@ -106,8 +107,27 @@
         right: "",
       },
       events: calendarEvents.value,
+      snapDuration:"00:15:00",
+      dragScroll:false,
+      eventDrop(info) {
+        dropEvent(info)
+      },
+      eventResize(info) {
+        dropEvent(info)
+      },
     };
   return cal
   })
 
+  // methods
+  // drop event
+  const dropEvent = (info:any) => {
+    // alert(info.event.title + " was dropped on " + info.event.start?.toISOString() + ', end:'+info.event.end?.toISOString());
+    const track = {
+      id:info.event.id,
+      start:info.event.start,
+      end:info.event.end
+    }
+    emit('updateTrack', track)
+  }
 </script>
