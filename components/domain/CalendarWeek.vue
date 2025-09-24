@@ -1,7 +1,7 @@
 <template>
     <div>
       <FullCalendar ref="fullCalendar":options="calendarOptions" />
-      <LazyDomainUpdateTimeTrack v-if="selectedEvent" :modalUpdateTrack="modalUpdateTrack" :time-track="selectedEvent" @update-time-track="updateTimeTrack"></LazyDomainUpdateTimeTrack>
+      <LazyDomainUpdateTimeTrack v-if="selectedEvent" :modalUpdateTrack="modalUpdateTrack" :time-track="selectedEvent" @update-time-track="updateTrack"></LazyDomainUpdateTimeTrack>
     </div>
 </template>
 
@@ -50,14 +50,19 @@
           end:track.End?track.End:new Date(),
           // end:track.End,
           color:'#378006',
-          id:track.id
+          id:track.id,
+          isTrack:true,
+          editable:track.End?true:false
         })
         // add the pauses to the calendar
         track.pauses?.forEach(pause => {
           events.push( {
             title: pause.End?"Pause of "+formatDuration(pause.Duration):"Pause started",
             start:pause.Start,
-            end:pause.End?pause.End:new Date()
+            end:pause.End?pause.End:new Date(),
+            id:pause.id,
+            isTrack:false,
+            editable:pause.End?true:false
           })
         });        
       });
@@ -128,6 +133,7 @@
         dropResizeEvent(info)
       },
       eventClick(info) {
+        if(!info.event.startEditable) return
         clickEvent(info)
       },
     };
@@ -138,24 +144,27 @@
   // drop and resize event
   const dropResizeEvent = (info:any) => {
     // alert(info.event.title + " was dropped on " + info.event.start?.toISOString() + ', end:'+info.event.end?.toISOString());
+    selectedEvent.value = info.event
     const track = {
       id:info.event.id,
       start:info.event.start,
-      end:info.event.end
+      end:info.event.end,
+      isTrack:selectedEvent.value.extendedProps.isTrack
     }
     emit('updateTrack', track)
   }
   // click on event
   const clickEvent = (info:any) => {
-    // alert(info.event.title + " was dropped on " + info.event.start?.toISOString() + ', end:'+info.event.end?.toISOString());
+    alert(info.event.title + " was dropped on " + info.event.start?.toISOString() + ', isTrack:'+info.event.extendedProps.isTrack);
     selectedEvent.value = info.event
     modalUpdateTrack.value.show = !modalUpdateTrack.value.show
   }
-  const updateTimeTrack = (id:string, start:Date, end:Date) => {
+  const updateTrack = (id:string, start:Date, end:Date) => {
     const track = {
       id:id,
       start:start,
-      end:end
+      end:end,
+      isTrack:selectedEvent.value.extendedProps.isTrack
     }
     emit('updateTrack', track)
   }

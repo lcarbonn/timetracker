@@ -64,13 +64,25 @@ import type { ITimeTrack } from '~/types/tableTimeTrack'
   }
 
   const updateTrack = (track:any) => {
+    // alert(track.id + " was dropped on " + track.start.toISOString() + ', isTrack:'+track.isTrack)
     // get the original end time of the track
-    useTimeTracksWeek().value.forEach(tt => {
-      if(tt.id==track.id) {
-        if(!tt.End) track.end = null
-      }
-    });
-    if(track) updateTimeTrack(track.id, track.start, track.end )
+    if(track.isTrack) {
+      // useTimeTracksWeek().value.forEach(tt => {
+      //   if(tt.id==track.id) {
+      //     if(!tt.End) track.end = null
+      //   }
+      // });
+      updateTimeTrack(track.id, track.start, track.end )
+    } else {
+      // useTimeTracksWeek().value.forEach(tt => {
+      //   tt.pauses?.forEach(pp => {
+      //     if(pp.id==track.id) {
+      //       if(!pp.End) track.end = null
+      //     }
+      //   })
+      // });
+      updatePauseTrack(track.id, track.start, track.end )
+    }
   }
 
 </script>

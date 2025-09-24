@@ -73,7 +73,7 @@ export const openPauseTrack = (timeId:number) => {
       getStatePauseTracks(timeId)
     })
     .catch((error) => {
-        useTimeTrack().value = undefined
+        usePauseTrack().value = undefined
     })
 }
 
@@ -97,7 +97,7 @@ export const closePauseTrack = (id:number) => {
     }
   })
   .catch((error) => {
-    useTimeTrack().value = undefined
+    usePauseTrack().value = undefined
   })
 }
 
@@ -121,7 +121,7 @@ export const reopenPauseTrack = (id:number) => {
       }
   })
   .catch((error) => {
-    useTimeTrack().value = undefined
+    usePauseTrack().value = undefined
   })
 }
 
@@ -147,4 +147,31 @@ export const deleteStatePause = (id:number) => {
   if(usePauseTrack().value?.id == id) {
     usePauseTrack().value = undefined
   }
+}
+
+/**
+ * Update the pause track
+ * @param id, the pause track id
+ * @param start, the start date
+ * @param end, the end date
+ */
+export const updatePauseTrack = (id:number, start:Date, end:Date) => {
+  const { user } = useUserSession()
+  $fetch<IPauseTrack>('/api/pausetrack', {
+      method: 'PATCH',
+      body: {
+          id:id,
+          Start:start,
+          End:end
+      }
+  })
+  .then ((pt) => {
+    usePauseTrack().value = pt
+      if(user.value) {
+        getStateTimeTracksWeekUid(user.value.id, useWeek().value)
+      }
+  })
+  .catch((error) => {
+    usePauseTrack().value = undefined
+  })
 }
