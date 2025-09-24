@@ -43,6 +43,7 @@
     const events:any[] = []
     if(props.tracks && props.tracks.length>0) {
       props.tracks.forEach(track => {
+        // add the track to the calendar
         events.push( {
           title: track.End?"Day of effective "+formatDuration(track.EffectiveDuration):"Day not yet completed",
           start:track.Start,
@@ -51,6 +52,14 @@
           color:'#378006',
           id:track.id
         })
+        // add the pauses to the calendar
+        track.pauses?.forEach(pause => {
+          events.push( {
+            title: pause.End?"Pause of "+formatDuration(pause.Duration):"Pause started",
+            start:pause.Start,
+            end:pause.End?pause.End:new Date()
+          })
+        });        
       });
     }
     return events

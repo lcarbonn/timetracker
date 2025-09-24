@@ -1,4 +1,5 @@
 import type { IPauseTrack } from "~/types/tablePauseTrack"
+import type { ITimeTrack } from "~/types/tableTimeTrack"
 
 /**
  * get pause tracks for the time track id
@@ -16,6 +17,25 @@ export const getStatePauseTracks = (timeId:number) => {
       if(list[0].End==null) {
         usePauseTrack().value = list[0]
       }
+  })
+}
+
+/**
+ * get pause tracks for the time track id
+ * @param timeId
+ */
+export const getStateTrackPauseTracks = (track:ITimeTrack) :Promise<void> => {
+  return new Promise((resolve, reject) => {
+    $fetch<IPauseTrack[]>('/api/pausetracks', {
+      method: 'GET',
+        params: {
+            timeId:track.id,
+        }
+    })
+    .then((list) => {
+      track.pauses = list
+      resolve()
+    })
   })
 }
 

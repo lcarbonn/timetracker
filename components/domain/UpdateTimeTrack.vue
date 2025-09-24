@@ -5,7 +5,7 @@
       id="modal-update"
       title="Update time track"
       centered
-      header-bg-variant="info"
+      header-bg-variant="primary"
       size="lg"
       cancel-title="Cancel"
       ok-title="Update"

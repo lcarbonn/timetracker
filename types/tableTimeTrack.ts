@@ -1,3 +1,5 @@
+import type { IPauseTrack } from "./tablePauseTrack"
+
 /**
  * Type for TimeTrack table
  */
@@ -18,6 +20,7 @@ export interface ITimeTrack {
   Week:number
   PauseDuration:number
   EffectiveDuration:number
+  pauses:IPauseTrack[]|undefined
 }
 
 export class TimeTrack implements ITimeTrack {
@@ -30,6 +33,7 @@ export class TimeTrack implements ITimeTrack {
   Week:number=0
   PauseDuration:number=0
   EffectiveDuration:number=0
+  pauses:IPauseTrack[]|undefined=undefined
 }
 
 export interface ListTimeResponse {

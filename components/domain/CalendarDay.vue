@@ -41,7 +41,6 @@
           title: pause.End?"Pause of "+formatDuration(pause.Duration):"Pause started",
           start:pause.Start,
           end:pause.End?pause.End:new Date()
-          // url: "https://ui-thing.behonbaker.com/",
         })
       });
     }

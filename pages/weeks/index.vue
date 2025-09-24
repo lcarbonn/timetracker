@@ -32,7 +32,7 @@ import type { ITimeTrack } from '~/types/tableTimeTrack'
 
   // local refs
   const tracksWeek = useTimeTracksWeek()
-  
+    
   // local refs
   const modalDeleteDay = ref(false)
   const modalRestartDay = ref(false)

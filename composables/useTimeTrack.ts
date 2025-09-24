@@ -13,6 +13,16 @@ export const getStateTimeTracksWeekUid = (user_id:number, week:number) => {
       }
   })
   .then((list) => {
+      // useTimeTracksWeek().value = []
+      list.forEach(track => {
+        getStateTrackPauseTracks(track)
+        .then(() => {
+          const tracks = useTimeTracksWeek().value
+          const index = tracks.indexOf(track)
+          tracks[index] = track
+          useTimeTracksWeek().value = Object.assign([], tracks)
+        })
+      })
       useTimeTracksWeek().value = list
   })
 }
