@@ -155,32 +155,41 @@ export const deleteStatePause = (id:number) => {
  * @param start, the start date
  * @param end, the end date
  */
-export const updatePauseTrack = (id:number, start:Date, end:Date) => {
-  const { user } = useUserSession()
-  $fetch<IPauseTrack>('/api/pausetrack', {
-      method: 'PATCH',
-      body: {
-          id:id,
-          Start:start,
-          End:end
-      }
+export const updatePauseTrack = (id:number, start:Date, end:Date) :Promise<IPauseTrack>=> {
+  return new Promise((resolve, reject) => {
+    $fetch<IPauseTrack>('/api/pausetrack', {
+        method: 'PATCH',
+        body: {
+            id:id,
+            Start:start,
+            End:end
+        }
+    })
+    .then ((pt) => {
+      usePauseTrack().value = pt
+      refreshStateTracks(pt)
+      resolve(pt)
+    })
+    .catch((error) => {
+      usePauseTrack().value = undefined
+      reject(error)
+    })
   })
-  .then ((pt) => {
-    usePauseTrack().value = pt
-    const tracks = useTimeTracksWeek().value
-    tracks.forEach(track => {
-      if(track.pauses) {
-        for (let index = 0; index < track.pauses.length; index++) {
-          const pause = track.pauses[index];
-          if(pause.id == pt.id) {
-            track.pauses[index] = Object.assign([], pt)
-          }
+}
+/**
+ * Refresh the state tracks list with the given pause
+ * @param pause , the pause to refresh
+ */
+const refreshStateTracks = (pause:IPauseTrack) => {
+  const tracks = useTimeTracksWeek().value
+  tracks.forEach(track => {
+    if(track.pauses) {
+      for (let index = 0; index < track.pauses.length; index++) {
+        const statePause = track.pauses[index];
+        if(statePause.id == pause.id) {
+          track.pauses[index] = Object.assign([], pause)
         }
       }
-    });
-    messageToSnack("Event changed to "+new Date(pt.Start).toLocaleString())
-  })
-  .catch((error) => {
-    usePauseTrack().value = undefined
-  })
+    }
+  });
 }

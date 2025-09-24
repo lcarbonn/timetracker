@@ -182,32 +182,38 @@ export const deleteStateTrack = (id:number) => {
  * @param start, the start date
  * @param end, the end date
  */
-export const updateTimeTrack = (id:number, start:Date, end:Date) => {
-  const { user } = useUserSession()
-  $fetch<ITimeTrack>('/api/timetrack', {
-      method: 'PATCH',
-      body: {
-          id:id,
-          Start:start,
-          End:end
-      }
+export const updateTimeTrack = (id:number, start:Date, end:Date) : Promise<ITimeTrack>=> {
+  return new Promise((resolve, reject) => {
+    $fetch<ITimeTrack>('/api/timetrack', {
+        method: 'PATCH',
+        body: {
+            id:id,
+            Start:start,
+            End:end
+        }
+    })
+    .then ((tt) => {
+      useTimeTrack().value = tt
+      refreshStateTracks(tt)
+      resolve(tt)
+    })
+    .catch((error) => {
+      useTimeTrack().value = undefined
+      reject(error)
+    })
   })
-  .then ((tt) => {
-    useTimeTrack().value = tt
-      // if(user.value) {
-      //   // getStateTimeTracksWeekUid(user.value.id, useWeek().value)
-      // }
+}
+/**
+ * Refresh the state of tracks with the track
+ * @param track, the track to refresh
+ */
+const refreshStateTracks = (track:ITimeTrack) => {
     const tracks = useTimeTracksWeek().value
     for (let index = 0; index < tracks.length; index++) {
-      const track = tracks[index];
-      if(track.id == tt.id) {
-        tt.pauses = track.pauses
-        tracks[index] = Object.assign([], tt)
+      const stateTrack = tracks[index];
+      if(stateTrack.id == track.id) {
+        track.pauses = stateTrack.pauses
+        tracks[index] = Object.assign([], track)
       }
     }
-    messageToSnack("Event changed to "+new Date(tt.Start).toLocaleString())
-  })
-  .catch((error) => {
-    useTimeTrack().value = undefined
-  })
 }

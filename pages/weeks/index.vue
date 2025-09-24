@@ -65,23 +65,16 @@ import type { ITimeTrack } from '~/types/tableTimeTrack'
 
   const updateTrack = (track:any) => {
     // alert(track.id + " was dropped on " + track.start.toISOString() + ', isTrack:'+track.isTrack)
-    // get the original end time of the track
     if(track.isTrack) {
-      // useTimeTracksWeek().value.forEach(tt => {
-      //   if(tt.id==track.id) {
-      //     if(!tt.End) track.end = null
-      //   }
-      // });
       updateTimeTrack(track.id, track.start, track.end )
+      .then((tt) => {
+            messageToSnack("Event changed to "+new Date(tt.Start).toLocaleString())
+      })
     } else {
-      // useTimeTracksWeek().value.forEach(tt => {
-      //   tt.pauses?.forEach(pp => {
-      //     if(pp.id==track.id) {
-      //       if(!pp.End) track.end = null
-      //     }
-      //   })
-      // });
       updatePauseTrack(track.id, track.start, track.end )
+      .then((pt) => {
+        messageToSnack("Event changed to "+new Date(pt.Start).toLocaleString())
+      })
     }
   }
 
