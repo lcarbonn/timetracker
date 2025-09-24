@@ -53,7 +53,7 @@ import type { TableField } from 'bootstrap-vue-next';
   })
 
   // // emits declaration
-  const emit = defineEmits(['deleteTrack', 'emitFilter'])
+  const emit = defineEmits(['deleteTrack'])
 
   // const fields
   const fields = [
@@ -128,9 +128,4 @@ import type { TableField } from 'bootstrap-vue-next';
     const deleteTrack = (track:ITimeTrack) => {
       emit('deleteTrack', track)
     }
-
-    const emitFilter = () => {
-      emit('emitFilter')
-    }
-
 </script>

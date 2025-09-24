@@ -9,7 +9,7 @@
   import FullCalendar from '@fullcalendar/vue3'
   import interactionPlugin from '@fullcalendar/interaction'
   import timeGridPlugin from '@fullcalendar/timegrid'
-  import type { CalendarOptions, EventDropArg } from '@fullcalendar/core/index.js'
+  import type { CalendarOptions } from '@fullcalendar/core/index.js'
   import { TimeTrack } from '~/types/tableTimeTrack'
 
   // props
@@ -21,7 +21,7 @@
   })
 
   // emits declaration
-  const emit = defineEmits(['emitFilter', 'updateTrack'])
+  const emit = defineEmits(['navToWeek', 'updateTrack'])
 
   const fullCalendar = ref()
   const selectedEvent = ref()
@@ -79,7 +79,7 @@
           click: function() {
             currentWeek.value = currentWeek.value-1
             fullCalendar.value.getApi().prev()
-            emit('emitFilter')
+            emit('navToWeek', currentWeek.value)
           }
         },
         myTodayButton: {
@@ -87,7 +87,7 @@
           click: function() {
             currentWeek.value = todayWeek
             fullCalendar.value.getApi().today()
-            emit('emitFilter')
+            emit('navToWeek', currentWeek.value)
           }
         },
         myNextButton: {
@@ -95,7 +95,7 @@
           click: function() {
             currentWeek.value = currentWeek.value+1
             fullCalendar.value.getApi().next()
-            emit('emitFilter')
+            emit('navToWeek')
           }
         }
       },    
