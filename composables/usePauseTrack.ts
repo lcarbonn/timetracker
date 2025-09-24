@@ -24,7 +24,7 @@ export const getStatePauseTracks = (timeId:number) => {
  * get pause tracks for the time track id
  * @param timeId
  */
-export const getStateTrackPauseTracks = (track:ITimeTrack) :Promise<void> => {
+export const getStateTrackPauseTracks = (track:ITimeTrack) :Promise<IPauseTrack[]> => {
   return new Promise((resolve, reject) => {
     $fetch<IPauseTrack[]>('/api/pausetracks', {
       method: 'GET',
@@ -34,7 +34,7 @@ export const getStateTrackPauseTracks = (track:ITimeTrack) :Promise<void> => {
     })
     .then((list) => {
       track.pauses = list
-      resolve()
+      resolve(list)
     })
   })
 }
@@ -168,8 +168,9 @@ export const updatePauseTrack = (id:number, start:Date, end:Date) => {
   .then ((pt) => {
     usePauseTrack().value = pt
       if(user.value) {
-        getStateTimeTracksWeekUid(user.value.id, useWeek().value)
+        // getStateTimeTracksWeekUid(user.value.id, useWeek().value)
       }
+    messageToSnack("Event changed to "+new Date(pt.Start).toLocaleString())
   })
   .catch((error) => {
     usePauseTrack().value = undefined

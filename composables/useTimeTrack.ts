@@ -196,8 +196,9 @@ export const updateTimeTrack = (id:number, start:Date, end:Date) => {
   .then ((tt) => {
     useTimeTrack().value = tt
       if(user.value) {
-        getStateTimeTracksWeekUid(user.value.id, useWeek().value)
+        // getStateTimeTracksWeekUid(user.value.id, useWeek().value)
       }
+    messageToSnack("Event changed to "+new Date(tt.Start).toLocaleString())
   })
   .catch((error) => {
     useTimeTrack().value = undefined
