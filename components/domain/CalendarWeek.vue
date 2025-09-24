@@ -1,6 +1,7 @@
 <template>
     <div>
       <FullCalendar ref="fullCalendar":options="calendarOptions" />
+      <LazyDomainUpdateTimeTrack v-if="selectedEvent" :modalUpdateTrack="modalUpdateTrack" :time-track="selectedEvent" @update-time-track="updateTimeTrack"></LazyDomainUpdateTimeTrack>
     </div>
 </template>
 
@@ -23,8 +24,10 @@
   const emit = defineEmits(['emitFilter', 'updateTrack'])
 
   const fullCalendar = ref()
+  const selectedEvent = ref()
   const todayWeek = useWeek().value
   const currentWeek = useWeek()
+  const modalUpdateTrack = ref(new ModalShow()) 
 
   // watch changes date to go to associated calendar week
   watch(() => props.tracks, async(newTracks) => {
@@ -110,18 +113,21 @@
       snapDuration:"00:15:00",
       dragScroll:false,
       eventDrop(info) {
-        dropEvent(info)
+        dropResizeEvent(info)
       },
       eventResize(info) {
-        dropEvent(info)
+        dropResizeEvent(info)
+      },
+      eventClick(info) {
+        clickEvent(info)
       },
     };
   return cal
   })
 
   // methods
-  // drop event
-  const dropEvent = (info:any) => {
+  // drop and resize event
+  const dropResizeEvent = (info:any) => {
     // alert(info.event.title + " was dropped on " + info.event.start?.toISOString() + ', end:'+info.event.end?.toISOString());
     const track = {
       id:info.event.id,
@@ -130,4 +136,19 @@
     }
     emit('updateTrack', track)
   }
+  // click on event
+  const clickEvent = (info:any) => {
+    // alert(info.event.title + " was dropped on " + info.event.start?.toISOString() + ', end:'+info.event.end?.toISOString());
+    selectedEvent.value = info.event
+    modalUpdateTrack.value.show = !modalUpdateTrack.value.show
+  }
+  const updateTimeTrack = (id:string, start:Date, end:Date) => {
+    const track = {
+      id:id,
+      start:start,
+      end:end
+    }
+    emit('updateTrack', track)
+  }
+
 </script>

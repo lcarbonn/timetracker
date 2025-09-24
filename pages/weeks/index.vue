@@ -69,7 +69,6 @@ import type { ITimeTrack } from '~/types/tableTimeTrack'
         if(!tt.End) track.end = null
       }
     });
-    alert("track end " + track.end)
     if(track) updateTimeTrack(track.id, track.start, track.end )
   }
 

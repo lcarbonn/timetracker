@@ -180,7 +180,7 @@ export const updateTimeTrack = (id:number, start:Date, end:Date) => {
       body: {
           id:id,
           Start:start,
-          End:end?end:null
+          End:end
       }
   })
   .then ((tt) => {
