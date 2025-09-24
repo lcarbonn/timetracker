@@ -45,7 +45,6 @@
           start:track.Start,
           end:track.End?track.End:new Date(),
           color:'#378006'
-          // url: "https://ui-thing.behonbaker.com/",
         })
       });
     }
@@ -63,6 +62,13 @@
       stickyHeaderDates: true,
       allDaySlot:false,
       firstDay:1,
+      businessHours: {
+        // days of week. an array of zero-based day of week integers (0=Sunday)
+        daysOfWeek: [ 1, 2, 3, 4, 5 ], // Monday - Friday
+
+        startTime: '07:00', // a start time (10am in this example)
+        endTime: '18:00', // an end time (6pm in this example)
+      },
       customButtons: {
         myPrevButton: {
           icon: 'chevron-left',

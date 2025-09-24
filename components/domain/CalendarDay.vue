@@ -58,6 +58,13 @@
       nowIndicator: true,
       scrollTime:"07:00:00",
       dayHeaders:false,
+      businessHours: {
+        // days of week. an array of zero-based day of week integers (0=Sunday)
+        daysOfWeek: [ 1, 2, 3, 4, 5 ], // Monday - Friday
+
+        startTime: '07:00', // a start time (10am in this example)
+        endTime: '18:00', // an end time (6pm in this example)
+      },
       // dateClick(arg) {
       //   useSonner("Date clicked", {
       //     description: dayjs(arg.dateStr).format("dddd, MMMM D, YYYY h:mm A"),
