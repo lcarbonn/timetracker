@@ -24,6 +24,7 @@
           enable-time-picker
           time-picker-inline
           minutes-increment="5"
+          text-input
           :state="startDateState"/>
         </BFormGroup>
         <BFormGroup
@@ -40,6 +41,7 @@
           enable-time-picker
           time-picker-inline
           minutes-increment="5"
+          text-input
           :state="endDateState"/>
         </BFormGroup>
       </BModal>
@@ -65,7 +67,7 @@
   })
 
   // emits declaration
-  const emit = defineEmits(['updateTimeTrack'])
+  const emit = defineEmits(['updateTrack'])
 
   // local refs
   const startDateForm = ref(props.timeTrack.start)
@@ -92,6 +94,6 @@
   const submit = () => {
     const start = new Date(startDateForm.value)
     const end = new Date(endDateForm.value)
-    emit('updateTimeTrack', props.timeTrack.id, start, end)
+    emit('updateTrack', props.timeTrack.id, start, end)
   }
 </script>

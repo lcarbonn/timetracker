@@ -13,14 +13,13 @@ export const getStateTimeTracksWeekUid = (user_id:number, week:number) => {
       }
   })
   .then((list) => {
-      // useTimeTracksWeek().value = []
       list.forEach(track => {
         getStateTrackPauseTracks(track)
         .then(() => {
           const tracks = useTimeTracksWeek().value
           const index = tracks.indexOf(track)
-          tracks[index] = track
-          useTimeTracksWeek().value = Object.assign([], tracks)
+          tracks[index] = Object.assign([], track)
+          // useTimeTracksWeek().value = Object.assign([], tracks)
         })
       })
       useTimeTracksWeek().value = list
@@ -195,9 +194,17 @@ export const updateTimeTrack = (id:number, start:Date, end:Date) => {
   })
   .then ((tt) => {
     useTimeTrack().value = tt
-      if(user.value) {
-        // getStateTimeTracksWeekUid(user.value.id, useWeek().value)
+      // if(user.value) {
+      //   // getStateTimeTracksWeekUid(user.value.id, useWeek().value)
+      // }
+    const tracks = useTimeTracksWeek().value
+    for (let index = 0; index < tracks.length; index++) {
+      const track = tracks[index];
+      if(track.id == tt.id) {
+        tt.pauses = track.pauses
+        tracks[index] = Object.assign([], tt)
       }
+    }
     messageToSnack("Event changed to "+new Date(tt.Start).toLocaleString())
   })
   .catch((error) => {

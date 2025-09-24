@@ -1,7 +1,7 @@
 <template>
     <div>
       <FullCalendar ref="fullCalendar":options="calendarOptions" />
-      <LazyDomainUpdateTimeTrack v-if="selectedEvent" :modalUpdateTrack="modalUpdateTrack" :time-track="selectedEvent" @update-time-track="updateTrack"></LazyDomainUpdateTimeTrack>
+      <LazyDomainUpdateTimeTrack v-if="selectedEvent" :modalUpdateTrack="modalUpdateTrack" :time-track="selectedEvent" @update-track="updateTrack"></LazyDomainUpdateTimeTrack>
     </div>
 </template>
 
@@ -52,7 +52,8 @@
           color:'#378006',
           id:track.id,
           isTrack:true,
-          editable:track.End?true:false
+          editable:track.End?true:false,
+          track:track
         })
         // add the pauses to the calendar
         track.pauses?.forEach(pause => {
@@ -109,7 +110,7 @@
           click: function() {
             currentWeek.value = currentWeek.value+1
             fullCalendar.value.getApi().next()
-            emit('navToWeek')
+            emit('navToWeek', currentWeek.value)
           }
         }
       },    
@@ -155,7 +156,7 @@
   }
   // click on event
   const clickEvent = (info:any) => {
-    alert(info.event.title + " was dropped on " + info.event.start?.toISOString() + ', isTrack:'+info.event.extendedProps.isTrack);
+    // alert(info.event.title + " was dropped on " + info.event.start?.toISOString() + ', isTrack:'+info.event.extendedProps.track);
     selectedEvent.value = info.event
     modalUpdateTrack.value.show = !modalUpdateTrack.value.show
   }

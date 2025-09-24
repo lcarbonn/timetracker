@@ -167,9 +167,17 @@ export const updatePauseTrack = (id:number, start:Date, end:Date) => {
   })
   .then ((pt) => {
     usePauseTrack().value = pt
-      if(user.value) {
-        // getStateTimeTracksWeekUid(user.value.id, useWeek().value)
+    const tracks = useTimeTracksWeek().value
+    tracks.forEach(track => {
+      if(track.pauses) {
+        for (let index = 0; index < track.pauses.length; index++) {
+          const pause = track.pauses[index];
+          if(pause.id == pt.id) {
+            track.pauses[index] = Object.assign([], pt)
+          }
+        }
       }
+    });
     messageToSnack("Event changed to "+new Date(pt.Start).toLocaleString())
   })
   .catch((error) => {
