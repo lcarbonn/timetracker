@@ -167,7 +167,6 @@ export const updatePauseTrack = (id:number, start:Date, end:Date) :Promise<IPaus
     })
     .then ((pt) => {
       usePauseTrack().value = pt
-      refreshStateTracks(pt)
       resolve(pt)
     })
     .catch((error) => {
@@ -180,7 +179,7 @@ export const updatePauseTrack = (id:number, start:Date, end:Date) :Promise<IPaus
  * Refresh the state tracks list with the given pause
  * @param pause , the pause to refresh
  */
-const refreshStateTracks = (pause:IPauseTrack) => {
+export const refreshStateTracksPause = (pause:IPauseTrack) => {
   const tracks = useTimeTracksWeek().value
   tracks.forEach(track => {
     if(track.pauses) {
@@ -192,4 +191,18 @@ const refreshStateTracks = (pause:IPauseTrack) => {
       }
     }
   });
+}
+/**
+ * Refresh the state of tracks with the track
+ * @param track, the track to refresh
+ */
+export const refreshStatePauses = (track:IPauseTrack) => {
+    const tracks = usePauseTracks().value
+    if(!tracks) return
+    for (let index = 0; index < tracks.length; index++) {
+      const stateTrack = tracks[index];
+      if(stateTrack.id == track.id) {
+        tracks[index] = Object.assign([], track)
+      }
+    }
 }

@@ -68,11 +68,13 @@ import type { ITimeTrack } from '~/types/tableTimeTrack'
     if(track.isTrack) {
       updateTimeTrack(track.id, track.start, track.end )
       .then((tt) => {
-            messageToSnack("Event changed to "+new Date(tt.Start).toLocaleString())
+        refreshStateTracksTime(tt)
+        messageToSnack("Event changed to "+new Date(tt.Start).toLocaleString())
       })
     } else {
       updatePauseTrack(track.id, track.start, track.end )
       .then((pt) => {
+        refreshStateTracksPause(pt)
         messageToSnack("Event changed to "+new Date(pt.Start).toLocaleString())
       })
     }

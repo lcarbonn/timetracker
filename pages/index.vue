@@ -14,11 +14,11 @@
         <BButton v-if="todayTrack && !todayTrack.End && !currentPause" size="lg" class="mx-1" @click="startPause" variant="primary">Have a break</BButton>
         <BButton v-if="todayTrack && !todayTrack.End && currentPause && !currentPause.End" size="lg" class="mx-1" @click="endPause" variant="primary">Back to work</BButton>
       </BCard>
-      <BCard title="Current pause" v-if="currentPause" body-class="text-center">
-        <BCardText v-if="currentPause">  Pause started at : <b>{{ currentPauseStartTime }}</b></BCardText>
-        <BCardText v-if="currentPause"> Duration : <b>{{ pauseTimer }}</b></BCardText>
+      <BCard title="Current pause" v-if="currentPause && !currentPause.End" body-class="text-center">
+        <BCardText>  Pause started at : <b>{{ currentPauseStartTime }}</b></BCardText>
+        <BCardText> Duration : <b>{{ pauseTimer }}</b></BCardText>
       </BCard>
-      <DomainCalendarDay :today-track="todayTrack" :today-pauses="todayPauses"/>
+      <DomainCalendarDay :today-track="todayTrack" :today-pauses="todayPauses" @update-track="updateTrack"/>
       <BCard title="Pauses for today">
         <DomainPauseTracksTable :disabled="disabled" :pauses="todayPauses" @delete-pause="deletePause" @reopen-pause="restartPause"/>
       </BCard>
@@ -188,6 +188,23 @@
   // confirm restart received
   const confirmRestartPause = () => {
     if(selectedPause.value) reopenPauseTrack(selectedPause.value.id)
+  }
+
+  const updateTrack = (track:any) => {
+    // alert(track.id + " was dropped on " + track.start.toISOString() + ', isTrack:'+track.isTrack)
+    if(track.isTrack) {
+      updateTimeTrack(track.id, track.start, track.end )
+      .then((tt) => {
+        todayTrack.value = tt
+        messageToSnack("Event changed to "+new Date(tt.Start).toLocaleString())
+      })
+    } else {
+      updatePauseTrack(track.id, track.start, track.end )
+      .then((pt) => {
+        refreshStatePauses(pt)
+        messageToSnack("Event changed to "+new Date(pt.Start).toLocaleString())
+      })
+    }
   }
 
 </script>

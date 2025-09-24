@@ -1,5 +1,7 @@
 <template>
     <FullCalendar :options="calendarOptions"/>
+    <LazyDomainUpdateTimeTrack v-if="selectedEvent" :modalUpdateTrack="modalUpdateTrack" :time-track="selectedEvent" @update-track="updateTrack"></LazyDomainUpdateTimeTrack>
+
 </template>
 
 <script setup lang="ts">
@@ -22,6 +24,12 @@
       },
   })
 
+    // emits declaration
+  const emit = defineEmits(['updateTrack'])
+
+  const selectedEvent = ref()
+  const modalUpdateTrack = ref(new ModalShow()) 
+
   // computed events
   const calendarEvents = computed (() => {
     const events:any[] = []
@@ -31,8 +39,10 @@
         title: today.End?"Day "+formatDuration(today.Duration):"Day started",
         start:today.Start,
         end:today.End?today.End:new Date(),
-        color:'#378006'
-        // url: "https://ui-thing.behonbaker.com/",
+        color:'#378006',
+        id:today.id,
+        isTrack:true,
+        editable:today.End?true:false,
       })
     }
     if(props.todayPauses) {
@@ -40,7 +50,10 @@
         events.push( {
           title: pause.End?"Pause of "+formatDuration(pause.Duration):"Pause started",
           start:pause.Start,
-          end:pause.End?pause.End:new Date()
+          end:pause.End?pause.End:new Date(),
+          id:pause.id,
+          isTrack:false,
+          editable:pause.End?true:false
         })
       });
     }
@@ -64,16 +77,6 @@
         startTime: '07:00', // a start time (10am in this example)
         endTime: '18:00', // an end time (6pm in this example)
       },
-      // dateClick(arg) {
-      //   useSonner("Date clicked", {
-      //     description: dayjs(arg.dateStr).format("dddd, MMMM D, YYYY h:mm A"),
-      //   });
-      // },
-      // eventClick(arg) {
-      //   useSonner("Event clicked", {
-      //     description: arg.event.title,
-      //   });
-      // },
       stickyHeaderDates: true,
       allDaySlot:false,
       headerToolbar: {
@@ -81,14 +84,51 @@
         center: "title",
         right: "",
       },
-      // footerToolbar: {
-      //   left: "prevYear,prev,today,next,nextYear",
-      //   center: "",
-      //   right: "timeGridWeek,timeGridDay",
-      // },
       events: calendarEvents.value,
+      snapDuration:"00:15:00",
+      dragScroll:false,
+      eventDrop(info) {
+        dropResizeEvent(info)
+      },
+      eventResize(info) {
+        dropResizeEvent(info)
+      },
+      eventClick(info) {
+        if(!info.event.startEditable) return
+        clickEvent(info)
+      },
+
     };
   return cal
   })
+
+  // methods
+  // drop and resize event
+  const dropResizeEvent = (info:any) => {
+    // alert(info.event.title + " was dropped on " + info.event.start?.toISOString() + ', end:'+info.event.end?.toISOString());
+    selectedEvent.value = info.event
+    const track = {
+      id:info.event.id,
+      start:info.event.start,
+      end:info.event.end,
+      isTrack:selectedEvent.value.extendedProps.isTrack
+    }
+    emit('updateTrack', track)
+  }
+  // click on event
+  const clickEvent = (info:any) => {
+    // alert(info.event.title + " was dropped on " + info.event.start?.toISOString() + ', isTrack:'+info.event.extendedProps.track);
+    selectedEvent.value = info.event
+    modalUpdateTrack.value.show = !modalUpdateTrack.value.show
+  }
+  const updateTrack = (id:string, start:Date, end:Date) => {
+    const track = {
+      id:id,
+      start:start,
+      end:end,
+      isTrack:selectedEvent.value.extendedProps.isTrack
+    }
+    emit('updateTrack', track)
+  }
 
 </script>

@@ -53,7 +53,6 @@
           id:track.id,
           isTrack:true,
           editable:track.End?true:false,
-          track:track
         })
         // add the pauses to the calendar
         track.pauses?.forEach(pause => {

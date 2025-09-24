@@ -194,7 +194,6 @@ export const updateTimeTrack = (id:number, start:Date, end:Date) : Promise<ITime
     })
     .then ((tt) => {
       useTimeTrack().value = tt
-      refreshStateTracks(tt)
       resolve(tt)
     })
     .catch((error) => {
@@ -207,7 +206,7 @@ export const updateTimeTrack = (id:number, start:Date, end:Date) : Promise<ITime
  * Refresh the state of tracks with the track
  * @param track, the track to refresh
  */
-const refreshStateTracks = (track:ITimeTrack) => {
+export const refreshStateTracksTime = (track:ITimeTrack) => {
     const tracks = useTimeTracksWeek().value
     for (let index = 0; index < tracks.length; index++) {
       const stateTrack = tracks[index];
