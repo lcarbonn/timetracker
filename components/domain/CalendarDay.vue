@@ -1,6 +1,6 @@
 <template>
     <FullCalendar :options="calendarOptions"/>
-    <LazyDomainUpdateTimeTrack v-if="selectedEvent" :modalUpdateTrack="modalUpdateTrack" :time-track="selectedEvent" @update-track="updateTrack"></LazyDomainUpdateTimeTrack>
+    <LazyDomainModalUpdateTimeTrack v-if="selectedEvent" :modalUpdateTrack="modalUpdateTrack" :time-track="selectedEvent" @update-track="updateTrack"></LazyDomainModalUpdateTimeTrack>
 
 </template>
 

@@ -129,24 +129,27 @@ export const reopenPauseTrack = (id:number) => {
  * Delete the pause track
  * @param id, the pause track id
  */
-export const deleteStatePause = (id:number) => {
-  $fetch<IPauseTrack>('/api/pausetrack', {
-    method: 'DELETE',
-    params:{
-      id:id
+export const deleteStatePause = (id:number) :Promise<void> => {
+  return new Promise((resolve, reject) => {
+    $fetch<IPauseTrack>('/api/pausetrack', {
+      method: 'DELETE',
+      params:{
+        id:id
+      }
+    })
+    .then((pt) => {
+      // const tt = useTimeTrack().value
+      //   if(tt?.id) {
+      //     getStatePauseTracks(tt.id)
+      //     const { user } = useUserSession()
+      //     // getStateTodayTimeTrack()
+      //   }
+      resolve()
+    })
+    if(usePauseTrack().value?.id == id) {
+      usePauseTrack().value = undefined
     }
   })
-  .then((pt) => {
-    const tt = useTimeTrack().value
-      if(tt?.id) {
-        getStatePauseTracks(tt.id)
-        const { user } = useUserSession()
-        // getStateTodayTimeTrack()
-      }
-  })
-  if(usePauseTrack().value?.id == id) {
-    usePauseTrack().value = undefined
-  }
 }
 
 /**
@@ -187,6 +190,23 @@ export const refreshStateTracksPause = (pause:IPauseTrack) => {
         const statePause = track.pauses[index];
         if(statePause.id == pause.id) {
           track.pauses[index] = Object.assign([], pause)
+        }
+      }
+    }
+  });
+}
+/**
+ * Delete the pause from tracks list
+ * @param pause , the pause to refresh
+ */
+export const deleteFromStateTracksPause = (id:number) => {
+  const tracks = useTimeTracksWeek().value
+  tracks.forEach(track => {
+    if(track.pauses) {
+      for (let index = 0; index < track.pauses.length; index++) {
+        const statePause = track.pauses[index];
+        if(statePause.id == id) {
+          track.pauses.splice(index,1)
         }
       }
     }

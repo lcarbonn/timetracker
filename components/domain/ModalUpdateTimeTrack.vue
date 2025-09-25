@@ -4,7 +4,6 @@
       v-model="modalUpdateTrack.show"
       id="modal-update"
       title="Update time track"
-      centered
       header-bg-variant="primary"
       size="lg"
       cancel-title="Cancel"
@@ -45,7 +44,9 @@
           text-input
           :state="endDateState"/>
         </BFormGroup>
+        <BButton class="mx-1" @click="deleteTrack()" size="sm" v-b-tooltip.focus.top="'Delete this event'"><Trash/></BButton>
       </BModal>
+      <BModal v-model="modalDelete" title="Delete pause" @ok="confirmDelete"> Really ? </BModal>
   </div>
 </template>
 
@@ -54,6 +55,9 @@
   // import datepicker vue component
   import VueDatePicker from '@vuepic/vue-datepicker'
   import '@vuepic/vue-datepicker/dist/main.css'
+
+  // icons
+  import Trash from '~icons/bi/trash'
 
   // props
   const props = defineProps({
@@ -68,12 +72,13 @@
   })
 
   // emits declaration
-  const emit = defineEmits(['updateTrack'])
+  const emit = defineEmits(['updateTrack', 'deleteTrack'])
 
   // local refs
   const startDateForm = ref(props.timeTrack.start)
   const endDateForm = ref(props.timeTrack.end)
-
+  const modalDelete = ref(false)
+  
   watch(() => props.timeTrack, (timeTrack) => {
     startDateForm.value = timeTrack.start
     endDateForm.value = timeTrack.end
@@ -97,4 +102,20 @@
     const end = new Date(endDateForm.value)
     emit('updateTrack', props.timeTrack.id, start, end)
   }
+
+  // const deleteTrack = () => {
+  //   props.modalUpdateTrack.show = false
+  //   emit('deleteTrack', props.timeTrack.id)
+  // }
+
+    // ask for modal before delete
+  const deleteTrack = () => {
+    modalDelete.value = !modalDelete.value
+  }
+  // confirm delete received
+  const confirmDelete = () => {
+    props.modalUpdateTrack.show = false
+    emit('deleteTrack', props.timeTrack.id)
+  }
+
 </script>

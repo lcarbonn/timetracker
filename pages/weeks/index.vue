@@ -2,12 +2,12 @@
     <div>
       <BCard :title="'Your week '+useWeek().value+' tracks for ' + user?.first_name" body-class="text-center">
       </BCard>
-      <DomainCalendarWeek :tracks="tracksWeek" @nav-to-week="navToWeek" @update-track="updateTrack"/>
-      <BCard>
+      <DomainCalendarWeek :tracks="tracksWeek" @nav-to-week="navToWeek" @update-track="updateTrack" @delete-track="deleteTrack"/>
+      <!-- <BCard>
         <DomainTimeTracksTable :tracks="tracksWeek" @delete-track="deleteDay"/>
       </BCard>
       <BModal v-model="modalDeleteDay" title="Delete day" @ok="confirmDeleteDay"> Really ? </BModal>
-      <BModal v-model="modalRestartDay" title="Restart day" @ok="confirmRestartDay"> Really ? </BModal>
+      <BModal v-model="modalRestartDay" title="Restart day" @ok="confirmRestartDay"> Really ? </BModal> -->
     </div>
 </template>
 
@@ -33,30 +33,30 @@ import type { ITimeTrack } from '~/types/tableTimeTrack'
   // local refs
   const tracksWeek = useTimeTracksWeek()
     
-  // local refs
-  const modalDeleteDay = ref(false)
-  const modalRestartDay = ref(false)
-  const selectedTrack = ref()
+  // // local refs
+  // const modalDeleteDay = ref(false)
+  // const modalRestartDay = ref(false)
+  // const selectedTrack = ref()
   
   if(user.value) {
     getStateTimeTracksWeekUid(user.value.id, useWeek().value)
   }
 
-  // ask for modal before delete
-  const deleteDay = (track:ITimeTrack) => {
-    selectedTrack.value = track
-    modalDeleteDay.value = !modalDeleteDay.value
-  }
-  // confirm delete received
-  const confirmDeleteDay = () => {
-    if(selectedTrack.value) deleteStateTrack(selectedTrack.value.id)
-    selectedTrack.value = null
-  }
+  // // ask for modal before delete
+  // const deleteDay = (track:ITimeTrack) => {
+  //   selectedTrack.value = track
+  //   modalDeleteDay.value = !modalDeleteDay.value
+  // }
+  // // confirm delete received
+  // const confirmDeleteDay = () => {
+  //   if(selectedTrack.value) deleteStateTrack(selectedTrack.value.id)
+  //   selectedTrack.value = null
+  // }
 
-  // confirm restart received
-  const confirmRestartDay = () => {
-    if(selectedTrack.value) reopenTimeTrack(selectedTrack.value.id)
-  }
+  // // confirm restart received
+  // const confirmRestartDay = () => {
+  //   if(selectedTrack.value) reopenTimeTrack(selectedTrack.value.id)
+  // }
 
   const navToWeek = (week:number) => {
     useWeek().value = week
@@ -64,18 +64,33 @@ import type { ITimeTrack } from '~/types/tableTimeTrack'
   }
 
   const updateTrack = (track:any) => {
-    alert(track.id + " was dropped on " + track.start.toISOString() + ', end:'+track.end)
+    // alert(track.id + " was dropped on " + track.start.toISOString() + ', end:'+track.end)
     if(track.isTrack) {
       updateTimeTrack(track.id, track.start, track.end )
       .then((tt) => {
         refreshStateTracksTime(tt)
-        messageToSnack("Event changed to "+new Date(tt.Start).toLocaleString())
+        messageToSnack("Time changed to "+new Date(tt.Start).toLocaleString())
       })
     } else {
       updatePauseTrack(track.id, track.start, track.end )
       .then((pt) => {
         refreshStateTracksPause(pt)
-        messageToSnack("Event changed to "+new Date(pt.Start).toLocaleString())
+        messageToSnack("Pause changed to "+new Date(pt.Start).toLocaleString())
+      })
+    }
+  }
+  const deleteTrack = (track:any) => {
+    if(track.isTrack) {
+      deleteStateTrack(track.id )
+      .then((tt) => {
+        deleteFromStateTracksTime(track.id)
+        messageToSnack("Time deleted")
+      })
+    } else {
+      deleteStatePause(track.id)
+      .then((pt) => {
+        deleteFromStateTracksPause(track.id)
+        messageToSnack("Pause deleted")
       })
     }
   }

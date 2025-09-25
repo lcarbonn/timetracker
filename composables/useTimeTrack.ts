@@ -158,22 +158,24 @@ export const reopenTimeTrack = (id:number) => {
  * Delete the time track
  * @param id, the time track id
  */
-export const deleteStateTrack = (id:number) => {
-  const { user } = useUserSession()
-  $fetch<ITimeTrack>('/api/timetrack', {
-    method: 'DELETE',
-    params:{
-      id:id
+export const deleteStateTrack = (id:number) : Promise<void>=> {
+  return new Promise((resolve, reject) => {
+    $fetch<ITimeTrack>('/api/timetrack', {
+      method: 'DELETE',
+      params:{
+        id:id
+      }
+    })
+    .then((tt) => {
+      resolve()
+        // if(user.value) {
+        //   getStateTimeTracksWeekUid(user.value.id, useWeek().value)
+        // }
+    })
+    if(useTimeTrack().value?.id == id) {
+      useTimeTrack().value = undefined
     }
   })
-  .then((tt) => {
-      if(user.value) {
-        getStateTimeTracksWeekUid(user.value.id, useWeek().value)
-      }
-  })
-  if(useTimeTrack().value?.id == id) {
-    useTimeTrack().value = undefined
-  }
 }
 
 /**
@@ -213,6 +215,21 @@ export const refreshStateTracksTime = (track:ITimeTrack) => {
       if(stateTrack.id == track.id) {
         track.pauses = stateTrack.pauses
         tracks[index] = Object.assign([], track)
+      }
+    }
+}
+
+/**
+ * Delete the track from the state of tracks
+ * @param track, the track to refresh
+ */
+export const deleteFromStateTracksTime = (id:number) => {
+    const tracks = useTimeTracksWeek().value
+    for (let index = 0; index < tracks.length; index++) {
+      const stateTrack = tracks[index];
+      if(stateTrack.id == id) {
+        // track.pauses = stateTrack.pauses
+        tracks.splice(index, 1)
       }
     }
 }

@@ -1,7 +1,7 @@
 <template>
     <div>
       <FullCalendar ref="fullCalendar":options="calendarOptions" />
-      <LazyDomainUpdateTimeTrack v-if="selectedEvent" :modalUpdateTrack="modalUpdateTrack" :time-track="selectedEvent" @update-track="updateTrack"></LazyDomainUpdateTimeTrack>
+      <LazyDomainModalUpdateTimeTrack v-if="selectedEvent" :modalUpdateTrack="modalUpdateTrack" :time-track="selectedEvent" @update-track="updateTrack" @delete-track="deleteTrack"></LazyDomainModalUpdateTimeTrack>
     </div>
 </template>
 
@@ -21,7 +21,7 @@
   })
 
   // emits declaration
-  const emit = defineEmits(['navToWeek', 'updateTrack'])
+  const emit = defineEmits(['navToWeek', 'updateTrack', 'deleteTrack'])
 
   const fullCalendar = ref()
   const selectedEvent = ref()
@@ -160,6 +160,13 @@
       isTrack:selectedEvent.value.extendedProps.isTrack
     }
     emit('updateTrack', track)
+  }
+  const deleteTrack = (id:string) => {
+    const track = {
+      id:id,
+      isTrack:selectedEvent.value.extendedProps.isTrack
+    }
+    emit('deleteTrack', track)
   }
 
 </script>
