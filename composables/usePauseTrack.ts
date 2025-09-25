@@ -1,59 +1,25 @@
 import type { IPauseTrack } from "~/types/tablePauseTrack"
-import type { ITimeTrack } from "~/types/tableTimeTrack"
 
 /**
  * get pause tracks for the time track id
  * @param timeId
  */
-export const getStatePauseTracks = (timeId:number) => {
-  $fetch<IPauseTrack[]>('/api/pausetracks', {
-    method: 'GET',
-      params: {
-          timeId:timeId,
-      }
-  })
-  .then((list) => {
-      usePauseTracks().value = list
-      if(list[0].End==null) {
-        usePauseTrack().value = list[0]
-      }
-  })
-}
-
-/**
- * get pause tracks for the time track id
- * @param timeId
- */
-export const getStateTrackPauseTracks = (track:ITimeTrack) :Promise<IPauseTrack[]> => {
+export const getTimeTrackPauses = (timeId:number) :Promise<IPauseTrack[]> => {
   return new Promise((resolve, reject) => {
     $fetch<IPauseTrack[]>('/api/pausetracks', {
       method: 'GET',
         params: {
-            timeId:track.id,
+            timeId:timeId,
         }
     })
     .then((list) => {
-      track.pauses = list
+      if(list[0].End==null) {
+        usePauseTrack().value = list[0]
+      }      
       resolve(list)
     })
   })
 }
-
-// /**
-//  * Get the last open time track for the user
-//  * @param user_id
-//  */
-// export const getLastOpenTimeTrack = (user_id:number) => {
-//   $fetch<ITimeTrack>('/api/lasttrack', {
-//     method: 'GET',
-//     params:{
-//       user_id:user_id
-//     }
-//   })
-//   .then((tt) => {
-//       useTimeTrack().value = tt
-//   })
-// }
 
 /**
  * Open a new pause track for the time
@@ -70,7 +36,7 @@ export const openPauseTrack = (timeId:number) => {
     })
     .then ((pt) => {
       usePauseTrack().value = pt
-      getStatePauseTracks(timeId)
+      useTimeTrack().value?.pauses?.push(pt)
     })
     .catch((error) => {
         usePauseTrack().value = undefined
@@ -91,10 +57,11 @@ export const closePauseTrack = (id:number) => {
   })
   .then ((pt) => {
     usePauseTrack().value = undefined
-    const tt = useTimeTrack().value
-    if(tt?.id) {
-      getStatePauseTracks(tt.id)
-    }
+    refreshPauseInTimeTrack(pt)
+    // const tt = useTimeTrack().value
+    // if(tt?.id) {
+    //   getTimeTrackPauses(tt.id)
+    // }
   })
   .catch((error) => {
     usePauseTrack().value = undefined
@@ -115,10 +82,12 @@ export const reopenPauseTrack = (id:number) => {
   })
   .then ((pt) => {
     usePauseTrack().value = pt
-    const tt = useTimeTrack().value
-      if(tt?.id) {
-        getStatePauseTracks(tt.id)
-      }
+    refreshPauseInTimeTrack(pt)
+
+    // const tt = useTimeTrack().value
+    //   if(tt?.id) {
+    //     getTimeTrackPauses(tt.id)
+    //   }
   })
   .catch((error) => {
     usePauseTrack().value = undefined
@@ -138,12 +107,6 @@ export const deleteStatePause = (id:number) :Promise<void> => {
       }
     })
     .then((pt) => {
-      // const tt = useTimeTrack().value
-      //   if(tt?.id) {
-      //     getStatePauseTracks(tt.id)
-      //     const { user } = useUserSession()
-      //     // getStateTodayTimeTrack()
-      //   }
       resolve()
     })
     if(usePauseTrack().value?.id == id) {
@@ -179,11 +142,11 @@ export const updatePauseTrack = (id:number, start:Date, end:Date) :Promise<IPaus
   })
 }
 /**
- * Refresh the state tracks list with the given pause
+ * Refresh the pause in the tracks of the week
  * @param pause , the pause to refresh
  */
-export const refreshStateTracksPause = (pause:IPauseTrack) => {
-  const tracks = useTimeTracksWeek().value
+export const refreshPauseInTimeTracksOfTheWeek = (pause:IPauseTrack) => {
+  const tracks = useTimeTracksOfTheWeek().value
   tracks.forEach(track => {
     if(track.pauses) {
       for (let index = 0; index < track.pauses.length; index++) {
@@ -196,11 +159,11 @@ export const refreshStateTracksPause = (pause:IPauseTrack) => {
   });
 }
 /**
- * Delete the pause from tracks list
+ * Delete the pause from time tracks of the week
  * @param id , the pause id
  */
-export const deleteFromStateTracksPause = (id:number) => {
-  const tracks = useTimeTracksWeek().value
+export const deletePauseFromTimeTracksOfTheWeek = (id:number) => {
+  const tracks = useTimeTracksOfTheWeek().value
   tracks.forEach(track => {
     if(track.pauses) {
       for (let index = 0; index < track.pauses.length; index++) {
@@ -213,31 +176,40 @@ export const deleteFromStateTracksPause = (id:number) => {
   });
 }
 /**
- * Refresh the state of tracks with the track
- * @param track, the track to refresh
+ * Refresh the pause in the current time track
+ * @param pause, the pause to refresh
  */
-export const refreshStateTrackPauses = (track:IPauseTrack) => {
-    const tracks = usePauseTracks().value
-    if(!tracks) return
-    for (let index = 0; index < tracks.length; index++) {
-      const stateTrack = tracks[index];
-      if(stateTrack.id == track.id) {
-        tracks[index] = Object.assign([], track)
+export const refreshPauseInTimeTrack = (pause:IPauseTrack) => {
+    const pauses = useTimeTrack().value?.pauses
+    if(!pauses) return
+    for (let index = 0; index < pauses.length; index++) {
+      const stateTrack = pauses[index];
+      if(stateTrack.id == pause.id) {
+        pauses[index] = Object.assign([], pause)
       }
     }
 }
 
 /**
- * Delete pause form the state track
- * @param track, the track to refresh
+ * Refresh the pauses in the current time track
+ * @param pauses, the pauses to refresh
  */
-export const deleteFromStateTrackPause = (id:number) => {
-    const tracks = usePauseTracks().value
-    if(!tracks) return
-    for (let index = 0; index < tracks.length; index++) {
-      const stateTrack = tracks[index];
+export const refreshPausesInTimeTrack = (pauses:IPauseTrack[]) => {
+    const timeTrack = useTimeTrack().value
+    if(timeTrack) timeTrack.pauses = pauses
+}
+
+/**
+ * Delete pause form the state track
+ * @param id, the id of the track
+ */
+export const deletePauseFromTimeTrack = (id:number) => {
+    const pauses = useTimeTrack().value?.pauses
+    if(!pauses) return
+    for (let index = 0; index < pauses.length; index++) {
+      const stateTrack = pauses[index];
       if(stateTrack.id == id) {
-        tracks.splice(index, 1)
+        pauses.splice(index, 1)
       }
     }
 }

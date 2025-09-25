@@ -24,7 +24,7 @@
 
 
   // local refs
-  const tracksWeek = useTimeTracksWeek()
+  const tracksWeek = useTimeTracksOfTheWeek()
     
   if(user.value) {
     getStateTimeTracksOfTheWeek(useWeek().value)
@@ -40,13 +40,13 @@
     if(track.isTrack) {
       updateTimeTrack(track.id, track.start, track.end )
       .then((tt) => {
-        refreshStateTracksTime(tt)
+        refreshTimeInTracksOfTheWeek(tt)
         messageToSnack("Day changed to "+new Date(tt.Start).toLocaleString())
       })
     } else {
       updatePauseTrack(track.id, track.start, track.end )
       .then((pt) => {
-        refreshStateTracksPause(pt)
+        refreshPauseInTimeTracksOfTheWeek(pt)
         messageToSnack("Pause changed to "+new Date(pt.Start).toLocaleString())
       })
     }
@@ -55,13 +55,13 @@
     if(track.isTrack) {
       deleteStateTrack(track.id )
       .then((tt) => {
-        deleteFromStateTracksTime(track.id)
+        deleteTimeFromTimeTracksOfTheWeek(track.id)
         messageToSnack("Day deleted")
       })
     } else {
       deleteStatePause(track.id)
       .then((pt) => {
-        deleteFromStateTracksPause(track.id)
+        deletePauseFromTimeTracksOfTheWeek(track.id)
         messageToSnack("Pause deleted")
       })
     }

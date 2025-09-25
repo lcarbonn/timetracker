@@ -12,35 +12,32 @@ export const getStateTimeTracksOfTheWeek = (week:number) => {
       }
   })
   .then((list) => {
+      useTimeTracksOfTheWeek().value = list
       list.forEach(track => {
-        getStateTrackPauseTracks(track)
-        .then(() => {
-          const tracks = useTimeTracksWeek().value
-          const index = tracks.indexOf(track)
-          tracks[index] = Object.assign([], track)
+        getTimeTrackPauses(track.id)
+        .then((pauses) => {
+          track.pauses = pauses
+          refreshTimeInTracksOfTheWeek(track)
         })
       })
-      useTimeTracksWeek().value = list
   })
 }
 
 /**
- * Get the today time track for the user
- * @param user_id
+ * Get the today time track
  */
-export const getStateTodayTimeTrack = (user_id:number) => {
+export const getStateTodayTimeTrack = () => {
   $fetch<ITimeTrack>('/api/todaytrack', {
     method: 'GET',
-    params:{
-      user_id:user_id
-    }
   })
-  .then((tt) => {
-      useTimeTrack().value = tt
-      if(tt) {
-        getStatePauseTracks(tt.id)
-      } else {
-        usePauseTracks().value = undefined
+  .then((track) => {
+      useTimeTrack().value = track
+      if(track) {
+        getTimeTrackPauses(track.id)
+        .then((pauses) => {
+          const stateTime = useTimeTrack().value
+          if(stateTime) stateTime.pauses = pauses
+        })
       }
   })
 }
@@ -61,7 +58,6 @@ export const openTimeTrack = (user_id:number) => {
     })
     .then ((tt) => {
       useTimeTrack().value = tt
-      getStateTimeTracksOfTheWeek(useWeek().value)
     })
     .catch((error) => {
         useTimeTrack().value = undefined
@@ -81,8 +77,9 @@ export const closeTimeTrack = (id:number) => {
       }
   })
   .then ((tt) => {
-      useTimeTrack().value = tt
-      getStateTimeTracksOfTheWeek(useWeek().value)
+      // useTimeTrack().value = tt
+      const time = useTimeTrack().value
+      if(time) time.End = tt.End
   })
   .catch((error) => {
     useTimeTrack().value = undefined
@@ -102,8 +99,8 @@ export const reopenTimeTrack = (id:number) => {
       }
   })
   .then ((tt) => {
-    useTimeTrack().value = tt
-    getStateTimeTracksOfTheWeek(useWeek().value)
+      const time = useTimeTrack().value
+      if(time) time.End = null
   })
   .catch((error) => {
     useTimeTrack().value = undefined
@@ -148,7 +145,12 @@ export const updateTimeTrack = (id:number, start:Date, end:Date) : Promise<ITime
         }
     })
     .then ((tt) => {
-      useTimeTrack().value = tt
+      const time = useTimeTrack().value
+      if(time) {
+        time.Start = tt.Start
+        time.End = tt.End
+        tt.pauses = time.pauses
+      }
       resolve(tt)
     })
     .catch((error) => {
@@ -161,8 +163,8 @@ export const updateTimeTrack = (id:number, start:Date, end:Date) : Promise<ITime
  * Refresh the state of tracks with the track
  * @param track, the track to refresh
  */
-export const refreshStateTracksTime = (track:ITimeTrack) => {
-    const tracks = useTimeTracksWeek().value
+export const refreshTimeInTracksOfTheWeek = (track:ITimeTrack) => {
+    const tracks = useTimeTracksOfTheWeek().value
     for (let index = 0; index < tracks.length; index++) {
       const stateTrack = tracks[index];
       if(stateTrack.id == track.id) {
@@ -176,8 +178,8 @@ export const refreshStateTracksTime = (track:ITimeTrack) => {
  * Delete the track from the state of tracks
  * @param track, the track to refresh
  */
-export const deleteFromStateTracksTime = (id:number) => {
-    const tracks = useTimeTracksWeek().value
+export const deleteTimeFromTimeTracksOfTheWeek = (id:number) => {
+    const tracks = useTimeTracksOfTheWeek().value
     for (let index = 0; index < tracks.length; index++) {
       const stateTrack = tracks[index];
       if(stateTrack.id == id) {

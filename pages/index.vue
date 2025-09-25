@@ -18,7 +18,7 @@
         <BCardText>  Pause started at : <b>{{ currentPauseStartTime }}</b></BCardText>
         <BCardText> Duration : <b>{{ pauseTimer }}</b></BCardText>
       </BCard>
-      <DomainCalendarDay :today-track="todayTrack" :today-pauses="todayPauses" @update-track="updateTrack" @delete-track="deleteTrack"/>
+      <DomainCalendarDay :today-track="todayTrack" @update-track="updateTrack" @delete-track="deleteTrack"/>
       <BModal v-model="modalRestartDay" title="Restart day" @ok="confirmRestartDay"> Really ? </BModal>
     </div>
 </template>
@@ -42,7 +42,6 @@
 
   // local refs
   const todayTrack = useTimeTrack()
-  const todayPauses = usePauseTracks()
   const currentPause = usePauseTrack()
 
   // local refs
@@ -50,7 +49,7 @@
   const selectedTrack = ref()
 
   if(user.value) {
-    getStateTodayTimeTrack(user.value.id)
+    getStateTodayTimeTrack()
   }
 
   // computed properties
@@ -120,7 +119,9 @@
 
   // ending the day
   const endDay = () => {
-    if(todayTrack.value) closeTimeTrack(todayTrack.value.id)
+    if(todayTrack.value) {
+      closeTimeTrack(todayTrack.value.id)
+    }
     clearInterval(dayChrono.value)
   }
 
@@ -154,13 +155,12 @@
     if(track.isTrack) {
       updateTimeTrack(track.id, track.start, track.end )
       .then((tt) => {
-        todayTrack.value = tt
         messageToSnack("Day changed to "+new Date(tt.Start).toLocaleString())
       })
     } else {
       updatePauseTrack(track.id, track.start, track.end )
       .then((pt) => {
-        refreshStateTrackPauses(pt)
+        refreshPauseInTimeTrack(pt)
         messageToSnack("Pause changed to "+new Date(pt.Start).toLocaleString())
       })
     }
@@ -171,13 +171,12 @@
       deleteStateTrack(track.id )
       .then(() => {
         todayTrack.value = undefined
-        todayPauses.value = undefined
         messageToSnack("Day deleted")
       })
     } else {
       deleteStatePause(track.id)
       .then((pt) => {
-        deleteFromStateTrackPause(track.id)
+        deletePauseFromTimeTrack(track.id)
         messageToSnack("Pause deleted")
       })
     }

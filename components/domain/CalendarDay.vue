@@ -14,17 +14,12 @@
   import interactionPlugin from '@fullcalendar/interaction'
   import timeGridPlugin from '@fullcalendar/timegrid'
   import type { CalendarOptions } from '@fullcalendar/core/index.js'
-  import type { IPauseTrack } from '~/types/tablePauseTrack'
   import { TimeTrack } from '~/types/tableTimeTrack'
 
   // props
   const props = defineProps({
       todayTrack: {
           type: TimeTrack,
-          default: undefined
-      },
-      todayPauses: {
-          type: Array<IPauseTrack>,
           default: undefined
       },
   })
@@ -49,9 +44,7 @@
         isTrack:true,
         isEnded:today.End?true:false
       })
-    }
-    if(props.todayPauses) {
-      props.todayPauses.forEach(pause => {
+      today.pauses?.forEach(pause => {
         events.push( {
           title: pause.End?"Pause of "+formatDuration(pause.Duration):"Pause started",
           start:pause.Start,
@@ -78,7 +71,6 @@
       businessHours: {
         // days of week. an array of zero-based day of week integers (0=Sunday)
         daysOfWeek: [ 1, 2, 3, 4, 5 ], // Monday - Friday
-
         startTime: '07:00', // a start time (10am in this example)
         endTime: '18:00', // an end time (6pm in this example)
       },
