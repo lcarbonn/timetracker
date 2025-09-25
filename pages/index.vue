@@ -7,18 +7,20 @@
         <BButton v-if="todayTrack && todayTrack.End" class="mx-1" @click="restartDay">Restart my day</BButton>
         <BCardText v-if="todayTrack && !todayTrack.End"> Day started at : <b>{{ todayStartTime }}</b></BCardText>
         <BCardText v-if="todayTrack && todayTrack.End">  Day started at : <b>{{ todayStartTime }}</b> - ended at : <b>{{ todayEndTime }}</b></BCardText>
-        <BCardText v-if="todayTrack && todayTrack.End"> Duration : <b>{{ formatDuration(todayTrack.Duration) }}</b></BCardText>
-        <BCardText v-if="todayTrack && todayTrack.End"> Pause Duration : <b>{{ formatDuration(todayTrack.PauseDuration) }}</b></BCardText>
-        <BCardText v-if="todayTrack && todayTrack.End"> Effective Duration : <b>{{ formatDuration(todayTrack.EffectiveDuration) }}</b></BCardText>
+        <BCardText v-if="todayTrack && todayTrack.End">
+          Duration : <b>{{ formatDuration(todayTrack.Duration) }}</b> 
+          - Pause Duration : <b>{{ formatDuration(todayTrack.PauseDuration) }}</b> 
+          - Effective Duration : <b>{{ formatDuration(todayTrack.EffectiveDuration) }}</b>
+        </BCardText>
+        <!-- <BCardText v-if="todayTrack && todayTrack.End"> Pause Duration : <b>{{ formatDuration(todayTrack.PauseDuration) }}</b></BCardText> -->
+        <!-- <BCardText v-if="todayTrack && todayTrack.End"> Effective Duration : <b>{{ formatDuration(todayTrack.EffectiveDuration) }}</b></BCardText> -->
         <BCardText v-if="todayTrack && !todayTrack.End"> Timer : <b>{{ dayTimer }}</b></BCardText>
         <BButton v-if="todayTrack && !todayTrack.End && !currentPause" size="lg" class="mx-1" @click="startPause" variant="primary">Have a break</BButton>
         <BButton v-if="todayTrack && !todayTrack.End && currentPause && !currentPause.End" size="lg" class="mx-1" @click="endPause" variant="primary">Back to work</BButton>
+        <BCardText v-if="currentPause && !currentPause.End">  Pause started at : <b>{{ currentPauseStartTime }}</b></BCardText>
+        <BCardText v-if="currentPause && !currentPause.End"> Duration : <b>{{ pauseTimer }}</b></BCardText>
       </BCard>
-      <BCard title="Current pause" v-if="currentPause && !currentPause.End" body-class="text-center">
-        <BCardText>  Pause started at : <b>{{ currentPauseStartTime }}</b></BCardText>
-        <BCardText> Duration : <b>{{ pauseTimer }}</b></BCardText>
-      </BCard>
-      <DomainCalendarDay :today-track="todayTrack" @update-track="updateTrack" @delete-track="deleteTrack"/>
+      <DomainCalendar :today-track="todayTrack" @update-track="updateTrack" @delete-track="deleteTrack"/>
       <BModal v-model="modalRestartDay" title="Restart day" @ok="confirmRestartDay"> Really ? </BModal>
     </div>
 </template>

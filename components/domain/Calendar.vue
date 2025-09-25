@@ -23,6 +23,10 @@
           type: Array<TimeTrack>,
           default: undefined
       },
+      todayTrack: {
+          type: TimeTrack,
+          default: undefined
+      },
   })
 
   // emits declaration
@@ -37,39 +41,32 @@
   // watch changes date to go to associated calendar week
   watch(() => props.tracks, async(newTracks) => {
     if(newTracks) {
+      fullCalendar.value.getApi().changeView("timeGridWeek")
         if(newTracks.length>0) {
           fullCalendar.value.getApi().gotoDate(newTracks[0].Start)
         }
       }
     }
   )
+
   // set events
   const calendarEvents = computed (() => {
     const events:any[] = []
-    if(props.tracks && props.tracks.length>0) {
+    if(props.tracks) {
       props.tracks.forEach(track => {
         // add the track to the calendar
-        events.push( {
-          title: track.End?"Day of effective "+formatDuration(track.EffectiveDuration):"Day not yet completed",
-          start:track.Start,
-          end:track.End?track.End:new Date(),
-          // end:track.End,
-          color:'#378006',
-          id:track.id,
-          isTrack:true,
-          isEnded:track.End?true:false
-        })
+        events.push( trackToEvent(track))
         // add the pauses to the calendar
         track.pauses?.forEach(pause => {
-          events.push( {
-            title: pause.End?"Pause of "+formatDuration(pause.Duration):"Pause started",
-            start:pause.Start,
-            end:pause.End?pause.End:new Date(),
-            id:pause.id,
-            isTrack:false,
-            isEnded:pause.End?true:false
-          })
+          events.push( pauseToEvent(pause))
         });        
+      });
+    }
+    const today = props.todayTrack
+    if(today) {
+      events.push( trackToEvent(today))
+      today.pauses?.forEach(pause => {
+        events.push( pauseToEvent(pause))
       });
     }
     return events
@@ -80,9 +77,11 @@
     const cal:CalendarOptions = {
       plugins: [timeGridPlugin, interactionPlugin],
       locale:"fr-fr",
+      initialView: "timeGridDay",
       editable: true,
       nowIndicator: true,
       scrollTime:"07:00:00",
+      dayHeaders:props.todayTrack?false:true,
       stickyHeaderDates: true,
       allDaySlot:false,
       firstDay:1,
@@ -91,6 +90,11 @@
         daysOfWeek: [ 1, 2, 3, 4, 5 ], // Monday - Friday
         startTime: '07:00', // a start time (10am in this example)
         endTime: '18:00', // an end time (6pm in this example)
+      },
+      headerToolbar: {
+        left: props.todayTrack?"":"myPrevButton,myTodayButton,myNextButton",
+        center: props.todayTrack?"title":"",
+        right: "",
       },
       customButtons: {
         myPrevButton: {
@@ -118,16 +122,6 @@
           }
         }
       },    
-      headerToolbar: {
-        left: "myPrevButton,myTodayButton,myNextButton",
-        center: "",
-        right: "",
-      },
-      // footerToolbar: {
-      //   left: "myPrevButton,myTodayButton,myNextButton",
-      //   center: "",
-      //   right: "",
-      // },
       events: calendarEvents.value,
       snapDuration:"00:15:00",
       dragScroll:false,

@@ -2,7 +2,7 @@
     <div>
       <BCard :title="'Your week '+useWeek().value+' tracks for ' + user?.first_name" body-class="text-center">
       </BCard>
-      <DomainCalendarWeek :tracks="tracksWeek" @nav-to-week="navToWeek" @update-track="updateTrack" @delete-track="deleteTrack"/>
+      <DomainCalendar :tracks="tracksWeek" @nav-to-week="navToWeek" @update-track="updateTrack" @delete-track="deleteTrack"/>
     </div>
 </template>
 
