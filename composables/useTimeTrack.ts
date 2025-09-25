@@ -4,7 +4,7 @@ import type { ITimeTrack } from "~/types/tableTimeTrack"
  * get time tracks for the week and set state
  * @param week
  */
-export const getStateTimeTracksWeekUid = (week:number) => {
+export const getStateTimeTracksOfTheWeek = (week:number) => {
   $fetch<ITimeTrack[]>('/api/timetracks', {
     method: 'GET',
       params: {
@@ -23,38 +23,6 @@ export const getStateTimeTracksWeekUid = (week:number) => {
       useTimeTracksWeek().value = list
   })
 }
-
-/**
- * get time tracks for the user for today and set state
- * @param user_id
- */
-export const getStateTimeTracksTodayUid = (user_id:number) => {
-  $fetch<ITimeTrack[]>('/api/timetracks', {
-    method: 'GET',
-      params: {
-          today:true,
-      }
-  })
-  .then((list) => {
-      useTimeTracksToday().value = list
-  })
-}
-
-// /**
-//  * Get the last open time track for the user
-//  * @param user_id
-//  */
-// export const getLastOpenTimeTrack = (user_id:number) => {
-//   $fetch<ITimeTrack>('/api/lasttrack', {
-//     method: 'GET',
-//     params:{
-//       user_id:user_id
-//     }
-//   })
-//   .then((tt) => {
-//       useTimeTrack().value = tt
-//   })
-// }
 
 /**
  * Get the today time track for the user
@@ -82,7 +50,6 @@ export const getStateTodayTimeTrack = (user_id:number) => {
  * @param user_id
  */
 export const openTimeTrack = (user_id:number) => {
-  const { user } = useUserSession()
     $fetch<ITimeTrack>('/api/timetrack', {
         method: 'POST',
         body: {
@@ -94,10 +61,7 @@ export const openTimeTrack = (user_id:number) => {
     })
     .then ((tt) => {
       useTimeTrack().value = tt
-      
-      if(user.value) {
-        getStateTimeTracksWeekUid(user.value.id, useWeek().value)
-      }
+      getStateTimeTracksOfTheWeek(useWeek().value)
     })
     .catch((error) => {
         useTimeTrack().value = undefined
@@ -109,7 +73,6 @@ export const openTimeTrack = (user_id:number) => {
  * @param id, the time track id
  */
 export const closeTimeTrack = (id:number) => {
-  const { user } = useUserSession()
   $fetch<ITimeTrack>('/api/timetrack', {
       method: 'PATCH',
       body: {
@@ -119,9 +82,7 @@ export const closeTimeTrack = (id:number) => {
   })
   .then ((tt) => {
       useTimeTrack().value = tt
-      if(user.value) {
-        getStateTimeTracksWeekUid(user.value.id, useWeek().value)
-      }
+      getStateTimeTracksOfTheWeek(useWeek().value)
   })
   .catch((error) => {
     useTimeTrack().value = undefined
@@ -133,7 +94,6 @@ export const closeTimeTrack = (id:number) => {
  * @param id, the time track id
  */
 export const reopenTimeTrack = (id:number) => {
-  const { user } = useUserSession()
   $fetch<ITimeTrack>('/api/timetrack', {
       method: 'PATCH',
       body: {
@@ -143,9 +103,7 @@ export const reopenTimeTrack = (id:number) => {
   })
   .then ((tt) => {
     useTimeTrack().value = tt
-      if(user.value) {
-        getStateTimeTracksWeekUid(user.value.id, useWeek().value)
-      }
+    getStateTimeTracksOfTheWeek(useWeek().value)
   })
   .catch((error) => {
     useTimeTrack().value = undefined
@@ -166,9 +124,6 @@ export const deleteStateTrack = (id:number) : Promise<void>=> {
     })
     .then((tt) => {
       resolve()
-        // if(user.value) {
-        //   getStateTimeTracksWeekUid(user.value.id, useWeek().value)
-        // }
     })
     if(useTimeTrack().value?.id == id) {
       useTimeTrack().value = undefined
@@ -226,7 +181,6 @@ export const deleteFromStateTracksTime = (id:number) => {
     for (let index = 0; index < tracks.length; index++) {
       const stateTrack = tracks[index];
       if(stateTrack.id == id) {
-        // track.pauses = stateTrack.pauses
         tracks.splice(index, 1)
       }
     }

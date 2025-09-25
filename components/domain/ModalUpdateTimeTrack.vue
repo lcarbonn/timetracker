@@ -3,7 +3,7 @@
       <BModal
       v-model="modalUpdateTrack.show"
       id="modal-update"
-      title="Update time track"
+      title="Update event"
       header-bg-variant="primary"
       size="lg"
       cancel-title="Cancel"
@@ -46,7 +46,7 @@
         </BFormGroup>
         <BButton class="mx-1" @click="deleteTrack()" size="sm" v-b-tooltip.focus.top="'Delete this event'"><Trash/></BButton>
       </BModal>
-      <BModal v-model="modalDelete" title="Delete pause" @ok="confirmDelete"> Really ? </BModal>
+      <BModal v-model="modalDelete" title="Delete event" @ok="confirmDelete"> Really ? </BModal>
   </div>
 </template>
 
@@ -103,12 +103,7 @@
     emit('updateTrack', props.timeTrack.id, start, end)
   }
 
-  // const deleteTrack = () => {
-  //   props.modalUpdateTrack.show = false
-  //   emit('deleteTrack', props.timeTrack.id)
-  // }
-
-    // ask for modal before delete
+  // ask for modal before delete
   const deleteTrack = () => {
     modalDelete.value = !modalDelete.value
   }

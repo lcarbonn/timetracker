@@ -3,11 +3,6 @@
       <BCard :title="'Your week '+useWeek().value+' tracks for ' + user?.first_name" body-class="text-center">
       </BCard>
       <DomainCalendarWeek :tracks="tracksWeek" @nav-to-week="navToWeek" @update-track="updateTrack" @delete-track="deleteTrack"/>
-      <!-- <BCard>
-        <DomainTimeTracksTable :tracks="tracksWeek" @delete-track="deleteDay"/>
-      </BCard>
-      <BModal v-model="modalDeleteDay" title="Delete day" @ok="confirmDeleteDay"> Really ? </BModal>
-      <BModal v-model="modalRestartDay" title="Restart day" @ok="confirmRestartDay"> Really ? </BModal> -->
     </div>
 </template>
 
@@ -32,12 +27,12 @@
   const tracksWeek = useTimeTracksWeek()
     
   if(user.value) {
-    getStateTimeTracksWeekUid(useWeek().value)
+    getStateTimeTracksOfTheWeek(useWeek().value)
   }
 
   const navToWeek = (week:number) => {
     useWeek().value = week
-    if(user.value) getStateTimeTracksWeekUid(week)
+    if(user.value) getStateTimeTracksOfTheWeek(week)
   }
 
   const updateTrack = (track:any) => {
