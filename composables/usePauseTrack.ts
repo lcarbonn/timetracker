@@ -197,7 +197,7 @@ export const refreshStateTracksPause = (pause:IPauseTrack) => {
 }
 /**
  * Delete the pause from tracks list
- * @param pause , the pause to refresh
+ * @param id , the pause id
  */
 export const deleteFromStateTracksPause = (id:number) => {
   const tracks = useTimeTracksWeek().value
@@ -216,13 +216,28 @@ export const deleteFromStateTracksPause = (id:number) => {
  * Refresh the state of tracks with the track
  * @param track, the track to refresh
  */
-export const refreshStatePauses = (track:IPauseTrack) => {
+export const refreshStateTrackPauses = (track:IPauseTrack) => {
     const tracks = usePauseTracks().value
     if(!tracks) return
     for (let index = 0; index < tracks.length; index++) {
       const stateTrack = tracks[index];
       if(stateTrack.id == track.id) {
         tracks[index] = Object.assign([], track)
+      }
+    }
+}
+
+/**
+ * Delete pause form the state track
+ * @param track, the track to refresh
+ */
+export const deleteFromStateTrackPause = (id:number) => {
+    const tracks = usePauseTracks().value
+    if(!tracks) return
+    for (let index = 0; index < tracks.length; index++) {
+      const stateTrack = tracks[index];
+      if(stateTrack.id == id) {
+        tracks.splice(index, 1)
       }
     }
 }

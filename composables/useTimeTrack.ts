@@ -1,11 +1,10 @@
 import type { ITimeTrack } from "~/types/tableTimeTrack"
 
 /**
- * get time tracks for the user and the week and set state
- * @param user_id
+ * get time tracks for the week and set state
  * @param week
  */
-export const getStateTimeTracksWeekUid = (user_id:number, week:number) => {
+export const getStateTimeTracksWeekUid = (week:number) => {
   $fetch<ITimeTrack[]>('/api/timetracks', {
     method: 'GET',
       params: {
@@ -19,7 +18,6 @@ export const getStateTimeTracksWeekUid = (user_id:number, week:number) => {
           const tracks = useTimeTracksWeek().value
           const index = tracks.indexOf(track)
           tracks[index] = Object.assign([], track)
-          // useTimeTracksWeek().value = Object.assign([], tracks)
         })
       })
       useTimeTracksWeek().value = list

@@ -18,17 +18,18 @@
         <BCardText>  Pause started at : <b>{{ currentPauseStartTime }}</b></BCardText>
         <BCardText> Duration : <b>{{ pauseTimer }}</b></BCardText>
       </BCard>
-      <DomainCalendarDay :today-track="todayTrack" :today-pauses="todayPauses" @update-track="updateTrack"/>
-      <BCard title="Pauses for today">
+      <DomainCalendarDay :today-track="todayTrack" :today-pauses="todayPauses" @update-track="updateTrack" @delete-track="deleteTrack"/>
+      <!-- <BCard title="Pauses for today">
         <DomainPauseTracksTable :disabled="disabled" :pauses="todayPauses" @delete-pause="deletePause" @reopen-pause="restartPause"/>
-      </BCard>
+      </BCard> -->
       <BModal v-model="modalRestartDay" title="Restart day" @ok="confirmRestartDay"> Really ? </BModal>
-      <BModal v-model="modalDeletePause" title="Delete pause" @ok="confirmDeletePause"> Really ? </BModal>
-      <BModal v-model="modalRestartPause" title="Restart pause" @ok="confirmRestartPause"> Really ? </BModal>
+      <!-- <BModal v-model="modalDeletePause" title="Delete pause" @ok="confirmDeletePause"> Really ? </BModal>
+      <BModal v-model="modalRestartPause" title="Restart pause" @ok="confirmRestartPause"> Really ? </BModal> -->
     </div>
 </template>
 
 <script setup lang="ts">
+
   import type { IPauseTrack } from '~/types/tablePauseTrack'
 
   // middleware
@@ -54,9 +55,9 @@
   // local refs
   const modalRestartDay = ref(false)
   const selectedTrack = ref()
-  const modalDeletePause = ref(false)
-  const modalRestartPause = ref(false)
-  const selectedPause = ref()
+  // const modalDeletePause = ref(false)
+  // const modalRestartPause = ref(false)
+  // const selectedPause = ref()
 
   if(user.value) {
     getStateTodayTimeTrack(user.value.id)
@@ -99,15 +100,15 @@
     return text
   })
 
-  // display for today
-  const today = computed(() => {
-    return now.toLocaleDateString().substring(0,10)
-  })
+  // // display for today
+  // const today = computed(() => {
+  //   return now.toLocaleDateString().substring(0,10)
+  // })
 
-    // disabled for pause compoenent
-  const disabled = computed(() => {
-    return todayTrack.value?.End!=null
-  })
+  //   // disabled for pause compoenent
+  // const disabled = computed(() => {
+  //   return todayTrack.value?.End!=null
+  // })
 
   // const for chrono
   const dayTimer = ref()
@@ -168,27 +169,27 @@
     if(selectedTrack.value) reopenTimeTrack(selectedTrack.value.id)
   }
 
-    // ask for modal before delete
-  const deletePause = (pause:IPauseTrack) => {
-    selectedPause.value = pause
-    modalDeletePause.value = !modalDeletePause.value
-  }
-  // confirm delete received
-  const confirmDeletePause = () => {
-    if(selectedPause.value) deleteStatePause(selectedPause.value.id)
-    selectedPause.value = null
-  }
+  //   // ask for modal before delete
+  // const deletePause = (pause:IPauseTrack) => {
+  //   selectedPause.value = pause
+  //   modalDeletePause.value = !modalDeletePause.value
+  // }
+  // // confirm delete received
+  // const confirmDeletePause = () => {
+  //   if(selectedPause.value) deleteStatePause(selectedPause.value.id)
+  //   selectedPause.value = null
+  // }
 
-  // restart today track
-  const restartPause = (pause:IPauseTrack) => {
-    selectedPause.value = pause
-    modalRestartPause.value = !modalDeletePause.value
-  }
+  // // restart today track
+  // const restartPause = (pause:IPauseTrack) => {
+  //   selectedPause.value = pause
+  //   modalRestartPause.value = !modalDeletePause.value
+  // }
 
-  // confirm restart received
-  const confirmRestartPause = () => {
-    if(selectedPause.value) reopenPauseTrack(selectedPause.value.id)
-  }
+  // // confirm restart received
+  // const confirmRestartPause = () => {
+  //   if(selectedPause.value) reopenPauseTrack(selectedPause.value.id)
+  // }
 
   const updateTrack = (track:any) => {
     // alert(track.id + " was dropped on " + track.start.toISOString() + ', isTrack:'+track.isTrack)
@@ -196,15 +197,30 @@
       updateTimeTrack(track.id, track.start, track.end )
       .then((tt) => {
         todayTrack.value = tt
-        messageToSnack("Event changed to "+new Date(tt.Start).toLocaleString())
+        messageToSnack("Day changed to "+new Date(tt.Start).toLocaleString())
       })
     } else {
       updatePauseTrack(track.id, track.start, track.end )
       .then((pt) => {
-        refreshStatePauses(pt)
-        messageToSnack("Event changed to "+new Date(pt.Start).toLocaleString())
+        refreshStateTrackPauses(pt)
+        messageToSnack("Pause changed to "+new Date(pt.Start).toLocaleString())
       })
     }
   }
 
+  const deleteTrack = (track:any) => {
+    if(track.isTrack) {
+      deleteStateTrack(track.id )
+      .then(() => {
+        todayTrack.value = undefined
+        messageToSnack("Day deleted")
+      })
+    } else {
+      deleteStatePause(track.id)
+      .then((pt) => {
+        deleteFromStateTrackPause(track.id)
+        messageToSnack("Pause deleted")
+      })
+    }
+  }
 </script>

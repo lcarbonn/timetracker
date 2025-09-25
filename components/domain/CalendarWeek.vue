@@ -1,7 +1,12 @@
 <template>
     <div>
       <FullCalendar ref="fullCalendar":options="calendarOptions" />
-      <LazyDomainModalUpdateTimeTrack v-if="selectedEvent" :modalUpdateTrack="modalUpdateTrack" :time-track="selectedEvent" @update-track="updateTrack" @delete-track="deleteTrack"></LazyDomainModalUpdateTimeTrack>
+      <LazyDomainModalUpdateTimeTrack 
+        v-if="selectedEvent" 
+        :modalUpdateTrack="modalUpdateTrack" 
+        :time-track="selectedEvent" 
+        @update-track="updateTrack" 
+        @delete-track="deleteTrack"></LazyDomainModalUpdateTimeTrack>
     </div>
 </template>
 
