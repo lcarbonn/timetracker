@@ -64,12 +64,12 @@ import type { ITimeTrack } from '~/types/tableTimeTrack'
   }
 
   const updateTrack = (track:any) => {
-    // alert(track.id + " was dropped on " + track.start.toISOString() + ', end:'+track.end)
+    alert(track.id + " was dropped on " + track.start.toISOString() + ', end:'+track.end)
     if(track.isTrack) {
       updateTimeTrack(track.id, track.start, track.end )
       .then((tt) => {
         refreshStateTracksTime(tt)
-        messageToSnack("Time changed to "+new Date(tt.Start).toLocaleString())
+        messageToSnack("Day changed to "+new Date(tt.Start).toLocaleString())
       })
     } else {
       updatePauseTrack(track.id, track.start, track.end )
@@ -84,7 +84,7 @@ import type { ITimeTrack } from '~/types/tableTimeTrack'
       deleteStateTrack(track.id )
       .then((tt) => {
         deleteFromStateTracksTime(track.id)
-        messageToSnack("Time deleted")
+        messageToSnack("Day deleted")
       })
     } else {
       deleteStatePause(track.id)

@@ -118,11 +118,11 @@
         center: "",
         right: "",
       },
-      footerToolbar: {
-        left: "myPrevButton,myTodayButton,myNextButton",
-        center: "",
-        right: "",
-      },
+      // footerToolbar: {
+      //   left: "myPrevButton,myTodayButton,myNextButton",
+      //   center: "",
+      //   right: "",
+      // },
       events: calendarEvents.value,
       snapDuration:"00:15:00",
       dragScroll:false,
