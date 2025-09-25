@@ -42,7 +42,7 @@
         color:'#378006',
         id:today.id,
         isTrack:true,
-        editable:today.End?true:false,
+        isEnded:today.End?true:false
       })
     }
     if(props.todayPauses) {
@@ -53,7 +53,7 @@
           end:pause.End?pause.End:new Date(),
           id:pause.id,
           isTrack:false,
-          editable:pause.End?true:false
+          isEnded:pause.End?true:false
         })
       });
     }
@@ -66,7 +66,7 @@
       plugins: [timeGridPlugin, interactionPlugin],
       locale:"fr-fr",
       initialView: "timeGridDay",
-      // editable: true,
+      editable: true,
       nowIndicator: true,
       scrollTime:"07:00:00",
       dayHeaders:false,
@@ -94,7 +94,6 @@
         dropResizeEvent(info)
       },
       eventClick(info) {
-        if(!info.event.startEditable) return
         clickEvent(info)
       },
 
@@ -107,13 +106,7 @@
   const dropResizeEvent = (info:any) => {
     // alert(info.event.title + " was dropped on " + info.event.start?.toISOString() + ', end:'+info.event.end?.toISOString());
     selectedEvent.value = info.event
-    const track = {
-      id:info.event.id,
-      start:info.event.start,
-      end:info.event.end,
-      isTrack:selectedEvent.value.extendedProps.isTrack
-    }
-    emit('updateTrack', track)
+    updateTrack(info.event.id, info.event.start, info.event.end)
   }
   // click on event
   const clickEvent = (info:any) => {
@@ -125,7 +118,7 @@
     const track = {
       id:id,
       start:start,
-      end:end,
+      end:selectedEvent.value.extendedProps.isEnded?end:null,
       isTrack:selectedEvent.value.extendedProps.isTrack
     }
     emit('updateTrack', track)

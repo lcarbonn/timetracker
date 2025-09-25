@@ -52,7 +52,7 @@
           color:'#378006',
           id:track.id,
           isTrack:true,
-          editable:track.End?true:false,
+          isEnded:track.End?true:false
         })
         // add the pauses to the calendar
         track.pauses?.forEach(pause => {
@@ -62,7 +62,7 @@
             end:pause.End?pause.End:new Date(),
             id:pause.id,
             isTrack:false,
-            editable:pause.End?true:false
+            isEnded:pause.End?true:false
           })
         });        
       });
@@ -133,7 +133,6 @@
         dropResizeEvent(info)
       },
       eventClick(info) {
-        if(!info.event.startEditable) return
         clickEvent(info)
       },
     };
@@ -145,13 +144,7 @@
   const dropResizeEvent = (info:any) => {
     // alert(info.event.title + " was dropped on " + info.event.start?.toISOString() + ', end:'+info.event.end?.toISOString());
     selectedEvent.value = info.event
-    const track = {
-      id:info.event.id,
-      start:info.event.start,
-      end:info.event.end,
-      isTrack:selectedEvent.value.extendedProps.isTrack
-    }
-    emit('updateTrack', track)
+    updateTrack(info.event.id, info.event.start, info.event.end)
   }
   // click on event
   const clickEvent = (info:any) => {
@@ -163,7 +156,7 @@
     const track = {
       id:id,
       start:start,
-      end:end,
+      end:selectedEvent.value.extendedProps.isEnded?end:null,
       isTrack:selectedEvent.value.extendedProps.isTrack
     }
     emit('updateTrack', track)

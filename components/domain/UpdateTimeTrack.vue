@@ -28,6 +28,7 @@
           :state="startDateState"/>
         </BFormGroup>
         <BFormGroup
+          v-if="timeTrack.extendedProps.isEnded"
           label="End"
           label-for="endDate"
           label-cols-sm="3"

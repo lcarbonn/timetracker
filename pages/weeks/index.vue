@@ -64,7 +64,7 @@ import type { ITimeTrack } from '~/types/tableTimeTrack'
   }
 
   const updateTrack = (track:any) => {
-    // alert(track.id + " was dropped on " + track.start.toISOString() + ', isTrack:'+track.isTrack)
+    alert(track.id + " was dropped on " + track.start.toISOString() + ', end:'+track.end)
     if(track.isTrack) {
       updateTimeTrack(track.id, track.start, track.end )
       .then((tt) => {
