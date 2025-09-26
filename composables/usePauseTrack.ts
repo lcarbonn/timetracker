@@ -34,7 +34,7 @@ export const openPauseTrack = (timeId:number) :Promise<IPauseTrack>=> {
     })
     .then ((pt) => {
       usePauseTrack().value = pt
-      useTimeTrack().value?.pauses?.push(pt)
+      refreshPauseInTimeTrack(pt)
       resolve(pt)
     })
     .catch((error) => {
@@ -61,10 +61,6 @@ export const closePauseTrack = (id:number) :Promise<IPauseTrack> => {
       usePauseTrack().value = undefined
       refreshPauseInTimeTrack(pt)
       resolve(pt)
-      // const tt = useTimeTrack().value
-      // if(tt?.id) {
-      //   getTimeTrackPauses(tt.id)
-      // }
     })
     .catch((error) => {
       usePauseTrack().value = undefined
@@ -90,10 +86,6 @@ export const reopenPauseTrack = (id:number) :Promise<IPauseTrack> => {
       usePauseTrack().value = pt
       refreshPauseInTimeTrack(pt)
       resolve(pt)
-      // const tt = useTimeTrack().value
-      //   if(tt?.id) {
-      //     getTimeTrackPauses(tt.id)
-      //   }
     })
     .catch((error) => {
       usePauseTrack().value = undefined

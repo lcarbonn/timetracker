@@ -112,6 +112,9 @@
   const startDay = () => {
     if(user.value) {
       openTimeTrack(user.value.id)
+      .then((tt) => {
+        messageToSnack("Day started at "+new Date(tt.Start).toLocaleString())
+      })
     }
   }
 
@@ -119,6 +122,9 @@
   const endDay = () => {
     if(todayTrack.value) {
       closeTimeTrack(todayTrack.value.id)
+      .then((tt) => {
+        if(tt.End) messageToSnack("Day end at "+new Date(tt.End).toLocaleString())
+      })
     }
     clearInterval(dayChrono.value)
   }
@@ -127,12 +133,18 @@
   const startPause = () => {
     if(todayTrack.value) {
       openPauseTrack(todayTrack.value.id)
+      .then((tt) => {
+        messageToSnack("Pause started at "+new Date(tt.Start).toLocaleString())
+      })
     }
   }
   // ending a pause
   const endPause = () => {
     if(currentPause.value) {
       closePauseTrack(currentPause.value.id)
+      .then((tt) => {
+        if(tt.End) messageToSnack("Pause ended at "+new Date(tt.End).toLocaleString())
+      })
       clearInterval(pauseChrono.value)
     }
   }
