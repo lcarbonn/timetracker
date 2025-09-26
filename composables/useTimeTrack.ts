@@ -4,41 +4,47 @@ import type { ITimeTrack } from "~/types/tableTimeTrack"
  * get time tracks for the week and set state
  * @param week
  */
-export const getStateTimeTracksOfTheWeek = (week:number) => {
-  $fetch<ITimeTrack[]>('/api/timetracks', {
-    method: 'GET',
-      params: {
-          week:week,
-      }
-  })
-  .then((list) => {
-      useTimeTracksOfTheWeek().value = list
-      list.forEach(track => {
-        getTimeTrackPauses(track.id)
-        .then((pauses) => {
-          track.pauses = pauses
-          refreshTimeInTracksOfTheWeek(track)
+export const getStateTimeTracksOfTheWeek = (week:number) :Promise<ITimeTrack[]>=> {
+  return new Promise((resolve, reject) => {
+    $fetch<ITimeTrack[]>('/api/timetracks', {
+      method: 'GET',
+        params: {
+            week:week,
+        }
+    })
+    .then((list) => {
+        useTimeTracksOfTheWeek().value = list
+        list.forEach(track => {
+          getTimeTrackPauses(track.id)
+          .then((pauses) => {
+            track.pauses = pauses
+            refreshTimeInTracksOfTheWeek(track)
+          })
         })
-      })
+        resolve(list)
+    })
   })
 }
 
 /**
  * Get the today time track
  */
-export const getStateTodayTimeTrack = () => {
-  $fetch<ITimeTrack>('/api/todaytrack', {
-    method: 'GET',
-  })
-  .then((track) => {
-      useTimeTrack().value = track
-      if(track) {
-        getTimeTrackPauses(track.id)
-        .then((pauses) => {
-          const stateTime = useTimeTrack().value
-          if(stateTime) stateTime.pauses = pauses
-        })
-      }
+export const getStateTodayTimeTrack = () :Promise<ITimeTrack>=> {
+  return new Promise((resolve, reject) => {
+    $fetch<ITimeTrack>('/api/todaytrack', {
+      method: 'GET',
+    })
+    .then((track) => {
+        useTimeTrack().value = track
+        if(track) {
+          getTimeTrackPauses(track.id)
+          .then((pauses) => {
+            const stateTime = useTimeTrack().value
+            if(stateTime) stateTime.pauses = pauses
+          })
+        }
+        resolve(track)
+    })
   })
 }
 
@@ -46,7 +52,8 @@ export const getStateTodayTimeTrack = () => {
  * Open a new time track for the user
  * @param user_id
  */
-export const openTimeTrack = (user_id:number) => {
+export const openTimeTrack = (user_id:number) :Promise<ITimeTrack> => {
+  return new Promise((resolve, reject) => {
     $fetch<ITimeTrack>('/api/timetrack', {
         method: 'POST',
         body: {
@@ -58,31 +65,38 @@ export const openTimeTrack = (user_id:number) => {
     })
     .then ((tt) => {
       useTimeTrack().value = tt
+      resolve(tt)
     })
     .catch((error) => {
         useTimeTrack().value = undefined
+        reject(error)
     })
+  })
 }
 
 /**
  * Close the time track
  * @param id, the time track id
  */
-export const closeTimeTrack = (id:number) => {
-  $fetch<ITimeTrack>('/api/timetrack', {
-      method: 'PATCH',
-      body: {
-          id:id,
-          End:new Date()
-      }
-  })
-  .then ((tt) => {
-      // useTimeTrack().value = tt
-      const time = useTimeTrack().value
-      if(time) time.End = tt.End
-  })
-  .catch((error) => {
-    useTimeTrack().value = undefined
+export const closeTimeTrack = (id:number) :Promise<ITimeTrack> => {
+  return new Promise((resolve, reject) => {
+    $fetch<ITimeTrack>('/api/timetrack', {
+        method: 'PATCH',
+        body: {
+            id:id,
+            End:new Date()
+        }
+    })
+    .then ((tt) => {
+        // useTimeTrack().value = tt
+        const time = useTimeTrack().value
+        if(time) time.End = tt.End
+        resolve(tt)
+    })
+    .catch((error) => {
+      useTimeTrack().value = undefined
+      reject(error)
+    })
   })
 }
 
@@ -90,20 +104,24 @@ export const closeTimeTrack = (id:number) => {
  * Reopenthe time track
  * @param id, the time track id
  */
-export const reopenTimeTrack = (id:number) => {
-  $fetch<ITimeTrack>('/api/timetrack', {
-      method: 'PATCH',
-      body: {
-          id:id,
-          End:null
-      }
-  })
-  .then ((tt) => {
-      const time = useTimeTrack().value
-      if(time) time.End = null
-  })
-  .catch((error) => {
-    useTimeTrack().value = undefined
+export const reopenTimeTrack = (id:number) :Promise<ITimeTrack> => {
+  return new Promise((resolve, reject) => {
+    $fetch<ITimeTrack>('/api/timetrack', {
+        method: 'PATCH',
+        body: {
+            id:id,
+            End:null
+        }
+    })
+    .then ((tt) => {
+        const time = useTimeTrack().value
+        if(time) time.End = null
+        resolve(tt)
+    })
+    .catch((error) => {
+      useTimeTrack().value = undefined
+      reject(error)
+    })
   })
 }
 

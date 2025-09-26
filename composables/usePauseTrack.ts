@@ -25,8 +25,8 @@ export const getTimeTrackPauses = (timeId:number) :Promise<IPauseTrack[]> => {
  * Open a new pause track for the time
  * @param timeId
  */
-export const openPauseTrack = (timeId:number) => {
-  const { user } = useUserSession()
+export const openPauseTrack = (timeId:number) :Promise<IPauseTrack>=> {
+  return new Promise((resolve, reject) => {
     $fetch<IPauseTrack>('/api/pausetrack', {
         method: 'POST',
         body: {
@@ -37,34 +37,41 @@ export const openPauseTrack = (timeId:number) => {
     .then ((pt) => {
       usePauseTrack().value = pt
       useTimeTrack().value?.pauses?.push(pt)
+      resolve(pt)
     })
     .catch((error) => {
-        usePauseTrack().value = undefined
+      usePauseTrack().value = undefined
+      reject(error)
     })
+  })
 }
 
 /**
  * Close the pause track
  * @param id, the pause track id
  */
-export const closePauseTrack = (id:number) => {
-  $fetch<IPauseTrack>('/api/pausetrack', {
-      method: 'PATCH',
-      body: {
-          id:id,
-          End:new Date()
-      }
-  })
-  .then ((pt) => {
-    usePauseTrack().value = undefined
-    refreshPauseInTimeTrack(pt)
-    // const tt = useTimeTrack().value
-    // if(tt?.id) {
-    //   getTimeTrackPauses(tt.id)
-    // }
-  })
-  .catch((error) => {
-    usePauseTrack().value = undefined
+export const closePauseTrack = (id:number) :Promise<IPauseTrack> => {
+  return new Promise((resolve, reject) => {
+    $fetch<IPauseTrack>('/api/pausetrack', {
+        method: 'PATCH',
+        body: {
+            id:id,
+            End:new Date()
+        }
+    })
+    .then ((pt) => {
+      usePauseTrack().value = undefined
+      refreshPauseInTimeTrack(pt)
+      resolve(pt)
+      // const tt = useTimeTrack().value
+      // if(tt?.id) {
+      //   getTimeTrackPauses(tt.id)
+      // }
+    })
+    .catch((error) => {
+      usePauseTrack().value = undefined
+      reject(error)
+    })
   })
 }
 
@@ -72,25 +79,28 @@ export const closePauseTrack = (id:number) => {
  * Reopen the pause track
  * @param id, the pause track id
  */
-export const reopenPauseTrack = (id:number) => {
-  $fetch<IPauseTrack>('/api/pausetrack', {
-      method: 'PATCH',
-      body: {
-          id:id,
-          End:null
-      }
-  })
-  .then ((pt) => {
-    usePauseTrack().value = pt
-    refreshPauseInTimeTrack(pt)
-
-    // const tt = useTimeTrack().value
-    //   if(tt?.id) {
-    //     getTimeTrackPauses(tt.id)
-    //   }
-  })
-  .catch((error) => {
-    usePauseTrack().value = undefined
+export const reopenPauseTrack = (id:number) :Promise<IPauseTrack> => {
+  return new Promise((resolve, reject) => {
+    $fetch<IPauseTrack>('/api/pausetrack', {
+        method: 'PATCH',
+        body: {
+            id:id,
+            End:null
+        }
+    })
+    .then ((pt) => {
+      usePauseTrack().value = pt
+      refreshPauseInTimeTrack(pt)
+      resolve(pt)
+      // const tt = useTimeTrack().value
+      //   if(tt?.id) {
+      //     getTimeTrackPauses(tt.id)
+      //   }
+    })
+    .catch((error) => {
+      usePauseTrack().value = undefined
+      reject(error)
+    })
   })
 }
 
