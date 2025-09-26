@@ -10,6 +10,7 @@ describe('baserow user', async () => {
   beforeAll( async () => {
     // TODO : get env for server
     tokenAuth = await fetchSignInUser(LOGIN, MDP)
+    console.log("tokenAuth"+JSON.stringify(tokenAuth,null," "))
   })
 
   // login
@@ -18,6 +19,5 @@ describe('baserow user', async () => {
     console.log("token:", tokenAuth.token, ", access_token:", tokenAuth.access_token, ", refresh_token:", tokenAuth.refresh_token)
     expect(tokenAuth.user.username).toEqual(LOGIN)
     expect(tokenAuth.user.id).toEqual(Number(USER_ID).valueOf())
-
   })
 })

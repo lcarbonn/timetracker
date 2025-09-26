@@ -11,8 +11,9 @@ export const getTimeTrackPauses = (timeId:number) :Promise<IPauseTrack[]> => {
         }
     })
     .then((list) => {
-      if(list[0].End==null) {
-        usePauseTrack().value = list[0]
+      const last = list.length-1
+      if(list[last].End==null) {
+        usePauseTrack().value = list[last]
       }      
       resolve(list)
     })
