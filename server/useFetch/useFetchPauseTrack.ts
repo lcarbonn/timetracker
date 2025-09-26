@@ -32,9 +32,6 @@ export const fetchPauseTracks = () : Promise<IPauseTrack[]> => {
     ).then((res) => {
         resolve(res.results)
     })
-   .catch((error) => {
-     reject(error)
-   })
   })
 }
 
@@ -57,9 +54,6 @@ export const fetchPauseTrack = (id:number) : Promise<IPauseTrack> => {
    ).then((data) => {
         resolve(data)
     })
-   .catch((error) => {
-     reject(error)
-   })
   })
 }
 
@@ -84,9 +78,6 @@ export const fetchCreatePauseTrack = (pauseTrack:IPauseTrackPost) : Promise<IPau
      },
    ).then((res) => {
         resolve(res)
-   })
-   .catch((error) => {
-     reject(error)
    })
   })
 }
@@ -116,9 +107,6 @@ export const fetchUpdatePauseTrack = (pauseTrack:IPauseTrack) : Promise<IPauseTr
    ).then((res) => {
       resolve(res)
    })
-   .catch((error) => {
-     reject(error)
-   })
   })
 }
 
@@ -142,16 +130,13 @@ export const fetchDeletePauseTrack = (id:number) : Promise<number> => {
    ).then(() => {
     resolve(id)
    })
-   .catch((error) => {
-     reject(error)
-   })
   })
 }
 
 /**
  * Get pauses for the given time track id
  * @param id, the id
- * @returns Promise - the pauses traks or the error
+ * @returns Promise - the pauses traks order by start asc or the error
  */
 export const fetchPauseTracksForTimeTrack = (id:number) : Promise<IPauseTrack[]> => {
   return new Promise((resolve, reject) => {
@@ -160,7 +145,7 @@ export const fetchPauseTracksForTimeTrack = (id:number) : Promise<IPauseTrack[]>
       {
         page:1,
         size:200,
-        order_by:'-Start',
+        order_by:'+Start',
         filters: {
           filter_type:"AND",
           filters: [
@@ -185,9 +170,6 @@ export const fetchPauseTracksForTimeTrack = (id:number) : Promise<IPauseTrack[]>
     if(res.results) {
       resolve(res.results)
     }
-   })
-   .catch((error) => {
-     reject(error)
    })
   })
 }

@@ -32,9 +32,6 @@ export const fetchTimeTracks = () : Promise<ITimeTrack[]> => {
     ).then((res) => {
         resolve(res.results)
     })
-   .catch((error) => {
-     reject(error)
-   })
   })
 }
 
@@ -57,9 +54,6 @@ export const fetchTimeTrack = (id:number) : Promise<ITimeTrack> => {
    ).then((data) => {
         resolve(data)
     })
-   .catch((error) => {
-     reject(error)
-   })
   })
 }
 
@@ -84,9 +78,6 @@ export const fetchCreateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack>
      },
    ).then((res) => {
         resolve(res)
-   })
-   .catch((error) => {
-     reject(error)
    })
   })
 }
@@ -115,9 +106,6 @@ export const fetchUpdateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack>
      },
    ).then((res) => {
       resolve(res)
-   })
-   .catch((error) => {
-     reject(error)
    })
   })
 }
@@ -151,22 +139,18 @@ export const fetchTodayTimeTrack = (uid:number) : Promise<ITimeTrack> => {
           ]
         }
       }
-   // Use fetch with the runtime config values
-   $fetch<ListTimeResponse>(
-     uri,
-     {
-      query: params,
-       headers: {
-         Authorization: `Token ${TOKEN}`,
-       },
-     }
-   ).then((res) => {
+    // Use fetch with the runtime config values
+    $fetch<ListTimeResponse>(
+      uri,
+      {
+        query: params,
+        headers: {
+          Authorization: `Token ${TOKEN}`,
+        },
+      }
+    ).then((res) => {
       resolve(res.results[0])
-    }
-  )
-   .catch((error) => {
-     reject(error)
-   })
+    })
   })
 }
 
@@ -189,9 +173,6 @@ export const fetchDeleteTimeTrack = (id:number) : Promise<number> => {
      },
    ).then(() => {
     resolve(id)
-   })
-   .catch((error) => {
-     reject(error)
    })
   })
 }
@@ -240,9 +221,6 @@ export const fetchTimeTracksWeekUid = (uid:number, week:number) : Promise<ITimeT
       resolve(res.results)
     }
    })
-   .catch((error) => {
-     reject(error)
-   })
   })
 }
 
@@ -288,9 +266,6 @@ export const fetchTimeTracksTodayUid = (uid:number) : Promise<ITimeTrack[]> => {
     if(res.results) {
       resolve(res.results)
     }
-   })
-   .catch((error) => {
-     reject(error)
    })
   })
 }

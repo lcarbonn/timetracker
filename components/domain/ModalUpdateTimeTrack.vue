@@ -46,7 +46,8 @@
           :state="endDateState"/>
         </BFormGroup>
         <BButton class="mx-1" @click="deleteTrack()" size="sm" v-b-tooltip.focus.top="'Delete this event'"><Trash/></BButton>
-        <BButton v-if="isEnded"  class="mx-1" @click="restartTrack()" size="sm" v-b-tooltip.focus.top="'Restart this event'"><Reset/></BButton>
+        <BButton v-if="isRestartActive && isEnded && isLast"  class="mx-1" @click="restartTrack()" size="sm" v-b-tooltip.focus.top="'Restart this event'"><Reset/></BButton>
+        <BButton v-if="!isEnded"  class="mx-1" @click="closeTrack()" size="sm" v-b-tooltip.focus.top="'End this event'">Close this event</BButton>
       </BModal>
       <BModal v-model="modalDelete" title="Delete event" @ok="confirmDelete"> Really ? </BModal>
       <BModal v-model="modalRestart" title="Restart event" @ok="confirmRestart"> Really ? </BModal>
@@ -73,22 +74,30 @@
         type: Object,
         default: null
     },
+    isRestartActive: {
+        type: Boolean,
+        default: false
+    }
   })
 
   // emits declaration
-  const emit = defineEmits(['updateTrack', 'deleteTrack'])
+  const emit = defineEmits(['updateTrack', 'deleteTrack', 'closeTrack'])
 
   // local refs
   const startDateForm = ref(props.timeTrack.start)
   const endDateForm = ref(props.timeTrack.end)
   const modalDelete = ref(false)
   const modalRestart = ref(false)
-  // const isEnded = ref(props.timeTrack.extendedProps.isEnded)
+  const isEnded = ref(props.timeTrack.extendedProps.isEnded)
+  const isLast = ref(props.timeTrack.extendedProps.isLast)
+  const isCloseAsked = ref(false)
   
   // watch track changes
   watch(() => props.timeTrack, (timeTrack) => {
     startDateForm.value = timeTrack.start
     endDateForm.value = timeTrack.end
+    isEnded.value = timeTrack.extendedProps.isEnded
+    isLast.value = timeTrack.extendedProps.isLast
   })
 
   // computed properties
@@ -97,9 +106,6 @@
   })
   const endDateState = computed(() => {
     return endDateForm.value != null ? true:false
-  })
-  const isEnded = computed(() => {
-    return props.timeTrack.extendedProps.isEnded
   })
 
   // close modal on ok before send submit
@@ -113,7 +119,9 @@
   const submit = () => {
     const start = new Date(startDateForm.value)
     const end = new Date(endDateForm.value)
-    emit('updateTrack', props.timeTrack.id, start, end)
+    if(isCloseAsked.value) emit('closeTrack', props.timeTrack.id, start, end)
+    else emit('updateTrack', props.timeTrack.id, start, end)
+    isCloseAsked.value = false
   }
 
   // ask for modal before delete
@@ -135,14 +143,16 @@
     const start = new Date(startDateForm.value)
     emit('updateTrack', props.timeTrack.id, start, null)
   }
-  // // ask for close track
-  // const closeTrack = () => {
-  //   // modalRestart.value = !modalRestart.value
-  //   endDateForm.value = new Date()
-  //   isEnded.value = true
-  // }
+  // ask for close track
+  const closeTrack = () => {
+    // // modalRestart.value = !modalRestart.value
+    endDateForm.value = new Date()
+    isEnded.value = true
+    isCloseAsked.value = true
+  }
   const cancel = () => {
     // // endDateForm.value = props.timeTrack.end
-    // isEnded.value = props.timeTrack.extendedProps.isEnded
+    isEnded.value = props.timeTrack.extendedProps.isEnded
+    isCloseAsked.value = false
   }
 </script>

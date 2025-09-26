@@ -1,12 +1,14 @@
 <template>
     <div>
       <FullCalendar ref="fullCalendar":options="calendarOptions" />
-      <LazyDomainModalUpdateTimeTrack 
-        v-if="selectedEvent" 
+      <LazyDomainModalUpdateTimeTrack
+        v-if="selectedEvent"
         :modalUpdateTrack="modalUpdateTrack"
         :time-track="selectedEvent" 
+        :is-restart-active="Boolean(todayTrack?true:false)"
         @update-track="updateTrack" 
-        @delete-track="deleteTrack"></LazyDomainModalUpdateTimeTrack>
+        @delete-track="deleteTrack"
+        @close-track="closeTrack"></LazyDomainModalUpdateTimeTrack>
     </div>
 </template>
 
@@ -56,16 +58,22 @@
         // add the track to the calendar
         events.push( trackToEvent(track))
         // add the pauses to the calendar
+        let i = 1
+        const length = track.pauses?.length
         track.pauses?.forEach(pause => {
-          events.push( pauseToEvent(pause))
+          events.push( pauseToEvent(pause,  (i==length)))
+          i++
         });        
       });
     }
     const today = props.todayTrack
     if(today) {
       events.push( trackToEvent(today))
+      let i = 1
+      const length = today.pauses?.length
       today.pauses?.forEach(pause => {
-        events.push( pauseToEvent(pause))
+        events.push( pauseToEvent(pause, (i==length)))
+        i++
       });
     }
     return events
@@ -146,7 +154,7 @@
   }
   // click on event
   const clickEvent = (info:any) => {
-    // alert(info.event.title + " was dropped on " + info.event.start?.toISOString() + ', isTrack:'+info.event.extendedProps.track);
+    // alert(info.event.title + " was dropped on " + info.event.start?.toISOString() + ', isEnded' + info.event.extendedProps.isEnded);
     selectedEvent.value = info.event
     modalUpdateTrack.value.show = !modalUpdateTrack.value.show
   }
@@ -155,6 +163,15 @@
       id:id,
       start:start,
       end:selectedEvent.value.extendedProps.isEnded?end:null,
+      isTrack:selectedEvent.value.extendedProps.isTrack
+    }
+    emit('updateTrack', track)
+  }
+  const closeTrack = (id:string, start:Date, end:Date) => {
+    const track = {
+      id:id,
+      start:start,
+      end:end,
       isTrack:selectedEvent.value.extendedProps.isTrack
     }
     emit('updateTrack', track)

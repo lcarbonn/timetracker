@@ -21,14 +21,15 @@ export const trackToEvent = (track:ITimeTrack) :object => {
  * @param pause 
  * @returns 
  */
-export const pauseToEvent = (pause:IPauseTrack) :object => {
+export const pauseToEvent = (pause:IPauseTrack, isLast:boolean) :object => {
     const event = {
         title: pause.End?"Pause of "+formatDuration(pause.Duration):"Pause started",
         start:pause.Start,
         end:pause.End?pause.End:new Date(),
         id:pause.id,
         isTrack:false,
-        isEnded:pause.End?true:false
+        isEnded:pause.End?true:false,
+        isLast:isLast
     }
     return event
 }

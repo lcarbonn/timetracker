@@ -107,6 +107,7 @@ export const deleteStatePause = (id:number) :Promise<void> => {
       }
     })
     .then((pt) => {
+      usePauseTrack().value = undefined
       resolve()
     })
     if(usePauseTrack().value?.id == id) {
@@ -132,7 +133,7 @@ export const updatePauseTrack = (id:number, start:Date, end:Date) :Promise<IPaus
         }
     })
     .then ((pt) => {
-      usePauseTrack().value = pt
+      refreshCurrentStatePauseTrack(pt)
       resolve(pt)
     })
     .catch((error) => {
@@ -212,4 +213,10 @@ export const deletePauseFromTimeTrack = (id:number) => {
         pauses.splice(index, 1)
       }
     }
+}
+
+const refreshCurrentStatePauseTrack = (pause:IPauseTrack) => {
+  const currentPause = usePauseTrack().value
+  if(currentPause?.id == pause.id) usePauseTrack().value = pause
+  if(!pause.End) usePauseTrack().value = pause
 }
