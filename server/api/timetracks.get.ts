@@ -1,4 +1,4 @@
-import { fetchTimeTracksTodayUid, fetchTimeTracksWeekUid } from '~/utils/useFetchTimeTrack'
+import { fetchTimeTracksTodayUid, fetchTimeTracksWeekUid } from '../utils/useFetchTimeTrack'
 
 export default defineEventHandler(async (event) => {
   try {
