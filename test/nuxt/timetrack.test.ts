@@ -1,9 +1,6 @@
 import { beforeAll, describe, expect, it, test } from 'vitest'
-import type { IBaserowAuth } from '~/types/baserowAuth'
-import type { ITimeTrack } from '~/types/tableTimeTrack'
-
-import { fetchCreateTimeTrack, fetchDeleteTimeTrack, fetchTimeTracks, fetchUpdateTimeTrack } from '~/utils/useFetchTimeTrack'
-
+import { fetchSignInUser } from '~/server/useFetch/useFetchAuth'
+import { fetchCreateTimeTrack, fetchDeleteTimeTrack, fetchTimeTrack, fetchTimeTracks, fetchTimeTracksWeekUid, fetchTodayTimeTrack, fetchUpdateTimeTrack } from '~/server/useFetch/useFetchTimeTrack'
 
 function logTrack(tt:ITimeTrack) {
   console.log(tt.id,", ",tt.UID, ", ", tt.UID[0].name, ", ", tt.Start, ", ", tt.End, ', ', tt.Duration, ', ', tt.Year)
@@ -61,7 +58,7 @@ describe('baserow time tracker', () => {
 
   // read test time track
   it('get one row form baserow', async () => {
-    const tt:ITimeTrack = await fetchTimeTrack(1)
+    const tt:ITimeTrack = await fetchTimeTrack(TEST_TT.id)
     logTrack(tt)
     expect(tt.UID[0].id).toEqual(user_id)
   })

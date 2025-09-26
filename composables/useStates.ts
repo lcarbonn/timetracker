@@ -1,6 +1,3 @@
-import type { ISnackMessage } from "~/types/snackMessage";
-import type { IPauseTrack } from "~/types/tablePauseTrack";
-import type { ITimeTrack } from "~/types/tableTimeTrack";
 /**
  * State for snackbar message
  */

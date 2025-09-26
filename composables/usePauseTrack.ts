@@ -1,5 +1,3 @@
-import type { IPauseTrack } from "~/types/tablePauseTrack"
-
 /**
  * get pause tracks for the time track id
  * @param timeId

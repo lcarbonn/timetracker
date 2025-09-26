@@ -1,9 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it, test } from 'vitest'
-import type { IBaserowAuth } from '~/types/baserowAuth'
-import type { IPauseTrack, IPauseTrackPost } from '~/types/tablePauseTrack'
-import type { ITimeTrack } from '~/types/tableTimeTrack'
-import { fetchCreatePauseTrack, fetchDeletePauseTrack, fetchPauseTracksForTimeTrack, fetchPauseTrack, fetchUpdatePauseTrack } from '~/utils/useFetchPauseTrack'
-
+import { fetchSignInUser } from '~/server/useFetch/useFetchAuth'
+import { fetchCreatePauseTrack, fetchDeletePauseTrack, fetchPauseTrack, fetchPauseTracks, fetchPauseTracksForTimeTrack, fetchUpdatePauseTrack } from '~/server/useFetch/useFetchPauseTrack'
+import { fetchCreateTimeTrack, fetchDeleteTimeTrack } from '~/server/useFetch/useFetchTimeTrack'
 
 function logTrack(pt:IPauseTrack) {
   console.log(pt.id,", ", pt.TimeTrack[0].id, ", ", pt.Start, ", ", pt.End, ', ', pt.Duration)

@@ -1,11 +1,10 @@
 import { beforeAll, describe, expect, it } from 'vitest'
-import type { IBaserowAuth } from '~/types/baserowAuth'
-import { fetchSignInUser } from '~/utils/useFetchAuth'
+import { fetchSignInUser } from '~/server/useFetch/useFetchAuth'
 
 describe('baserow user', async () => {
   const LOGIN = import.meta.env.VITE_BASEROW_LOGIN
   const MDP = import.meta.env.VITE_BASEROW_MDP
-  const USER_ID  = import.meta.env.VITE_BASEROW_ID
+  const USER_ID  = import.meta.env.VITE_BASEROW_USER_ID
   let tokenAuth:IBaserowAuth
 
   beforeAll( async () => {

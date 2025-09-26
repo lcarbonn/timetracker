@@ -6,7 +6,7 @@
         <BAvatar rounded src="/icon.png"></BAvatar>
     </BNavbarBrand>
     <BNavbarNav fill>
-      <BNavItem :href="'https://baserow.io/database/' + baseId +'/table/' + tableId" target="_blank"><BAvatar rounded src="/baserow-logo.png"></BAvatar></BNavItem>
+      <BNavItem :href="baseUrl + baseId +'/table/' + tableId" target="_blank"><BAvatar rounded src="/baserow-logo.png"></BAvatar></BNavItem>
     </BNavbarNav>
     <BOffcanvas id="nav-collapse"
         isNav
@@ -34,7 +34,7 @@
 
   // get user session
   const { loggedIn, user, clear: clearSession } = useUserSession()
-
+  const config = useRuntimeConfig()
   // icons
   import Person from '~icons/bi/person'
   
@@ -48,14 +48,14 @@
   const userEmail = computed(() => {
     return user.value?.username
   })
-  const baseId = computed(() => {
-    return import.meta.env.VITE_BASEROW_BASE_ID
+  const baseUrl = computed(() => {
+    return config.public.baseUrl
   })
-  const baseName = computed(() => {
-    return import.meta.env.VITE_BASEROW_BASE_NAME
+  const baseId = computed(() => {
+    return config.public.baseId
   })
   const tableId = computed(() => {
-    return import.meta.env.VITE_BASEROW_TIMETRACK
+    return config.public.tableTimetrackId
   })
 
   // methods

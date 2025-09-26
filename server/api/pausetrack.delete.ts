@@ -1,4 +1,4 @@
-import { fetchDeletePauseTrack } from '../utils/useFetchPauseTrack'
+import { fetchDeletePauseTrack } from '../useFetch/useFetchPauseTrack'
 
 export default defineEventHandler(async (event) => {
   try {

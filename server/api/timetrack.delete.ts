@@ -1,4 +1,4 @@
-import { fetchDeleteTimeTrack} from '../utils/useFetchTimeTrack'
+import { fetchDeleteTimeTrack} from '../useFetch/useFetchTimeTrack'
 
 export default defineEventHandler(async (event) => {
   try {

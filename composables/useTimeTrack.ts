@@ -1,5 +1,3 @@
-import type { ITimeTrack } from "~/types/tableTimeTrack"
-
 /**
  * get time tracks for the week and set state
  * @param week

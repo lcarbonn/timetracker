@@ -15,7 +15,6 @@
   import interactionPlugin from '@fullcalendar/interaction'
   import timeGridPlugin from '@fullcalendar/timegrid'
   import type { CalendarOptions } from '@fullcalendar/core/index.js'
-  import { TimeTrack } from '~/types/tableTimeTrack'
 
   // props
   const props = defineProps({

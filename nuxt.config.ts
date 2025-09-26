@@ -76,5 +76,17 @@ export default defineNuxtConfig({
       navigateFallbackAllowlist: [/^\/$/],
       type: "module"
     }    
-  }
+  },
+  runtimeConfig: {
+    baserowApiUrl:'',
+    baserowToken:'',
+    sessionPassword:'',
+    public: {
+      baseUrl:'',
+      baseId:'',
+      baseName:'',
+      tableTimetrackId:'',
+      tablePausetrackId:''
+    }
+  },  
 })

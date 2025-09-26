@@ -1,4 +1,4 @@
-import { fetchTodayTimeTrack} from '../utils/useFetchTimeTrack'
+import { fetchTodayTimeTrack} from '../useFetch/useFetchTimeTrack'
 
 export default defineEventHandler(async (event) => {
   try {

@@ -1,5 +1,5 @@
-import { ITimeTrack } from '~/types/tableTimeTrack'
-import { fetchUpdateTimeTrack} from '../utils/useFetchTimeTrack'
+import { ITimeTrack } from '~/utils/tableTimeTrack'
+import { fetchUpdateTimeTrack} from '../useFetch/useFetchTimeTrack'
 
 export default defineEventHandler(async (event) => {
   try {

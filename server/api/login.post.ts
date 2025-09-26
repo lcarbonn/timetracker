@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { fetchSignInUser } from '../utils/useFetchAuth'
+import { fetchSignInUser } from '../useFetch/useFetchAuth'
 
 const bodySchema = z.object({
   email: z.email(),

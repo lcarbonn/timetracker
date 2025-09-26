@@ -1,8 +1,10 @@
-import type { IPauseTrack, IPauseTrackPost, ListPauseResponse } from "~/types/tablePauseTrack"
+import type { IPauseTrack, IPauseTrackPost, ListPauseResponse } from "~/utils/tablePauseTrack"
 
-const URL = import.meta.env.VITE_BASEROW_URL
-const PAUSETRACK_ID = import.meta.env.VITE_BASEROW_PAUSETRACK
-const TOKEN = import.meta.env.VITE_BASEROW_TOKEN
+const config = useRuntimeConfig()
+
+const URL = config.baserowApiUrl
+const PAUSETRACK_ID = config.public.tablePausetrackId
+const TOKEN = config.baserowToken
 
 /**
  * Get pause tracks

@@ -44,7 +44,6 @@ import type { TableField } from 'bootstrap-vue-next';
 
   // icons
   import Trash from '~icons/bi/trash'
-  import type { IPauseTrack } from '~/types/tablePauseTrack';
 
   // props
   const props = defineProps({

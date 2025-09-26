@@ -1,8 +1,10 @@
-import type { ListTimeResponse, ITimeTrack } from "~/types/tableTimeTrack";
+import type { ListTimeResponse, ITimeTrack } from "~/utils/tableTimeTrack";
 
-    const URL = import.meta.env.VITE_BASEROW_URL
-    const TIMETRACK_ID = import.meta.env.VITE_BASEROW_TIMETRACK
-    const TOKEN = import.meta.env.VITE_BASEROW_TOKEN
+const config = useRuntimeConfig()
+
+const URL = config.baserowApiUrl
+const TIMETRACK_ID = config.public.tableTimetrackId
+const TOKEN = config.baserowToken
 
 /**
  * Get time tracks

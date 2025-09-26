@@ -1,5 +1,5 @@
-import { IPauseTrackPost } from "~/types/tablePauseTrack"
-import { fetchCreatePauseTrack } from "../utils/useFetchPauseTrack"
+import { IPauseTrackPost } from "~/utils/tablePauseTrack"
+import { fetchCreatePauseTrack } from "../useFetch/useFetchPauseTrack"
 
 export default defineEventHandler(async (event) => {
   try {
