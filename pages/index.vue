@@ -1,7 +1,6 @@
 <template>
     <div>
       <BCard :title="'Today track for ' + user?.first_name" body-class="text-center">
-        <!-- <BCardText><b>{{ today }}</b></BCardText> -->
         <BButton v-if="!todayTrack" size="lg" class="m-1" @click="startDay">Start my day</BButton>
         <BButton v-if="todayTrack && !todayTrack.End" size="lg" class="mx-1" @click="endDay">End my day</BButton>
         <BButton v-if="todayTrack && todayTrack.End" class="mx-1" @click="restartDay">Restart my day</BButton>
@@ -12,8 +11,6 @@
           - Pause Duration : <b>{{ formatDuration(todayTrack.PauseDuration) }}</b> 
           - Effective Duration : <b>{{ formatDuration(todayTrack.EffectiveDuration) }}</b>
         </BCardText>
-        <!-- <BCardText v-if="todayTrack && todayTrack.End"> Pause Duration : <b>{{ formatDuration(todayTrack.PauseDuration) }}</b></BCardText> -->
-        <!-- <BCardText v-if="todayTrack && todayTrack.End"> Effective Duration : <b>{{ formatDuration(todayTrack.EffectiveDuration) }}</b></BCardText> -->
         <BCardText v-if="todayTrack && !todayTrack.End"> Timer : <b>{{ dayTimer }}</b></BCardText>
         <BButton v-if="todayTrack && !todayTrack.End && !currentPause" size="lg" class="mx-1" @click="startPause" variant="primary">Have a break</BButton>
         <BButton v-if="todayTrack && !todayTrack.End && currentPause && !currentPause.End" size="lg" class="mx-1" @click="endPause" variant="primary">Back to work</BButton>
@@ -50,9 +47,8 @@
   const modalRestartDay = ref(false)
   const selectedTrack = ref()
 
-  if(user.value) {
-    getStateTodayTimeTrack()
-  }
+  // init at setup
+  getStateTodayTimeTrack()
 
   // computed properties
   // start time of the day

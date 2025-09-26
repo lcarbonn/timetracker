@@ -1,6 +1,9 @@
 <template>
     <div>
       <BCard :title="'Your week '+useWeek().value+' tracks for ' + user?.first_name" body-class="text-center">
+        <BCardText>
+          Effective Duration : <b>{{ effectiveDuration }}</b>
+        </BCardText>
       </BCard>
       <DomainCalendar :tracks="tracksWeek" @nav-to-week="navToWeek" @update-track="updateTrack" @delete-track="deleteTrack"/>
     </div>
@@ -22,19 +25,31 @@
   useWeek().value = currentWeek
 
 
-
   // local refs
   const tracksWeek = useTimeTracksOfTheWeek()
-    
-  if(user.value) {
-    getStateTimeTracksOfTheWeek(useWeek().value)
-  }
 
+  // init on setup
+  getStateTimeTracksOfTheWeek(useWeek().value)
+
+  // computed properties
+  const effectiveDuration = computed(() => {
+    let efd:number = 0
+    if(tracksWeek.value) {
+      tracksWeek.value.forEach(track => {
+        efd = efd + Number(track.EffectiveDuration)
+      })
+    }
+    return formatDuration(efd)
+  })
+
+  // methods
+  // navigation to week
   const navToWeek = (week:number) => {
     useWeek().value = week
-    if(user.value) getStateTimeTracksOfTheWeek(week)
+    getStateTimeTracksOfTheWeek(week)
   }
 
+  // update track
   const updateTrack = (track:any) => {
     // alert(track.id + " was dropped on " + track.start.toISOString() + ', end:'+track.end)
     if(track.isTrack) {
@@ -51,6 +66,7 @@
       })
     }
   }
+  // delete track
   const deleteTrack = (track:any) => {
     if(track.isTrack) {
       deleteStateTrack(track.id )
