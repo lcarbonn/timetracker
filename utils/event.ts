@@ -1,5 +1,3 @@
-import type { IPauseTrack } from "~/types/tablePauseTrack";
-import type { ITimeTrack } from "~/types/tableTimeTrack";
 /**
  * Return a event from a track
  * @param track 

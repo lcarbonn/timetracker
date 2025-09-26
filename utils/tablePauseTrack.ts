@@ -1,5 +1,3 @@
-import type { ITimeTrack } from "./tableTimeTrack"
-
 /**
  * Type for PauseTrack table
  */

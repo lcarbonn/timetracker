@@ -3,7 +3,7 @@
       <FullCalendar ref="fullCalendar":options="calendarOptions" />
       <LazyDomainModalUpdateTimeTrack 
         v-if="selectedEvent" 
-        :modalUpdateTrack="modalUpdateTrack" 
+        :modalUpdateTrack="modalUpdateTrack"
         :time-track="selectedEvent" 
         @update-track="updateTrack" 
         @delete-track="deleteTrack"></LazyDomainModalUpdateTimeTrack>
