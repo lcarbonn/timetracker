@@ -8,7 +8,8 @@
       size="lg"
       cancel-title="Cancel"
       ok-title="Update"
-      @ok.prevent="preventOk">
+      @ok.prevent="preventOk"
+      @cancel="cancel">
         <BFormGroup
           label="Start"
           label-for="startDate"
@@ -27,7 +28,7 @@
           :state="startDateState"/>
         </BFormGroup>
         <BFormGroup
-          v-if="timeTrack.extendedProps.isEnded"
+          v-if="isEnded"
           label="End"
           label-for="endDate"
           label-cols-sm="3"
@@ -45,8 +46,10 @@
           :state="endDateState"/>
         </BFormGroup>
         <BButton class="mx-1" @click="deleteTrack()" size="sm" v-b-tooltip.focus.top="'Delete this event'"><Trash/></BButton>
+        <BButton v-if="isEnded"  class="mx-1" @click="restartTrack()" size="sm" v-b-tooltip.focus.top="'Restart this event'"><Reset/></BButton>
       </BModal>
       <BModal v-model="modalDelete" title="Delete event" @ok="confirmDelete"> Really ? </BModal>
+      <BModal v-model="modalRestart" title="Restart event" @ok="confirmRestart"> Really ? </BModal>
   </div>
 </template>
 
@@ -58,6 +61,7 @@
 
   // icons
   import Trash from '~icons/bi/trash'
+  import Reset from '~icons/bi/arrow-counterclockwise'
 
   // props
   const props = defineProps({
@@ -78,25 +82,34 @@
   const startDateForm = ref(props.timeTrack.start)
   const endDateForm = ref(props.timeTrack.end)
   const modalDelete = ref(false)
+  const modalRestart = ref(false)
+  // const isEnded = ref(props.timeTrack.extendedProps.isEnded)
   
+  // watch track changes
   watch(() => props.timeTrack, (timeTrack) => {
     startDateForm.value = timeTrack.start
     endDateForm.value = timeTrack.end
   })
 
+  // computed properties
   const startDateState = computed(() => {
     return startDateForm.value != null ? true:false
   })
   const endDateState = computed(() => {
     return endDateForm.value != null ? true:false
   })
+  const isEnded = computed(() => {
+    return props.timeTrack.extendedProps.isEnded
+  })
 
+  // close modal on ok before send submit
   const preventOk = () => {
     if(startDateForm.value && endDateForm.value) {
       props.modalUpdateTrack.show = false
       submit()
     }
   }
+  // submit form
   const submit = () => {
     const start = new Date(startDateForm.value)
     const end = new Date(endDateForm.value)
@@ -112,5 +125,24 @@
     props.modalUpdateTrack.show = false
     emit('deleteTrack', props.timeTrack.id)
   }
-
+  // ask for modal before restart
+  const restartTrack = () => {
+    modalRestart.value = !modalRestart.value
+  }
+  // confirm restart received
+  const confirmRestart = () => {
+    props.modalUpdateTrack.show = false
+    const start = new Date(startDateForm.value)
+    emit('updateTrack', props.timeTrack.id, start, null)
+  }
+  // // ask for close track
+  // const closeTrack = () => {
+  //   // modalRestart.value = !modalRestart.value
+  //   endDateForm.value = new Date()
+  //   isEnded.value = true
+  // }
+  const cancel = () => {
+    // // endDateForm.value = props.timeTrack.end
+    // isEnded.value = props.timeTrack.extendedProps.isEnded
+  }
 </script>

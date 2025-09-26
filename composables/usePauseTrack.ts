@@ -34,7 +34,7 @@ export const openPauseTrack = (timeId:number) :Promise<IPauseTrack>=> {
     })
     .then ((pt) => {
       usePauseTrack().value = pt
-      refreshPauseInTimeTrack(pt)
+      useTimeTrack().value?.pauses?.push(pt)
       resolve(pt)
     })
     .catch((error) => {
