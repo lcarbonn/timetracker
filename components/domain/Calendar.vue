@@ -86,21 +86,25 @@
       initialView: "timeGridDay",
       editable: true,
       nowIndicator: true,
-      scrollTime:"07:00:00",
+      scrollTime:"08:00:00",
       dayHeaders:props.todayTrack?false:true,
       stickyHeaderDates: true,
       allDaySlot:false,
       firstDay:1,
+      snapDuration:"00:15:00",
+      dragScroll:false,
+      // navLinks:true,
+      events: calendarEvents.value,
       businessHours: {
         // days of week. an array of zero-based day of week integers (0=Sunday)
         daysOfWeek: [ 1, 2, 3, 4, 5 ], // Monday - Friday
-        startTime: '07:00', // a start time (10am in this example)
-        endTime: '18:00', // an end time (6pm in this example)
+        startTime: '07:00',
+        endTime: '18:00',
       },
       headerToolbar: {
         left: props.todayTrack?"":"myPrevButton,myTodayButton,myNextButton",
         center: props.todayTrack?"title":"",
-        right: "",
+        right: "", //props.todayTrack?"":"timeGridWeek,timeGridDay",
       },
       customButtons: {
         myPrevButton: {
@@ -128,9 +132,6 @@
           }
         }
       },    
-      events: calendarEvents.value,
-      snapDuration:"00:15:00",
-      dragScroll:false,
       eventDrop(info) {
         dropResizeEvent(info)
       },

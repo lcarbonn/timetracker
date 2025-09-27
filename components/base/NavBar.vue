@@ -17,6 +17,7 @@
        >
       <BNavbarNav class="ms-auto mb-2 mb-lg-0">
         <BNavItem  href="/weeks">My tracks of the Week</BNavItem>
+        <BNavItem  @click="exportCsv">Export tracks of the Week</BNavItem>
         <BNavItemDropdown v-if="isConnected" right>
           <template #button-content>
             <em>{{userEmail}}<Person/></em>
@@ -35,6 +36,7 @@
   // get user session
   const { loggedIn, user, clear: clearSession } = useUserSession()
   const config = useRuntimeConfig()
+import { tracks } from 'happy-dom/lib/PropertySymbol.js'
   // icons
   import Person from '~icons/bi/person'
   
@@ -64,6 +66,12 @@
     // signOutUser()
     await clearSession()
     await navigateTo('/login')
+  }
+
+  // methods
+  const exportCsv = () => {
+    const tracks = useTimeTracksOfTheWeek().value
+    if(tracks) exportCSVFile(tracks)
   }
 
 </script>
