@@ -3,7 +3,7 @@
  * @param track 
  * @returns 
  */
-export const trackToEvent = (track:ITimeTrack) :object => {
+export const trackToEvent = (track:ITimeTrack, isRestart:boolean) :object => {
        const event = {
           title: track.End?"Day of effective "+formatDuration(track.EffectiveDuration):"Day not yet completed",
           start:track.Start,
@@ -11,7 +11,8 @@ export const trackToEvent = (track:ITimeTrack) :object => {
           color:'#378006',
           id:track.id,
           isTrack:true,
-          isEnded:track.End?true:false
+          isEnded:track.End?true:false,
+          isRestart:isRestart
         }
         return event
 }
@@ -21,7 +22,7 @@ export const trackToEvent = (track:ITimeTrack) :object => {
  * @param pause 
  * @returns 
  */
-export const pauseToEvent = (pause:IPauseTrack, isLast:boolean) :object => {
+export const pauseToEvent = (pause:IPauseTrack, isRestart:boolean) :object => {
     const event = {
         title: pause.End?"Pause of "+formatDuration(pause.Duration):"Pause started",
         start:pause.Start,
@@ -29,7 +30,7 @@ export const pauseToEvent = (pause:IPauseTrack, isLast:boolean) :object => {
         id:pause.id,
         isTrack:false,
         isEnded:pause.End?true:false,
-        isLast:isLast
+        isRestart:isRestart
     }
     return event
 }

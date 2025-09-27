@@ -35,7 +35,11 @@ export const openPauseTrack = (timeId:number) :Promise<IPauseTrack>=> {
     })
     .then ((pt) => {
       usePauseTrack().value = pt
-      useTimeTrack().value?.pauses?.push(pt)
+      const currentTime = useTimeTrack().value
+      if(currentTime && !currentTime?.pauses) {
+        currentTime.pauses = []
+      }
+      currentTime?.pauses?.push(pt)
       resolve(pt)
     })
     .catch((error) => {

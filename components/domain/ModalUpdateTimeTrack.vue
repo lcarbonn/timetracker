@@ -46,7 +46,7 @@
           :state="endDateState"/>
         </BFormGroup>
         <BButton class="mx-1" @click="deleteTrack()" size="sm" v-b-tooltip.focus.top="'Delete this event'"><Trash/></BButton>
-        <BButton v-if="isRestartActive && isEnded && isLast"  class="mx-1" @click="restartTrack()" size="sm" v-b-tooltip.focus.top="'Restart this event'"><Reset/></BButton>
+        <BButton v-if="isRestart && isEnded"  class="mx-1" @click="restartTrack()" size="sm" v-b-tooltip.focus.top="'Restart this event'"><Reset/></BButton>
         <BButton v-if="!isEnded"  class="mx-1" @click="closeTrack()" size="sm" v-b-tooltip.focus.top="'End this event'">Close this event</BButton>
       </BModal>
       <BModal v-model="modalDelete" title="Delete event" @ok="confirmDelete"> Really ? </BModal>
@@ -73,10 +73,6 @@
     timeTrack: {
         type: Object,
         default: null
-    },
-    isRestartActive: {
-        type: Boolean,
-        default: false
     }
   })
 
@@ -89,7 +85,7 @@
   const modalDelete = ref(false)
   const modalRestart = ref(false)
   const isEnded = ref(props.timeTrack.extendedProps.isEnded)
-  const isLast = ref(props.timeTrack.extendedProps.isLast)
+  const isRestart = ref(props.timeTrack.extendedProps.isRestart)
   const isCloseAsked = ref(false)
   
   // watch track changes
@@ -97,7 +93,7 @@
     startDateForm.value = timeTrack.start
     endDateForm.value = timeTrack.end
     isEnded.value = timeTrack.extendedProps.isEnded
-    isLast.value = timeTrack.extendedProps.isLast
+    isRestart.value = timeTrack.extendedProps.isRestart
   })
 
   // computed properties

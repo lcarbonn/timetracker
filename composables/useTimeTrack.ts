@@ -163,10 +163,14 @@ export const updateTimeTrack = (id:number, start:Date, end:Date) : Promise<ITime
     .then ((tt) => {
       const time = useTimeTrack().value
       if(time) {
-        time.Start = tt.Start
-        time.End = tt.End
+        // time.Start = tt.Start
+        // time.End = tt.End
+        // time.Duration = tt.Duration
+        // time.EffectiveDuration = tt.EffectiveDuration
+        // time.PauseDuration = tt.PauseDuration
         tt.pauses = time.pauses
       }
+      useTimeTrack().value = tt
       resolve(tt)
     })
     .catch((error) => {

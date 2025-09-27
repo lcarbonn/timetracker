@@ -5,7 +5,6 @@
         v-if="selectedEvent"
         :modalUpdateTrack="modalUpdateTrack"
         :time-track="selectedEvent" 
-        :is-restart-active="Boolean(todayTrack?true:false)"
         @update-track="updateTrack" 
         @delete-track="deleteTrack"
         @close-track="closeTrack"></LazyDomainModalUpdateTimeTrack>
@@ -56,19 +55,19 @@
     if(props.tracks) {
       props.tracks.forEach(track => {
         // add the track to the calendar
-        events.push( trackToEvent(track))
+        events.push( trackToEvent(track, false))
         // add the pauses to the calendar
         let i = 1
         const length = track.pauses?.length
         track.pauses?.forEach(pause => {
-          events.push( pauseToEvent(pause,  (i==length)))
+          events.push( pauseToEvent(pause, false))
           i++
         });        
       });
     }
     const today = props.todayTrack
     if(today) {
-      events.push( trackToEvent(today))
+      events.push( trackToEvent(today, true))
       let i = 1
       const length = today.pauses?.length
       today.pauses?.forEach(pause => {
