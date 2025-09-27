@@ -86,9 +86,11 @@ export const closeTimeTrack = (id:number) :Promise<ITimeTrack> => {
         }
     })
     .then ((tt) => {
-        // useTimeTrack().value = tt
-        const time = useTimeTrack().value
-        if(time) time.End = tt.End
+      const time = useTimeTrack().value
+      if(time) {
+        tt.pauses = time.pauses
+      }
+      useTimeTrack().value = tt
         resolve(tt)
     })
     .catch((error) => {
@@ -112,9 +114,12 @@ export const reopenTimeTrack = (id:number) :Promise<ITimeTrack> => {
         }
     })
     .then ((tt) => {
-        const time = useTimeTrack().value
-        if(time) time.End = null
-        resolve(tt)
+      const time = useTimeTrack().value
+      if(time) {
+        tt.pauses = time.pauses
+      }
+      useTimeTrack().value = tt
+      resolve(tt)
     })
     .catch((error) => {
       useTimeTrack().value = undefined
@@ -163,11 +168,6 @@ export const updateTimeTrack = (id:number, start:Date, end:Date) : Promise<ITime
     .then ((tt) => {
       const time = useTimeTrack().value
       if(time) {
-        // time.Start = tt.Start
-        // time.End = tt.End
-        // time.Duration = tt.Duration
-        // time.EffectiveDuration = tt.EffectiveDuration
-        // time.PauseDuration = tt.PauseDuration
         tt.pauses = time.pauses
       }
       useTimeTrack().value = tt
