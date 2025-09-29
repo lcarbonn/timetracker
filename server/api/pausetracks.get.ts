@@ -11,7 +11,6 @@ export default defineEventHandler(async (event) => {
     }    
     return (pauseTracks)
   } catch (error) {
-    console.error(error)
     return (error)    
   }
 })

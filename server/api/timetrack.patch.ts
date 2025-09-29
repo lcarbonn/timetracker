@@ -10,7 +10,6 @@ export default defineEventHandler(async (event) => {
     
     return (timeTrack)
   } catch (error) {
-    console.error(error)
     return (error)    
   }
 })

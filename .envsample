@@ -4,6 +4,7 @@ NUXT_PUBLIC_BASE_ID = 'base id'
 NUXT_PUBLIC_TABLE_TIMETRACK_ID = "timetrack table id"
 NUXT_PUBLIC_TABLE_PAUSETRACK_ID = "pausetrack table id"
 NUXT_PUBLIC_BASE_NAME ='TimeTracker'
+NUXT_PUBLIC_WORKSPACE_ID = 'workspace id'
 
 # private keys
 NUXT_BASEROW_API_URL = 'https://api.baserow.io'

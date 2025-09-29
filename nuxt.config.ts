@@ -86,7 +86,8 @@ export default defineNuxtConfig({
       baseId:'',
       baseName:'',
       tableTimetrackId:'',
-      tablePausetrackId:''
+      tablePausetrackId:'',
+      workspaceId:''
     }
   },  
 })

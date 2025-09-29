@@ -7,7 +7,7 @@ function logTrack(tt:ITimeTrack) {
   console.log(tt.id,", ",tt.UID, ", ", tt.UID[0].name, ", ", tt.Start, ", ", tt.End, ', ', tt.Duration, ', ', tt.Year)
 }
 
-describe('baserow time tracker', () => {
+describe('baserow export', () => {
   let TEST_TT:ITimeTrack
   const login = import.meta.env.VITE_BASEROW_LOGIN
   const mdp = import.meta.env.VITE_BASEROW_MDP

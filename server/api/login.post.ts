@@ -23,7 +23,6 @@ export default defineEventHandler(async (event) => {
     })
     return (tokenAuth.user.first_name)
   } catch (error) {
-    console.error(error)
     return (error)    
   }
 })
