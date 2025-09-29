@@ -32,6 +32,7 @@
   getStateTimeTracksOfTheWeek(useWeek().value)
 
   // computed properties
+  // effectiveDuration calculated instead of filed form base
   const effectiveDuration = computed(() => {
     let efd:number = 0
     if(tracksWeek.value) {
