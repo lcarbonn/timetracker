@@ -37,6 +37,9 @@
     if(tracksWeek.value) {
       tracksWeek.value.forEach(track => {
         efd = efd + Number(track.EffectiveDuration)
+        track.pauses?.forEach(pause => {
+          efd = efd - pause.Duration
+        });
       })
     }
     return formatDuration(efd)
