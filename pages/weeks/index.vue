@@ -36,7 +36,7 @@
     let efd:number = 0
     if(tracksWeek.value) {
       tracksWeek.value.forEach(track => {
-        efd = efd + Number(track.EffectiveDuration)
+        efd = efd + Number(track.Duration)
         track.pauses?.forEach(pause => {
           efd = efd - pause.Duration
         });
