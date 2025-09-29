@@ -27,7 +27,7 @@ export default defineNuxtConfig({
 
   css: [
     'bootstrap/dist/css/bootstrap.min.css',
-    '~/assets/css/custom-theme.scss'
+    '~/assets/scss/custom-theme.scss'
   ],
 
   build: {
