@@ -16,8 +16,9 @@
         style="background-color:var(--bs-primary);color:var(--bs-white)"
        >
       <BNavbarNav class="ms-auto mb-2 mb-lg-0">
-        <BNavItem  href="/weeks">My tracks of the Week</BNavItem>
-        <BNavItem  @click="exportCsv">Export tracks of the Week</BNavItem>
+        <BNavItem  v-if="isConnected" href="/weeks">My week calendar</BNavItem>
+        <BNavItem  v-if="isConnected" @click="exportCsv">Export week tracks</BNavItem>
+        <BNavItem  v-if="isConnected && isAdmin" href="/users">All users</BNavItem>
         <BNavItemDropdown v-if="isConnected" right>
           <template #button-content>
             <em>{{userEmail}}<Person/></em>
@@ -36,7 +37,7 @@
   // get user session
   const { loggedIn, user, clear: clearSession } = useUserSession()
   const config = useRuntimeConfig()
-import { tracks } from 'happy-dom/lib/PropertySymbol.js'
+
   // icons
   import Person from '~icons/bi/person'
   
@@ -46,6 +47,9 @@ import { tracks } from 'happy-dom/lib/PropertySymbol.js'
   // computed properties
   const isConnected = computed(() => {
     return loggedIn.value
+  })
+  const isAdmin = computed(() => {
+   return user.value?.isAdmin
   })
   const userEmail = computed(() => {
     return user.value?.username

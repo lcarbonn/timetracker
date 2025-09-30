@@ -14,9 +14,9 @@ export const signInUser = (email:string, password:string) :Promise<void> => {
                 password:password
             }
         })
-        .then(async (data) => {
+        .then(async (first_name) => {
             // Refresh the session on client-side and redirect to the home page
-            messageToSnack("Hello " + data)
+            messageToSnack("Hello " + first_name)
             await refreshSession()
             await navigateTo('/')
             resolve()

@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { fetchSignInUser } from '../useFetch/useFetchAuth'
+import { fetchWorkspacePermisssions } from '../useFetch/useFetchWorkspace'
 
 const bodySchema = z.object({
   email: z.email(),
@@ -13,6 +14,13 @@ export default defineEventHandler(async (event) => {
     // TODO : get env for server
     const tokenAuth = await fetchSignInUser(email, password)
     
+    let isAdmin = false
+    const permissions = await fetchWorkspacePermisssions(tokenAuth.access_token)
+    permissions.forEach(permission => {
+      isAdmin = isAdmin || Boolean(permission.permissions.is_admin)
+    });
+    tokenAuth.user.isAdmin = isAdmin
+
     await setUserSession(event, {
       user:tokenAuth.user,
       secure:{

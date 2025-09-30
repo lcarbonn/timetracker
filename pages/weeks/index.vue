@@ -1,6 +1,6 @@
 <template>
     <div>
-      <BCard :title="'Your week '+useWeek().value+' tracks for ' + user?.first_name" body-class="text-center">
+      <BCard :title="'Your week '+useWeek().value+' calendar for ' + user?.first_name" body-class="text-center">
         <BCardText>
           Effective Duration : <b>{{ effectiveDuration }}</b>
         </BCardText>

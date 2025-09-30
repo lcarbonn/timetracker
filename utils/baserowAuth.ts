@@ -6,6 +6,7 @@ export interface IUser {
   username:string
   language:string
   id:number
+  isAdmin:boolean
 }
 /**
  * Type for Auth token

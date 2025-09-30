@@ -5,6 +5,7 @@ declare module '#auth-utils' {
     first_name:string
     username:string
     language:string
+    isAdmin:boolean
   }
 
   // interface UserSession {
