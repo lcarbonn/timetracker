@@ -64,13 +64,13 @@ import type { TableField } from 'bootstrap-vue-next';
         sortable: true,
       },
       {
-        key: 'Permissions',
-        label: 'permissions',
+        key: 'permissions',
+        label: 'Permissions',
         sortable: true,
       },
       {
-        key: 'id',
-        label: 'Actions'
+        key: 'user_id',
+        label: 'User Id'
         }
     ]
 
