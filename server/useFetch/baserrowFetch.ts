@@ -16,12 +16,12 @@ export const setAccessToken = (newAccessToken:string) => {
  */
 async function refreshAccessToken(event:any): Promise<boolean> {
 
-  console.log("➡️ Refresh start");
+  // console.log("➡️ Refresh start");
 
   const session = await getUserSession(event)
   if (!session.secure?.refresh_token) return false;
 
-  console.log("➡️ Refresh refresh token is set");
+  // console.log("➡️ Refresh refresh token is set");
 
   const response = await fetch(`${BASEROW_URL}/api/user/token-refresh/`, {
     method: "POST",
@@ -30,13 +30,13 @@ async function refreshAccessToken(event:any): Promise<boolean> {
   });
 
   if (!response.ok) {
-    console.log("➡️ Refresh error:", response.status, ", ",response.statusText);
+    // console.log("➡️ Refresh error:", response.status, ", ",response.statusText);
     await clearUserSession(event)
     return false;
   }
 
   const data = await response.json();
-  console.log("➡️ Refresh data:", data);
+  // console.log("➡️ Refresh data:", data);
   accessToken = data.access_token
   await setUserSession(event, {
     secure:{
@@ -44,7 +44,7 @@ async function refreshAccessToken(event:any): Promise<boolean> {
     }
   })
 
-  console.log("➡️ Refresh end");
+  // console.log("➡️ Refresh end");
   return true;
 }
 /**
@@ -60,28 +60,28 @@ export async function baserowExecute<E, T extends any[], R>(
   ...args: T
 ): Promise<R> {
   try {
-    console.log("➡️ Fetch start:", method.name);
+    // console.log("➡️ Fetch start:", method.name);
 
     // get the accessToken
     const session = await getUserSession(event as any)
-    console.log("✅ Fetch access_token:", session.secure?.access_token?true:false);
+    // console.log("✅ Fetch access_token:", session.secure?.access_token?true:false);
     if(session.secure?.access_token)
       accessToken = session.secure?.access_token
 
     // first call of the method
     const result = await method(...args);
 
-    console.log("✅ Fetch success:", method.name);
+    // console.log("✅ Fetch success:", method.name);
     
     return result;
   } catch (err: any) {
     // try to refresh in case of 401 and recall method
-    console.log("🔄 Fetch error before refresh:", err.statusCode);
+    // console.log("🔄 Fetch error before refresh:", err.statusCode);
     if (err.statusCode === 401 && (await refreshAccessToken(event))) {
-      console.log("🔄 Fetch retry after refresh:", method.name);
+      // console.log("🔄 Fetch retry after refresh:", method.name);
       return await method(...args);
     }
-    console.error("❌ Fetch failed:", method.name, err.statusMessage);
+    // console.error("❌ Fetch failed:", method.name, err.statusMessage);
     throw err;
   }
 }
