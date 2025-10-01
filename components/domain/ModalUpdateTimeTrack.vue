@@ -19,7 +19,8 @@
           class="mb-0"
         >
         <VueDatePicker id="startDate"
-          v-model="startDateForm" 
+          v-model="startDateForm"
+          format="dd/MM/yyyy HH:mm"
           auto-apply 
           enable-time-picker
           time-picker-inline
@@ -37,7 +38,8 @@
           class="mb-0"
         >
         <VueDatePicker id="endDate"
-          v-model="endDateForm" 
+          v-model="endDateForm"
+          format="dd/MM/yyyy HH:mm"
           auto-apply 
           enable-time-picker
           time-picker-inline
@@ -59,6 +61,7 @@
   // import datepicker vue component
   import VueDatePicker from '@vuepic/vue-datepicker'
   import '@vuepic/vue-datepicker/dist/main.css'
+  import { fr } from 'date-fns/locale';
 
   // icons
   import Trash from '~icons/bi/trash'

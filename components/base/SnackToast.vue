@@ -1,5 +1,5 @@
 <template>
-    <BToastOrchestrator />
+    <BOrchestrator />
 </template>
 <script setup lang="ts">
 

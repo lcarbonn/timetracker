@@ -2,8 +2,7 @@
  * get pause tracks for the time track id
  * @param timeId
  */
-export const getTimeTrackPauses = (timeId:number) :Promise<IPauseTrack[]> => {
-  return new Promise((resolve, reject) => {
+export const getTimeTrackPauses = async (timeId:number) :Promise<IPauseTrack[]|void> => {
     $fetch<IPauseTrack[]>('/api/pausetracks', {
       method: 'GET',
         params: {
@@ -15,17 +14,18 @@ export const getTimeTrackPauses = (timeId:number) :Promise<IPauseTrack[]> => {
       if(last!=-1 && list[last].End==null) {
         usePauseTrack().value = list[last]
       }      
-      resolve(list)
+      return list
     })
-  })
+    .catch((error) => {
+      errorToSnack("Error get track pauses", error)
+    })
 }
 
 /**
  * Open a new pause track for the time
  * @param timeId
  */
-export const openPauseTrack = (timeId:number) :Promise<IPauseTrack>=> {
-  return new Promise((resolve, reject) => {
+export const openPauseTrack = async (timeId:number) :Promise<IPauseTrack|void>=> {
     $fetch<IPauseTrack>('/api/pausetrack', {
         method: 'POST',
         body: {
@@ -40,21 +40,19 @@ export const openPauseTrack = (timeId:number) :Promise<IPauseTrack>=> {
         currentTime.pauses = []
       }
       currentTime?.pauses?.push(pt)
-      resolve(pt)
+      return pt
     })
     .catch((error) => {
       usePauseTrack().value = undefined
-      reject(error)
+      errorToSnack("Error open pause", error)
     })
-  })
 }
 
 /**
  * Close the pause track
  * @param id, the pause track id
  */
-export const closePauseTrack = (id:number) :Promise<IPauseTrack> => {
-  return new Promise((resolve, reject) => {
+export const closePauseTrack = async (id:number) :Promise<IPauseTrack|void> => {
     $fetch<IPauseTrack>('/api/pausetrack', {
         method: 'PATCH',
         body: {
@@ -65,21 +63,19 @@ export const closePauseTrack = (id:number) :Promise<IPauseTrack> => {
     .then ((pt) => {
       usePauseTrack().value = undefined
       refreshPauseInTimeTrack(pt)
-      resolve(pt)
+      return pt
     })
     .catch((error) => {
       usePauseTrack().value = undefined
-      reject(error)
+      errorToSnack("Error close pause", error)
     })
-  })
 }
 
 /**
  * Reopen the pause track
  * @param id, the pause track id
  */
-export const reopenPauseTrack = (id:number) :Promise<IPauseTrack> => {
-  return new Promise((resolve, reject) => {
+export const reopenPauseTrack = async (id:number) :Promise<IPauseTrack|void> => {
     $fetch<IPauseTrack>('/api/pausetrack', {
         method: 'PATCH',
         body: {
@@ -90,21 +86,19 @@ export const reopenPauseTrack = (id:number) :Promise<IPauseTrack> => {
     .then ((pt) => {
       usePauseTrack().value = pt
       refreshPauseInTimeTrack(pt)
-      resolve(pt)
+      return pt
     })
     .catch((error) => {
       usePauseTrack().value = undefined
-      reject(error)
+      errorToSnack("Error reopen pause", error)
     })
-  })
 }
 
 /**
  * Delete the pause track
  * @param id, the pause track id
  */
-export const deleteStatePause = (id:number) :Promise<void> => {
-  return new Promise((resolve, reject) => {
+export const deleteStatePause = async (id:number) :Promise<void> => {
     $fetch<IPauseTrack>('/api/pausetrack', {
       method: 'DELETE',
       params:{
@@ -113,12 +107,14 @@ export const deleteStatePause = (id:number) :Promise<void> => {
     })
     .then((pt) => {
       usePauseTrack().value = undefined
-      resolve()
+      return
+    })
+    .catch((error) => {
+      errorToSnack("Error delete pause", error)
     })
     if(usePauseTrack().value?.id == id) {
       usePauseTrack().value = undefined
     }
-  })
 }
 
 /**
@@ -127,8 +123,7 @@ export const deleteStatePause = (id:number) :Promise<void> => {
  * @param start, the start date
  * @param end, the end date
  */
-export const updatePauseTrack = (id:number, start:Date, end:Date) :Promise<IPauseTrack>=> {
-  return new Promise((resolve, reject) => {
+export const updatePauseTrack = async (id:number, start:Date, end:Date) :Promise<IPauseTrack|void>=> {
     $fetch<IPauseTrack>('/api/pausetrack', {
         method: 'PATCH',
         body: {
@@ -139,13 +134,12 @@ export const updatePauseTrack = (id:number, start:Date, end:Date) :Promise<IPaus
     })
     .then ((pt) => {
       refreshCurrentStatePauseTrack(pt)
-      resolve(pt)
+      return pt
     })
     .catch((error) => {
       usePauseTrack().value = undefined
-      reject(error)
+      errorToSnack("Error update pause", error)
     })
-  })
 }
 /**
  * Refresh the pause in the tracks of the week

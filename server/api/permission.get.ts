@@ -1,7 +1,6 @@
 import { fetchWorkspacePermisssions } from "../useFetch/useFetchWorkspace"
 
 export default defineEventHandler(async (event) => {
-  try {
     const { user } = await requireUserSession(event)
     const session = await getUserSession(event)
     let isAdmin = false
@@ -14,7 +13,4 @@ export default defineEventHandler(async (event) => {
     }
 
     return (isAdmin)
-  } catch (error) {
-    return (error)    
-  }
 })

@@ -4,8 +4,7 @@
  * @param password - the password
  * @returns A Promise that resolve when completed
  */
-export const signInUser = (email:string, password:string) :Promise<void> => {
-    return new Promise((resolve, reject) => {
+export const signInUser = async (email:string, password:string) :Promise<void> => {
         const { fetch: refreshSession } = useUserSession()
         $fetch('/api/login', {
             method: 'POST',
@@ -19,11 +18,10 @@ export const signInUser = (email:string, password:string) :Promise<void> => {
             messageToSnack("Hello " + first_name)
             await refreshSession()
             await navigateTo('/')
-            resolve()
+            return
         })
         .catch((error) => {
             errorToSnack("Error on login", error)
-            reject(error)
+            throw(error)
         })
-    })
   }

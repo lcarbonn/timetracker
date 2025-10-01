@@ -13,9 +13,6 @@ export default defineEventHandler(async (event) => {
       if (query.today) {
         timeTracks = await fetchTimeTracksTodayUid(user.id)
       }
-      // else {
-      //   timeTracks = await fetchTimeTracks()
-      // }
     }    
     return (timeTracks)
   } catch (error) {

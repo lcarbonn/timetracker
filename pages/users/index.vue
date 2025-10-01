@@ -2,6 +2,7 @@
     <div>
       <BCard :title="'Users '" body-class="text-center">
       </BCard>
+      <DomainUsersTable :users="users"></DomainUsersTable>
     </div>
 </template>
 
@@ -9,10 +10,16 @@
 
   // middleware
   definePageMeta({
-    middleware: 'auth'
+    middleware: 'admin'
   })
 
   const { user } = useUserSession()
+
+    // local refs
+  const users = useWorkspaceUsers()
+
+  // init on setup
+  getStateWorkspaceUsers()
 
 
 </script>

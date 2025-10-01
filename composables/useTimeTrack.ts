@@ -2,8 +2,7 @@
  * get time tracks for the week and set state
  * @param week
  */
-export const getStateTimeTracksOfTheWeek = (week:number) :Promise<ITimeTrack[]>=> {
-  return new Promise((resolve, reject) => {
+export const getStateTimeTracksOfTheWeek = async (week:number) :Promise<ITimeTrack[]|void>=> {
     $fetch<ITimeTrack[]>('/api/timetracks', {
       method: 'GET',
         params: {
@@ -15,43 +14,47 @@ export const getStateTimeTracksOfTheWeek = (week:number) :Promise<ITimeTrack[]>=
         list.forEach(track => {
           getTimeTrackPauses(track.id)
           .then((pauses) => {
-            track.pauses = pauses
+            if(pauses) track.pauses = pauses
             refreshTimeInTracksOfTheWeek(track)
           })
         })
-        resolve(list)
+        return list
     })
-  })
+    .catch((error) => {
+      errorToSnack("Error get week tracks", error)
+    })
 }
 
 /**
  * Get the today time track
  */
-export const getStateTodayTimeTrack = () :Promise<ITimeTrack>=> {
-  return new Promise((resolve, reject) => {
+export const getStateTodayTimeTrack = async () :Promise<ITimeTrack|void>=> {
     $fetch<ITimeTrack>('/api/todaytrack', {
-      method: 'GET',
+      method: 'GET'
     })
     .then((track) => {
         useTimeTrack().value = track
         if(track) {
           getTimeTrackPauses(track.id)
           .then((pauses) => {
-            const stateTime = useTimeTrack().value
-            if(stateTime) stateTime.pauses = pauses
+            if(pauses) {
+              const stateTime = useTimeTrack().value
+              if(stateTime) stateTime.pauses = pauses
+            }
           })
         }
-        resolve(track)
+        return track
     })
-  })
+    .catch((error) => {
+      errorToSnack("Error get today track", error)
+    })
 }
 
 /**
  * Open a new time track for the user
  * @param user_id
  */
-export const openTimeTrack = (user_id:number) :Promise<ITimeTrack> => {
-  return new Promise((resolve, reject) => {
+export const openTimeTrack = async (user_id:number) :Promise<ITimeTrack|void> => {
     $fetch<ITimeTrack>('/api/timetrack', {
         method: 'POST',
         body: {
@@ -63,21 +66,19 @@ export const openTimeTrack = (user_id:number) :Promise<ITimeTrack> => {
     })
     .then ((tt) => {
       useTimeTrack().value = tt
-      resolve(tt)
+      return tt
     })
     .catch((error) => {
         useTimeTrack().value = undefined
-        reject(error)
+        errorToSnack("Error open track", error)
     })
-  })
 }
 
 /**
  * Close the time track
  * @param id, the time track id
  */
-export const closeTimeTrack = (id:number) :Promise<ITimeTrack> => {
-  return new Promise((resolve, reject) => {
+export const closeTimeTrack = async (id:number) :Promise<ITimeTrack|void> => {
     $fetch<ITimeTrack>('/api/timetrack', {
         method: 'PATCH',
         body: {
@@ -91,21 +92,19 @@ export const closeTimeTrack = (id:number) :Promise<ITimeTrack> => {
         tt.pauses = time.pauses
       }
       useTimeTrack().value = tt
-        resolve(tt)
+        return tt
     })
     .catch((error) => {
       useTimeTrack().value = undefined
-      reject(error)
+      errorToSnack("Error close track", error)
     })
-  })
 }
 
 /**
  * Reopenthe time track
  * @param id, the time track id
  */
-export const reopenTimeTrack = (id:number) :Promise<ITimeTrack> => {
-  return new Promise((resolve, reject) => {
+export const reopenTimeTrack = async (id:number) :Promise<ITimeTrack|void> => {
     $fetch<ITimeTrack>('/api/timetrack', {
         method: 'PATCH',
         body: {
@@ -119,21 +118,19 @@ export const reopenTimeTrack = (id:number) :Promise<ITimeTrack> => {
         tt.pauses = time.pauses
       }
       useTimeTrack().value = tt
-      resolve(tt)
+      return tt
     })
     .catch((error) => {
       useTimeTrack().value = undefined
-      reject(error)
+      errorToSnack("Error reopen track", error)
     })
-  })
 }
 
 /**
  * Delete the time track
  * @param id, the time track id
  */
-export const deleteStateTrack = (id:number) : Promise<void>=> {
-  return new Promise((resolve, reject) => {
+export const deleteStateTrack = async (id:number) : Promise<void>=> {
     $fetch<ITimeTrack>('/api/timetrack', {
       method: 'DELETE',
       params:{
@@ -141,12 +138,14 @@ export const deleteStateTrack = (id:number) : Promise<void>=> {
       }
     })
     .then((tt) => {
-      resolve()
+      return
+    })
+    .catch((error) => {
+      errorToSnack("Error delete track", error)
     })
     if(useTimeTrack().value?.id == id) {
       useTimeTrack().value = undefined
     }
-  })
 }
 
 /**
@@ -155,8 +154,7 @@ export const deleteStateTrack = (id:number) : Promise<void>=> {
  * @param start, the start date
  * @param end, the end date
  */
-export const updateTimeTrack = (id:number, start:Date, end:Date) : Promise<ITimeTrack>=> {
-  return new Promise((resolve, reject) => {
+export const updateTimeTrack = async (id:number, start:Date, end:Date) : Promise<ITimeTrack|void>=> {
     $fetch<ITimeTrack>('/api/timetrack', {
         method: 'PATCH',
         body: {
@@ -171,13 +169,12 @@ export const updateTimeTrack = (id:number, start:Date, end:Date) : Promise<ITime
         tt.pauses = time.pauses
       }
       useTimeTrack().value = tt
-      resolve(tt)
+      return tt
     })
     .catch((error) => {
       useTimeTrack().value = undefined
-      reject(error)
+      errorToSnack("Error update track", error)
     })
-  })
 }
 /**
  * Refresh the state of tracks with the track

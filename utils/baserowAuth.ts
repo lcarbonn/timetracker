@@ -13,7 +13,6 @@ export interface IUser {
  */
 export interface IBaserowAuth {
   user:IUser
-  token:string
   access_token:string
   refresh_token:string
 }

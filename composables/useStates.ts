@@ -22,3 +22,8 @@ export const usePauseTrack = () => useState<IPauseTrack|undefined>("pauseTrack")
  * State for week
  */
 export const useWeek = () => useState<number>("week");
+
+/**
+ * State for workspace users
+ */
+export const useWorkspaceUsers = () => useState<IBrUser[]|undefined>("workspaceusers");

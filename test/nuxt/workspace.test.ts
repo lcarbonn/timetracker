@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it, test } from 'vitest'
-import { is } from 'zod/v4/locales'
+import { setAccessToken } from '~/server/useFetch/baserrowFetch'
 import { fetchSignInUser } from '~/server/useFetch/useFetchAuth'
-import { fetchWorkspacePermisssions } from '~/server/useFetch/useFetchWorkspace'
+import { fetchWorkspacePermisssions, fetchWorkspaceUsers } from '~/server/useFetch/useFetchWorkspace'
 
 describe('baserow workspace', () => {
   let TEST_TT:ITimeTrack
@@ -17,7 +17,7 @@ describe('baserow workspace', () => {
     user_id = tokenAuth.user.id
   })
 
-  // count all times
+  // get workspace permissions for a user
   it('get workspace permissions', async () => {
     const permissions = await fetchWorkspacePermisssions(tokenAuth.access_token)
     // console.log("permissions="+JSON.stringify(permissions,null,' '))
@@ -29,4 +29,13 @@ describe('baserow workspace', () => {
     expect(permissions).toBeDefined()
     expect(isAdmin).toEqual(true)
   })
+
+  // get workspace list of user
+  it('get workspace users', async () => {
+    setAccessToken(tokenAuth.access_token)
+    const users = await fetchWorkspaceUsers()
+    // console.log("users="+JSON.stringify(users,null,' '))
+    expect(users.length).toEqual(2)
+  })
+
 })

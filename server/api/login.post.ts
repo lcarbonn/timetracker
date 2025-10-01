@@ -24,7 +24,6 @@ export default defineEventHandler(async (event) => {
     await setUserSession(event, {
       user:tokenAuth.user,
       secure:{
-        token:tokenAuth.token,
         refresh_token:tokenAuth.refresh_token,
         access_token:tokenAuth.access_token
       }
