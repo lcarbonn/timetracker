@@ -2,7 +2,7 @@
     <div>
       <BCard :title="'Users '" body-class="text-center">
       </BCard>
-      <DomainUsersTable :users="users"></DomainUsersTable>
+      <DomainUsersTable v-if="users" :users="users"></DomainUsersTable>
     </div>
 </template>
 
@@ -13,13 +13,7 @@
     middleware: 'admin'
   })
 
-  const { user } = useUserSession()
-
-    // local refs
-  const users = useWorkspaceUsers()
-
   // init on setup
-  getStateWorkspaceUsers()
-
+  const { data:users} = await useAsyncData('users', () => getStateWorkspaceUsers())
 
 </script>

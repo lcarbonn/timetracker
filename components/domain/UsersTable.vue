@@ -14,7 +14,6 @@
       striped
       hover
       stacked="md"
-      :busy="isBusy"
       empty-text="No User"
       show-empty
       :fields="(fields as TableField[])"
@@ -35,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import type { TableField } from 'bootstrap-vue-next';
+  import type { TableField } from 'bootstrap-vue-next';
 
   // icons
   import Trash from '~icons/bi/trash'
@@ -77,17 +76,12 @@ import type { TableField } from 'bootstrap-vue-next';
     // local ref
     const perPage = 10
     const currentPage =ref(1)
-    const totalRows = ref()
-    const isBusy = ref(true)
     
-    // // nuxt cycle hook
-    watch(() => props.users, async(users) => {
-      if(users) {
-          totalRows.value = users.length
-        }
-      isBusy.value = false
-      }
-    )
+    // computed properties
+    const totalRows = computed(() => {
+      return props.users?.length
+    })
+
     // const deleteTrack = (track:ITimeTrack) => {
     //   emit('deleteTrack', track)
     // }

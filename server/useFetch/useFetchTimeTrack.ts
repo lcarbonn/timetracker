@@ -1,4 +1,5 @@
 import type { ListTimeResponse, ITimeTrack } from "~/utils/tableTimeTrack";
+import { rawFetch } from "./baserrowFetch";
 
 const config = useRuntimeConfig()
 
@@ -269,3 +270,35 @@ export const fetchTimeTracksTodayUid = (uid:number) : Promise<ITimeTrack[]> => {
    })
   })
 }
+
+/**
+ * Get last open time track for an uid
+ * @param uid, the uid
+ * @returns Promise - the time trak or the error
+ */
+export const fetchLastOpenTimeTrack = async (uid:number) : Promise<ITimeTrack> => {
+    let endpoint = `${URL}/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
+    const params = 
+      {
+        page:1,
+        size:1,
+        order_by:'-Start',
+        filters: {
+          filter_type:"AND",
+          filters: [
+            {
+              field:"UID",
+              type: "multiple_collaborators_has",
+              value: uid
+            },
+            {
+              field:"End",
+              type: "empty",
+              value: ""
+            }
+          ]
+        }
+      }
+   return await rawFetch(endpoint)
+}
+

@@ -41,27 +41,7 @@ export const fetchWorkspacePermisssions = async (token:string) : Promise<IPermis
  * @returns Promise - the array of users
  */
 export const fetchWorkspaceUsers = async () : Promise<IBrUser[]> => {
-  // return new Promise((resolve, reject) => {
     const endpoint = `/api/workspaces/users/workspace/${WORKSPACE_ID}/`
     return await rawFetch(endpoint)
-    // // Use fetch with the runtime config values
-    // const response = await fetch(
-    //   uri,
-    //   {
-    //     headers: {
-    //       Authorization: `JWT ${accessToken}`,
-    //       // Authorization: `Token ${TOKEN}`
-    //     },
-    //   }
-    // )
-    // if(response.ok) {
-    //   const users = await response.json() as Promise<IBrUser[]>
-    //   return users
-    // }
-    // else {
-    //   throw createError({
-    //     statusCode: response.status,
-    //     statusMessage: response.statusText,
-    //   })
-    // }
+
 }

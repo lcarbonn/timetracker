@@ -88,13 +88,24 @@ export async function baserowExecute<E, T extends any[], R>(
 
 export async function rawFetch<T>(
   endpoint: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
+  query?: Record<string, string | number | boolean | undefined>
 ): Promise<T> {
   options.headers = {
     ...(options.headers || {}),
     "Content-Type": "application/json",
   };
 
+if (query) {
+    const searchParams = new URLSearchParams();
+    for (const [key, value] of Object.entries(query)) {
+      if (value !== undefined) {
+        searchParams.append(key, String(value));
+      }
+    }
+    const qs = searchParams.toString();
+    if (qs) endpoint += `?${qs}`;
+  }
   if (accessToken) {
     (options.headers as Record<string, string>)["Authorization"] =
       `JWT ${accessToken}`;
