@@ -1,11 +1,11 @@
 <template>
     <div>
-      <BCard :title="'Your week '+selectedWeek+' calendar for ' + user?.first_name" body-class="text-center">
+      <BCard :title="'Your week '+week+' calendar for ' + user?.first_name" body-class="text-center">
         <BCardText>
           Effective Duration : <b>{{ effectiveDuration }}</b>
         </BCardText>
       </BCard>
-      <DomainCalendar v-if="tracksWeek" :currentWeek="selectedWeek" :tracks="tracksWeek" @nav-to-week="navToWeek" @update-track="updateTrack" @delete-track="deleteTrack"/>
+      <DomainCalendar v-if="tracks" :currentWeek="week" :tracks="tracks" @nav-to-week="navToWeek" @update-track="updateTrack" @delete-track="deleteTrack"/>
     </div>
 </template>
 
@@ -19,24 +19,25 @@
   const { user } = useUserSession()
 
   // const
+  const uid = user.value?.id
   const now = new Date()
   const currentWeek:number = getWeekNumber(now)
-  const selectedWeek =  ref(currentWeek)
+  const week =  ref(currentWeek)
+  const tracks = useTimeTracksOfTheWeek()
 
-  // init on setup
-  const { data:tracksWeek } = await useAsyncData(
-    'tracksWeek',
-     () => getTimeTracksOfTheWeek(user.value?.id, selectedWeek.value),
-     {
-        watch: [selectedWeek],
-     })
+  const { data, execute } = await useAsyncData('fetchTracks', () => getTracksOfTheWeek(uid, week.value),
+  {
+      watch:[week]
+  })
 
+  if(data.value) tracks.value = data.value as ITimeTrack[]
+  
   // computed properties
   // effectiveDuration calculated instead of filed form base
   const effectiveDuration = computed(() => {
     let efd:number = 0
-    if(tracksWeek.value) {
-      tracksWeek.value.forEach(track => {
+    if(tracks.value) {
+      tracks.value.forEach(track => {
         efd = efd + Number(track.Duration)
         track.pauses?.forEach(pause => {
           efd = efd - pause.Duration
@@ -48,10 +49,10 @@
 
   // methods
   // navigation to week
-  const navToWeek = async (week:number) => {
-    // useWeek().value = week
-    selectedWeek.value = week
-    // await execute()
+  const navToWeek = async (newWeek:number) => {
+    week.value = newWeek
+    await execute()
+    if(data.value) tracks.value = data.value as ITimeTrack[]
   }
 
   // update track

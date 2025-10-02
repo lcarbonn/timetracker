@@ -1,30 +1,22 @@
 /**
- * get workspace users
+ * Get tracks of the week for the user
+ * @param uid 
+ * @param week 
+ * @returns 
  */
-export const getTimeTracksOfTheWeek = async (uid:number|undefined, week:number) :Promise<ITimeTrack[]>=> {
-  if(!uid) return []
-  console.log("getTimeTracksOfTheWeek : ", week)
-  return $fetch(`/api/timetracks/?uid=${uid}&&week=${week}`, {
-    onResponse ({ request, response, options }) {
-      // Process the response data
-      // console.log("getTimeTracksOfTheWeek response")
-      if(response._data) {
-        // useTimeTracksOfTheWeek().value = response._data
-        // tracks.forEach(track => {
-        //   getTimeTrackPauses(track.id)
-        //   .then((pauses) => {
-        //     if(pauses) track.pauses = pauses
-        //     refreshTimeInTracksOfTheWeek(track)
-        //   })
-        // })
-      }
-    },
-    onResponseError ({ request, response, options }) {
-      // Handle the response errors
-      errorToSnack("Error in get week tracks", response.statusText)
-    },
-  })
-}
+export  const getTracksOfTheWeek = (uid:number|undefined, week:number) :Promise<ITimeTrack[]> => {
+    const result = $fetch<ITimeTrack[]>('/api/timetracks', {
+      query: {
+        uid:uid,
+        week:week
+      },
+      onResponseError ({ request, response, options }) {
+        // Handle the response errors
+        errorToSnack("Error in get week tracks", response.statusText)
+      },
+    })
+    return result
+  }
 
 /**
  * get time tracks for the week and set state
