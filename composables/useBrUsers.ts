@@ -2,16 +2,14 @@
  * get workspace users
  */
 export const getWorkspaceUsers = async () :Promise<IBrUser[]>=> {
-  let users:IBrUser[] = []
-  await useFetch('/api/workspaceusers', {
+  console.log("getWorkspaceUsers")
+  return $fetch<IBrUser[]>('/api/workspaceusers', {
     onResponse ({ request, response, options }) {
-      // Process the response data
-      if(response._data) users = response._data
+      // console.log("getWorkspaceUsers response")
     },
     onResponseError ({ request, response, options }) {
       // Handle the response errors
       errorToSnack("Error in get users", response.statusText)
     },
   })
-  return users
 }

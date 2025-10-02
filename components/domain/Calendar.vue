@@ -27,6 +27,10 @@
           type: TimeTrack,
           default: undefined
       },
+      currentWeek: {
+        type: Number,
+        defaut: getWeekNumber(new Date())
+      }
   })
 
   // emits declaration
@@ -34,8 +38,8 @@
 
   const fullCalendar = ref()
   const selectedEvent = ref()
-  const todayWeek = useWeek().value
-  const currentWeek = useWeek()
+  const todayWeek = getWeekNumber(new Date())
+  const currentWeek = ref(props.currentWeek?props.currentWeek:todayWeek)
   const modalUpdateTrack = ref(new ModalShow()) 
 
   // watch changes date to go to associated calendar week
@@ -83,7 +87,7 @@
     const cal:CalendarOptions = {
       plugins: [timeGridPlugin, interactionPlugin],
       locale:"fr-fr",
-      initialView: "timeGridDay",
+      initialView: props.tracks?"timeGridWeek":"timeGridDay",
       editable: true,
       nowIndicator: true,
       scrollTime:"08:00:00",
@@ -104,7 +108,7 @@
       headerToolbar: {
         left: props.todayTrack?"":"myPrevButton,myTodayButton,myNextButton",
         center: props.todayTrack?"title":"",
-        right: "", //props.todayTrack?"":"timeGridWeek,timeGridDay",
+        right: props.todayTrack?"":"timeGridWeek,timeGridDay",
       },
       customButtons: {
         myPrevButton: {

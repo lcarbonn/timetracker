@@ -35,8 +35,6 @@
   const now = new Date()
   const currentWeek:number = getWeekNumber(now)
 
-  useWeek().value = currentWeek
-
   // local refs
   const todayTrack = useTimeTrack()
   const currentPause = usePauseTrack()

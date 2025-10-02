@@ -17,8 +17,3 @@ export const useTimeTrack = () => useState<ITimeTrack|undefined>("timeTrack");
  * State for Pause Track
  */
 export const usePauseTrack = () => useState<IPauseTrack|undefined>("pauseTrack");
-
-/**
- * State for week
- */
-export const useWeek = () => useState<number>("week");

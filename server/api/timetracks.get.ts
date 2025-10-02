@@ -2,19 +2,14 @@ import { fetchTimeTracksTodayUid, fetchTimeTracksWeekUid } from '../useFetch/use
 
 export default defineEventHandler(async (event) => {
   try {
-    const { user } = await requireUserSession(event)
+    // const session = await getUserSession(event)
     const query = getQuery(event)
-    let timeTracks
-    if(user.id) {
-      if(query.week) {
-        const week = new Number(query.week).valueOf()
-        timeTracks = await fetchTimeTracksWeekUid(user.id, week)
-      }
-      if (query.today) {
-        timeTracks = await fetchTimeTracksTodayUid(user.id)
-      }
-    }    
-    return (timeTracks)
+    const uid = Number(query.uid)
+    const week = Number(query.week)
+    if(week) {
+      return await fetchTimeTracksWeekUid(uid, week)
+    }
+    return await fetchTimeTracksTodayUid(uid)
   } catch (error) {
     return (error)    
   }

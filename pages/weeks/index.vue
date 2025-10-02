@@ -1,11 +1,11 @@
 <template>
     <div>
-      <BCard :title="'Your week '+useWeek().value+' calendar for ' + user?.first_name" body-class="text-center">
+      <BCard :title="'Your week '+selectedWeek+' calendar for ' + user?.first_name" body-class="text-center">
         <BCardText>
           Effective Duration : <b>{{ effectiveDuration }}</b>
         </BCardText>
       </BCard>
-      <DomainCalendar :tracks="tracksWeek" @nav-to-week="navToWeek" @update-track="updateTrack" @delete-track="deleteTrack"/>
+      <DomainCalendar v-if="tracksWeek" :currentWeek="selectedWeek" :tracks="tracksWeek" @nav-to-week="navToWeek" @update-track="updateTrack" @delete-track="deleteTrack"/>
     </div>
 </template>
 
@@ -21,15 +21,15 @@
   // const
   const now = new Date()
   const currentWeek:number = getWeekNumber(now)
-
-  useWeek().value = currentWeek
-
-
-  // local refs
-  const tracksWeek = useTimeTracksOfTheWeek()
+  const selectedWeek =  ref(currentWeek)
 
   // init on setup
-  getStateTimeTracksOfTheWeek(useWeek().value)
+  const { data:tracksWeek } = await useAsyncData(
+    'tracksWeek',
+     () => getTimeTracksOfTheWeek(user.value?.id, selectedWeek.value),
+     {
+        watch: [selectedWeek],
+     })
 
   // computed properties
   // effectiveDuration calculated instead of filed form base
@@ -48,9 +48,10 @@
 
   // methods
   // navigation to week
-  const navToWeek = (week:number) => {
-    useWeek().value = week
-    getStateTimeTracksOfTheWeek(week)
+  const navToWeek = async (week:number) => {
+    // useWeek().value = week
+    selectedWeek.value = week
+    // await execute()
   }
 
   // update track
@@ -59,14 +60,18 @@
     if(track.isTrack) {
       updateTimeTrack(track.id, track.start, track.end )
       .then((tt) => {
+        if(tt) {
         refreshTimeInTracksOfTheWeek(tt)
         messageToSnack("Day changed to "+new Date(tt.Start).toLocaleString())
+        }
       })
     } else {
       updatePauseTrack(track.id, track.start, track.end )
       .then((pt) => {
+        if(pt) {
         refreshPauseInTimeTracksOfTheWeek(pt)
         messageToSnack("Pause changed to "+new Date(pt.Start).toLocaleString())
+        }
       })
     }
   }
