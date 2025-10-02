@@ -4,11 +4,11 @@ export default defineEventHandler(async (event) => {
   try {
     const { user } = await requireUserSession(event)
     const query = getQuery(event)
-    let timeTrack
+    let id
     if(query.id) {
-      timeTrack = await fetchDeleteTimeTrack(new Number(query.id).valueOf())
+      id = await fetchDeleteTimeTrack(new Number(query.id).valueOf())
     }
-    return (timeTrack)
+    return (id)
   } catch (error) {
     return (error)    
   }

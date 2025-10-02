@@ -4,8 +4,8 @@
       <LazyDomainModalUpdateTimeTrack
         v-if="selectedEvent"
         :modalUpdateTrack="modalUpdateTrack"
-        :time-track="selectedEvent" 
-        @update-track="updateTrack" 
+        :time-track="selectedEvent"
+        @update-track="updateTrack"
         @delete-track="deleteTrack"
         @close-track="closeTrack"></LazyDomainModalUpdateTimeTrack>
     </div>
@@ -27,7 +27,7 @@
           type: TimeTrack,
           default: undefined
       },
-      currentWeek: {
+      selectedWeek: {
         type: Number,
         defaut: getWeekNumber(new Date())
       }
@@ -39,7 +39,7 @@
   const fullCalendar = ref()
   const selectedEvent = ref()
   const todayWeek = getWeekNumber(new Date())
-  const currentWeek = ref(props.currentWeek?props.currentWeek:todayWeek)
+  const currentWeek = ref(props.selectedWeek?props.selectedWeek:todayWeek)
   const modalUpdateTrack = ref(new ModalShow()) 
 
   // watch changes date to go to associated calendar week

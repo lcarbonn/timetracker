@@ -1,11 +1,11 @@
 <template>
     <div>
-      <BCard :title="'Your week '+week+' calendar for ' + user?.first_name" body-class="text-center">
+      <BCard :title="'Your week '+selectedWeek+' calendar for ' + user?.first_name" body-class="text-center">
         <BCardText>
           Effective Duration : <b>{{ effectiveDuration }}</b>
         </BCardText>
       </BCard>
-      <DomainCalendar v-if="tracks" :currentWeek="week" :tracks="tracks" @nav-to-week="navToWeek" @update-track="updateTrack" @delete-track="deleteTrack"/>
+      <DomainCalendar v-if="tracks" :selectedWeek="selectedWeek" :tracks="tracks" @nav-to-week="navToWeek" @update-track="updateTrack" @delete-track="deleteTrack"/>
     </div>
 </template>
 
@@ -19,17 +19,17 @@
   const { user } = useUserSession()
 
   // const
-  const uid = user.value?.id
+  const uid = user.value?user.value.id:0
   const now = new Date()
   const currentWeek:number = getWeekNumber(now)
-  const week =  ref(currentWeek)
+  const selectedWeek =  ref(currentWeek)
   const tracks = useTimeTracksOfTheWeek()
 
-  const { data, execute } = await useAsyncData('fetchTracks', () => getTracksOfTheWeek(uid, week.value),
+  // load tracks and listen to week change
+  const { data, execute:reloadTracks } = await useAsyncData('fetchTracks', () => getTracksOfTheWeek(uid, selectedWeek.value),
   {
-      watch:[week]
+      watch:[selectedWeek]
   })
-
   if(data.value) tracks.value = data.value as ITimeTrack[]
   
   // computed properties
@@ -50,8 +50,8 @@
   // methods
   // navigation to week
   const navToWeek = async (newWeek:number) => {
-    week.value = newWeek
-    await execute()
+    selectedWeek.value = newWeek
+    await reloadTracks()
     if(data.value) tracks.value = data.value as ITimeTrack[]
   }
 
@@ -61,10 +61,8 @@
     if(track.isTrack) {
       updateTimeTrack(track.id, track.start, track.end )
       .then((tt) => {
-        if(tt) {
         refreshTimeInTracksOfTheWeek(tt)
         messageToSnack("Day changed to "+new Date(tt.Start).toLocaleString())
-        }
       })
     } else {
       updatePauseTrack(track.id, track.start, track.end )
@@ -80,13 +78,13 @@
   const deleteTrack = (track:any) => {
     if(track.isTrack) {
       deleteStateTrack(track.id )
-      .then((tt) => {
+      .then(() => {
         deleteTimeFromTimeTracksOfTheWeek(track.id)
         messageToSnack("Day deleted")
       })
     } else {
       deleteStatePause(track.id)
-      .then((pt) => {
+      .then(() => {
         deletePauseFromTimeTracksOfTheWeek(track.id)
         messageToSnack("Pause deleted")
       })
