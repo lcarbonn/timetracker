@@ -38,7 +38,7 @@
 
   // local refs
   const todayTrack = useStateTrack()
-  const currentPause = usePauseTrack()
+  const currentPause = useStatePause()
 
   // local refs
   const modalRestartDay = ref(false)
@@ -49,7 +49,16 @@
   {
       watch:[user]
   })
-  if(data.value) todayTrack.value = data.value as ITimeTrack
+  if(data.value) {
+      todayTrack.value = data.value as ITimeTrack
+      const pauses = todayTrack.value.pauses
+      if(pauses) {
+        const last = pauses.length -1
+        if(last!=-1 && pauses[last].End==null) {
+          useStatePause().value = pauses[last]
+        }      
+      }
+  }
 
   // computed properties
   // start time of the day
@@ -171,7 +180,7 @@
     } else {
       updatePauseTrack(track.id, track.start, track.end )
       .then((pt) => {
-        refreshPauseInTimeTrack(pt)
+        // refreshPauseInTimeTrack(pt)
         messageToSnack("Pause changed to "+new Date(pt.Start).toLocaleString())
       })
     }
@@ -179,15 +188,15 @@
 
   const deleteTrack = (track:any) => {
     if(track.isTrack) {
-      deleteStateTrack(track.id )
+      deleteTimeTrack(track.id )
       .then(() => {
-        todayTrack.value = undefined
+        // todayTrack.value = undefined
         messageToSnack("Day deleted")
       })
     } else {
       deleteStatePause(track.id)
       .then((pt) => {
-        deletePauseFromTimeTrack(track.id)
+        // deletePauseFromStateTrack(track.id)
         messageToSnack("Pause deleted")
       })
     }

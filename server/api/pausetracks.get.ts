@@ -1,4 +1,4 @@
-import { fetchPauseTracksForTimeTrack } from "../useFetch/useFetchPauseTrack"
+import { fetchPausesOfTrack } from "../useFetch/useFetchPauseTrack"
 
 export default defineEventHandler(async (event) => {
   try {
@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     let pauseTracks
     if(query.timeId) {
         const timeId = new Number(query.timeId).valueOf()
-        pauseTracks = await fetchPauseTracksForTimeTrack(timeId)
+        pauseTracks = await fetchPausesOfTrack(timeId)
     }    
     return (pauseTracks)
   } catch (error) {

@@ -1,10 +1,10 @@
 import { afterAll, beforeAll, describe, expect, it, test } from 'vitest'
 import { setAccessToken } from '~/server/useFetch/baserrowFetch'
 import { fetchSignInUser } from '~/server/useFetch/useFetchAuth'
-import { fetchCreatePauseTrack, fetchDeletePauseTrack, fetchPauseTrack, fetchPauseTracks, fetchPauseTracksForTimeTrack, fetchUpdatePauseTrack } from '~/server/useFetch/useFetchPauseTrack'
+import { fetchCreatePauseTrack, fetchDeletePauseTrack, fetchPauseTrack, fetchPauseTracks, fetchPausesOfTrack, fetchUpdatePauseTrack } from '~/server/useFetch/useFetchPauseTrack'
 import { fetchCreateTimeTrack, fetchDeleteTimeTrack } from '~/server/useFetch/useFetchTimeTrack'
 
-function logTrack(pt:IPauseTrack) {
+function logPause(pt:IPauseTrack) {
   console.log(pt.id,", ", pt.TimeTrack[0].id, ", ", pt.Start, ", ", pt.End, ', ', pt.Duration)
 }
 
@@ -23,6 +23,7 @@ describe('baserow pause tracker', () => {
     user_id = tokenAuth.user.id
     setAccessToken(tokenAuth.access_token)
 
+    // create a new track for test
     const now = new Date()
     const ct = {
       "UID":[
@@ -36,7 +37,7 @@ describe('baserow pause tracker', () => {
   })
 
   afterAll( async () => {
-    // Delete new time track
+    // Delete test track
     const id = await fetchDeleteTimeTrack(TEST_TIME_ID)
   })
 
@@ -45,7 +46,7 @@ describe('baserow pause tracker', () => {
     const pts:IPauseTrack[] = await fetchPauseTracks()
     console.log("tts="+pts.length)
     pts.forEach(tt => {
-      logTrack(tt)
+      logPause(tt)
     });
     expect(pts.length).toBeGreaterThan(0)
   })
@@ -58,26 +59,25 @@ describe('baserow pause tracker', () => {
       "Start": now
     }
     const pt:IPauseTrack = await fetchCreatePauseTrack(ct as IPauseTrackPost)
-    logTrack(pt)
+    logPause(pt)
     TEST_PT = pt
     expect(pt.TimeTrack[0].id).toEqual(TEST_TIME_ID)
   })
 
-    // count pauses for a given timetrack
+  // count pauses for a given timetrack
   it('count pauses for a given timetrack', async () => {
-    const pts:IPauseTrack[] = await fetchPauseTracksForTimeTrack(TEST_TIME_ID)
+    const pts:IPauseTrack[] = await fetchPausesOfTrack(TEST_TIME_ID)
     console.log("tts="+pts.length)
     pts.forEach(tt => {
-      logTrack(tt)
+      logPause(tt)
     });
     expect(pts.length).toBeGreaterThan(0)
   })
 
-
   // read test pause track
   it('get one row form baserow', async () => {
     const pt:IPauseTrack = await fetchPauseTrack(TEST_PT.id)
-    logTrack(pt)
+    logPause(pt)
     expect(pt.TimeTrack[0].id).toEqual(TEST_TIME_ID)
   })
 
@@ -85,7 +85,7 @@ describe('baserow pause tracker', () => {
   it('update one row form baserow', async () => {
     const now = new Date()
     TEST_PT.End = now
-    logTrack(TEST_PT)
+    logPause(TEST_PT)
     const tt = await fetchUpdatePauseTrack(TEST_PT)
     expect(tt.End).toBeDefined()
   })

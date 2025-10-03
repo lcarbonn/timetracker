@@ -16,4 +16,4 @@ export const useStateTrack = () => useState<ITimeTrack|undefined>("timeTrack");
 /**
  * State for Pause Track
  */
-export const usePauseTrack = () => useState<IPauseTrack|undefined>("pauseTrack");
+export const useStatePause = () => useState<IPauseTrack|undefined>("pauseTrack");

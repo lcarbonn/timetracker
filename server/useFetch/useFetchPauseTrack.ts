@@ -1,4 +1,5 @@
 import type { IPauseTrack, IPauseTrackPost, ListPauseResponse } from "~/utils/tablePauseTrack"
+import { rawFetch } from "./baserrowFetch"
 
 const config = useRuntimeConfig()
 
@@ -138,13 +139,12 @@ export const fetchDeletePauseTrack = (id:number) : Promise<number> => {
  * @param id, the id
  * @returns Promise - the pauses traks order by start asc or the error
  */
-export const fetchPauseTracksForTimeTrack = (id:number) : Promise<IPauseTrack[]> => {
-  return new Promise((resolve, reject) => {
-    const uri = `${URL}/api/database/rows/table/${PAUSETRACK_ID}/?user_field_names=true`
+export const fetchPausesOfTrack = async (id:number) : Promise<IPauseTrack[]> => {
+  let endpoint = `/api/database/rows/table/${PAUSETRACK_ID}/?user_field_names=true`
     const params = 
       {
         page:1,
-        size:200,
+        size:20,
         order_by:'+Start',
         filters: {
           filter_type:"AND",
@@ -157,19 +157,11 @@ export const fetchPauseTracksForTimeTrack = (id:number) : Promise<IPauseTrack[]>
           ]
         }
       }
-   // Use fetch with the runtime config values
-   $fetch<ListPauseResponse>(
-     uri,
-     {
-      query: params,
-       headers: {
-         Authorization: `Token ${TOKEN}`,
-       },
-     }
-   ).then((res) => {
-    if(res.results) {
-      resolve(res.results)
-    }
-   })
-  })
+    const response =  await rawFetch<ListPauseResponse>(endpoint, 
+      {
+        method:"GET",
+        query: params,
+      }
+    )
+    return response.results
 }

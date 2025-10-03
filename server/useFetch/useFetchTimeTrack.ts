@@ -1,6 +1,7 @@
 import type { ListTimeResponse, ITimeTrack } from "~/utils/tableTimeTrack";
 import { rawFetch } from "./baserrowFetch";
 import { track } from "happy-dom/lib/PropertySymbol.js";
+import { fetchPausesOfTrack } from "./useFetchPauseTrack";
 
 const config = useRuntimeConfig()
 
@@ -73,7 +74,7 @@ export const fetchUpdateTimeTrack = async (timeTrack:ITimeTrack) : Promise<ITime
  * @param uid, the uid
  * @returns Promise - the time trak or the error
  */
-export const fetchTodayTimeTrack = async (uid:number) : Promise<ITimeTrack> => {
+export const fetchTodayTrack = async (uid:number) : Promise<ITimeTrack> => {
     let endpoint = `/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
     const params = 
       {
@@ -102,7 +103,12 @@ export const fetchTodayTimeTrack = async (uid:number) : Promise<ITimeTrack> => {
         method:"GET",
         query : params
       })
-    return response.results[0]
+    // get associated pauses
+    const track = response.results[0]
+    const pauses = await fetchPausesOfTrack(track.id)
+    track.pauses = pauses
+
+    return track
 }
 
 /**
@@ -164,44 +170,15 @@ export const fetchTracksOfTheWeek = async (uid:number, week:number) : Promise<IT
       method:"GET",
       query : params
     })
-  if(response?.results) tracks = response.results
+  if(response?.results) {
+    tracks = response.results
+    for (let index = 0; index < tracks.length; index++) {
+      const track = tracks[index];
+      const pauses = await fetchPausesOfTrack(track.id)
+      track.pauses = pauses
+    }
+  }
   return tracks
-}
-
-/**
- * Get time tracks for an uid for today
- * @param uid, the uid
- * @returns Promise - the time trak or the error
- */
-export const fetchTodayTrack = async (uid:number) : Promise<ITimeTrack[]> => {
-    let endpoint = `/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
-    const params = 
-      {
-        page:1,
-        size:200,
-        order_by:'-Start',
-        filters: {
-          filter_type:"AND",
-          filters: [
-            {
-              field:"UID",
-              type: "multiple_collaborators_has",
-              value: uid
-            },
-            {
-              field:"Start",
-              type: "date_is",
-              value: "UTC??today"
-            }
-          ]
-        }
-      }
-    const response =  await rawFetch<ListTimeResponse>(endpoint, 
-      {
-        method:"GET",
-        query : params
-      })
-    return response.results
 }
 
 /**
@@ -237,7 +214,12 @@ export const fetchLastOpenTrack = async (uid:number) : Promise<ITimeTrack> => {
         method:"GET",
         query : params
       })
-    return response.results[0]
+    // get associated pauses
+    const track = response.results[0]
+    const pauses = await fetchPausesOfTrack(track.id)
+    track.pauses = pauses
+
+    return track
 }
 
 /**

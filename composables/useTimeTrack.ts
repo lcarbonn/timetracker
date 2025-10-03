@@ -13,7 +13,7 @@ export const getTracksOfTheWeek = (uid:number, week:number) :Promise<ITimeTrack[
       onResponseError ({ response}) {
         // Handle the response errors
         console.error("❌ Fetch failed:", response.statusText)
-        errorToSnack("Error in get week tracks", response.statusText)
+        errorToSnack("Error get tracks of the week", response.statusText)
       }
     })
     return result
@@ -30,29 +30,10 @@ export const getTrackOfTheDay = async (uid:number) :Promise<ITimeTrack>=> {
       onResponseError ({ response}) {
         // Handle the response errors
         console.error("❌ Fetch failed:", response.statusText)
-        errorToSnack("Error in get today track", response.statusText)
+        errorToSnack("Error get track of the day", response.statusText)
       }
     })
     return result
-    // $fetch<ITimeTrack>('/api/todaytrack', {
-    //   method: 'GET'
-    // })
-    // .then((track) => {
-    //     useTimeTrack().value = track
-    //     if(track) {
-    //       getTimeTrackPauses(track.id)
-    //       .then((pauses) => {
-    //         if(pauses) {
-    //           const stateTime = useTimeTrack().value
-    //           if(stateTime) stateTime.pauses = pauses
-    //         }
-    //       })
-    //     }
-    //     return track
-    // })
-    // .catch((error) => {
-    //   errorToSnack("Error get today track", error)
-    // })
 }
 
 /**
@@ -66,7 +47,7 @@ export const getLastOpenTrack = async (uid:number) :Promise<ITimeTrack>=> {
       onResponseError ({ response}) {
         // Handle the response errors
         console.error("❌ Fetch failed:", response.statusText)
-        errorToSnack("Error in get today track", response.statusText)
+        errorToSnack("Error last open track", response.statusText)
       }
     })
     return result
@@ -92,7 +73,8 @@ export  const updateTimeTrack = async (id:number, start:Date, end:Date) :Promise
       },
       onResponseError ({ response }) {
         // Handle the response errors
-        errorToSnack("Error update track", response.statusText)
+        useStateTrack().value = undefined
+        errorToSnack("Error updating track", response.statusText)
       },
     })
     return result
@@ -104,7 +86,7 @@ export  const updateTimeTrack = async (id:number, start:Date, end:Date) :Promise
  * @param user_id
  */
 export const openTimeTrack = async (user_id:number) :Promise<ITimeTrack> => {
-    const result = $fetch<ITimeTrack>('/api/timetrack', {
+    const result = await $fetch<ITimeTrack>('/api/timetrack', {
         method: 'POST',
         body: {
           "UID":[
@@ -118,7 +100,8 @@ export const openTimeTrack = async (user_id:number) :Promise<ITimeTrack> => {
       },
       onResponseError ({ response }) {
         // Handle the response errors
-        errorToSnack("Error update track", response.statusText)
+        useStateTrack().value = undefined
+        errorToSnack("Error creating track", response.statusText)
       },
     })
     return result
@@ -141,6 +124,7 @@ export const closeTimeTrack = async (id:number) :Promise<ITimeTrack> => {
       },
       onResponseError ({ response}) {
         // Handle the response errors
+        useStateTrack().value = undefined
         errorToSnack("Error closing track", response.statusText)
       }
     })
@@ -164,22 +148,11 @@ export const reopenTimeTrack = async (id:number) :Promise<ITimeTrack> => {
       },
       onResponseError ({ response}) {
         // Handle the response errors
+        useStateTrack().value = undefined
         errorToSnack("Error reopening track", response.statusText)
       }
     })
     return result
-    // .then ((tt) => {
-    //   const time = useTimeTrack().value
-    //   if(time) {
-    //     tt.pauses = time.pauses
-    //   }
-    //   useTimeTrack().value = tt
-    //   return tt
-    // })
-    // .catch((error) => {
-    //   useTimeTrack().value = undefined
-    //   errorToSnack("Error reopen track", error)
-    // })
 }
 
 /**
@@ -187,7 +160,7 @@ export const reopenTimeTrack = async (id:number) :Promise<ITimeTrack> => {
  * @param id, the time track id
  */
 export const deleteTimeTrack = async (id:number) :Promise<void> => {
-    await $fetch<number>('/api/timetrack', {
+    await await $fetch<number>('/api/timetrack', {
       method: 'DELETE',
       params:{
         id:id
@@ -198,49 +171,13 @@ export const deleteTimeTrack = async (id:number) :Promise<void> => {
       },
       onResponseError ({ response}) {
         // Handle the response errors
+        useStateTrack().value = undefined
         errorToSnack("Error deleting track", response.statusText)
       }
     })
     return
-    // .then((tt) => {
-    //   return
-    // })
-    // .catch((error) => {
-    //   errorToSnack("Error delete track", error)
-    // })
-    // if(useTimeTrack().value?.id == id) {
-    //   useTimeTrack().value = undefined
-    // }
 }
 
-// /**
-//  * Update the time track
-//  * @param id, the time track id
-//  * @param start, the start date
-//  * @param end, the end date
-//  */
-// export const updateTimeTrack = async (id:number, start:Date, end:Date) : Promise<ITimeTrack|void>=> {
-//     $fetch<ITimeTrack>('/api/timetrack', {
-//         method: 'PATCH',
-//         body: {
-//             id:id,
-//             Start:start,
-//             End:end
-//         }
-//     })
-//     .then ((tt) => {
-//       const time = useTimeTrack().value
-//       if(time) {
-//         tt.pauses = time.pauses
-//       }
-//       useTimeTrack().value = tt
-//       return tt
-//     })
-//     .catch((error) => {
-//       useTimeTrack().value = undefined
-//       errorToSnack("Error update track", error)
-//     })
-// }
 /**
  * Refresh the state of tracks with the track
  * @param track, the track to refresh
@@ -269,30 +206,3 @@ export const deleteTrackFromTracksOfTheWeek = (id:number) => {
       }
     }
 }
-
-// /**
-//  * get time tracks for the week and set state
-//  * @param week
-//  */
-// export const getStateTimeTracksOfTheWeek = async (week:number) :Promise<ITimeTrack[]|void>=> {
-//     $fetch<ITimeTrack[]>('/api/timetracks', {
-//       method: 'GET',
-//         params: {
-//             week:week,
-//         }
-//     })
-//     .then((list) => {
-//         useTimeTracksOfTheWeek().value = list
-//         list.forEach(track => {
-//           getTimeTrackPauses(track.id)
-//           .then((pauses) => {
-//             if(pauses) track.pauses = pauses
-//             refreshTimeInTracksOfTheWeek(track)
-//           })
-//         })
-//         return list
-//     })
-//     .catch((error) => {
-//       errorToSnack("Error get week tracks", error)
-//     })
-// }
