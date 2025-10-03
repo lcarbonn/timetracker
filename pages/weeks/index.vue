@@ -23,7 +23,7 @@
   const now = new Date()
   const currentWeek:number = getWeekNumber(now)
   const selectedWeek =  ref(currentWeek)
-  const tracks = useTimeTracksOfTheWeek()
+  const tracks = useStateTracksOfTheWeek()
 
   // load tracks and listen to week change
   const { data, execute:reloadTracks } = await useAsyncData('fetchTracks', () => getTracksOfTheWeek(uid, selectedWeek.value),
@@ -61,7 +61,7 @@
     if(track.isTrack) {
       updateTimeTrack(track.id, track.start, track.end )
       .then((tt) => {
-        refreshTimeInTracksOfTheWeek(tt)
+        refreshTrackInTracksOfTheWeek(tt)
         messageToSnack("Day changed to "+new Date(tt.Start).toLocaleString())
       })
     } else {
@@ -77,9 +77,9 @@
   // delete track
   const deleteTrack = (track:any) => {
     if(track.isTrack) {
-      deleteStateTrack(track.id )
+      deleteTimeTrack(track.id )
       .then(() => {
-        deleteTimeFromTimeTracksOfTheWeek(track.id)
+        deleteTrackFromTracksOfTheWeek(track.id)
         messageToSnack("Day deleted")
       })
     } else {

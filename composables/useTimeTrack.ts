@@ -4,7 +4,7 @@
  * @param week 
  * @returns 
  */
-export  const getTracksOfTheWeek = (uid:number, week:number) :Promise<ITimeTrack[]> => {
+export const getTracksOfTheWeek = (uid:number, week:number) :Promise<ITimeTrack[]> => {
     const result = $fetch<ITimeTrack[]>('/api/timetracks', {
       query: {
         uid:uid,
@@ -186,7 +186,7 @@ export const reopenTimeTrack = async (id:number) :Promise<ITimeTrack> => {
  * Delete the time track
  * @param id, the time track id
  */
-export const deleteStateTrack = async (id:number) :Promise<void> => {
+export const deleteTimeTrack = async (id:number) :Promise<void> => {
     await $fetch<number>('/api/timetrack', {
       method: 'DELETE',
       params:{
@@ -245,7 +245,7 @@ export const deleteStateTrack = async (id:number) :Promise<void> => {
  * Refresh the state of tracks with the track
  * @param track, the track to refresh
  */
-export const refreshTimeInTracksOfTheWeek = (track:ITimeTrack) => {
+export const refreshTrackInTracksOfTheWeek = (track:ITimeTrack) => {
     const tracks = useStateTracksOfTheWeek().value
     for (let index = 0; index < tracks.length; index++) {
       const stateTrack = tracks[index];
@@ -260,7 +260,7 @@ export const refreshTimeInTracksOfTheWeek = (track:ITimeTrack) => {
  * Delete the track from the state of tracks
  * @param track, the track to refresh
  */
-export const deleteTimeFromTimeTracksOfTheWeek = (id:number) => {
+export const deleteTrackFromTracksOfTheWeek = (id:number) => {
     const tracks = useStateTracksOfTheWeek().value
     for (let index = 0; index < tracks.length; index++) {
       const stateTrack = tracks[index];

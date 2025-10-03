@@ -135,7 +135,7 @@ export const fetchDeleteTimeTrack = async (id:number) : Promise<number> => {
  * @param week, the week number
  * @returns Promise - the time trak or the error
  */
-export const fetchTimeTracksWeekUid = async (uid:number, week:number) : Promise<ITimeTrack[]> => {
+export const fetchTracksOfTheWeek = async (uid:number, week:number) : Promise<ITimeTrack[]> => {
     let tracks:ITimeTrack[] = []
     const endpoint = `/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
     const params = 
@@ -173,7 +173,7 @@ export const fetchTimeTracksWeekUid = async (uid:number, week:number) : Promise<
  * @param uid, the uid
  * @returns Promise - the time trak or the error
  */
-export const fetchTimeTracksTodayUid = async (uid:number) : Promise<ITimeTrack[]> => {
+export const fetchTodayTrack = async (uid:number) : Promise<ITimeTrack[]> => {
     let endpoint = `/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
     const params = 
       {
@@ -209,7 +209,7 @@ export const fetchTimeTracksTodayUid = async (uid:number) : Promise<ITimeTrack[]
  * @param uid, the uid
  * @returns Promise - the time trak or the error
  */
-export const fetchLastOpenTimeTrack = async (uid:number) : Promise<ITimeTrack> => {
+export const fetchLastOpenTrack = async (uid:number) : Promise<ITimeTrack> => {
     let endpoint = `/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
     const params = 
       {

@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it, test } from 'vitest'
 import { fetchSignInUser } from '~/server/useFetch/useFetchAuth'
-import { fetchTimeTracks, fetchTimeTracksWeekUid} from '~/server/useFetch/useFetchTimeTrack'
+import { fetchTimeTracks, fetchTracksOfTheWeek} from '~/server/useFetch/useFetchTimeTrack'
 import { convertToCSVFile } from '~/utils/exportCsv'
 
 function logTrack(tt:ITimeTrack) {
