@@ -1,3 +1,5 @@
+import { track } from "happy-dom/lib/PropertySymbol.js"
+
 /**
  * Open a new pause track for the time
  * @param timeId
@@ -174,9 +176,13 @@ export const deletePauseFromTracksOfTheWeek = (id:number) => {
  * @param pause, the pause to refresh
  */
 export const refreshPauseInStateTrack = (pause:IPauseTrack) => {
-    if(!useStateTrack().value) return
-    let pauses = useStateTrack().value?.pauses
-    if(!pauses) pauses = []
+    const track = useStateTrack().value
+    if(!track) return 
+    let pauses = track.pauses
+    if(!pauses) {
+      pauses = []
+      track.pauses = pauses
+    }
     let isFound = false
     for (let index = 0; index < pauses.length; index++) {
       const stateTrack = pauses[index];

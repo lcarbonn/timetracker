@@ -1,6 +1,5 @@
 import type { ListTimeResponse, ITimeTrack } from "~/utils/tableTimeTrack";
 import { rawFetch } from "./baserrowFetch";
-import { track } from "happy-dom/lib/PropertySymbol.js";
 import { fetchPausesOfTrack } from "./useFetchPauseTrack";
 
 const config = useRuntimeConfig()
@@ -89,9 +88,10 @@ export const fetchTodayTrack = async (uid:number) : Promise<ITimeTrack> => {
       })
     // get associated pauses
     const track = response.results[0]
-    const pauses = await fetchPausesOfTrack(track.id)
-    track.pauses = pauses
-
+    if(track) {
+      const pauses = await fetchPausesOfTrack(track.id)
+      track.pauses = pauses
+    }
     return track
 }
 
@@ -169,18 +169,41 @@ export const fetchLastOpenTrack = async (uid:number) : Promise<ITimeTrack> => {
         order_by:'-Start',
         filters: {
           filter_type:"AND",
-          filters: [
-            {
-              field:"UID",
-              type: "multiple_collaborators_has",
-              value: uid
-            },
-            {
-              field:"End",
-              type: "empty",
-              value: ""
-            }
-          ]
+          filters:[
+              {type:"multiple_collaborators_has",field:"UID",value:uid}
+            ],
+            groups:[
+              {filter_type:"OR",
+              filters:[
+                {type:"empty",field:"End",value:""},
+                {type:"date_is",field:"End",value:"Europe/Paris??today"}
+              ]
+              }
+            ]
+
+          // filter_type:"AND",
+          // filters: [
+          //   {
+          //     field:"UID",
+          //     type: "multiple_collaborators_has",
+          //     value: uid
+          //   },
+          //   groups: [
+          //     filter_type:"OR",
+          //     filters: [
+          //       {
+          //         field:"End",
+          //         type: "empty",
+          //         value: ""
+          //       },
+          //       {
+          //         field:"End",
+          //         type: "date_is",
+          //         value: "Europe/Paris??today"
+          //       },
+          //     ],
+          //   ]
+          // ]
         }
       }
     const response =  await rawFetch<ListTimeResponse>(endpoint, 
@@ -190,8 +213,10 @@ export const fetchLastOpenTrack = async (uid:number) : Promise<ITimeTrack> => {
       })
     // get associated pauses
     const track = response.results[0]
-    const pauses = await fetchPausesOfTrack(track.id)
-    track.pauses = pauses
+    if(track) {
+      const pauses = await fetchPausesOfTrack(track.id)
+      track.pauses = pauses
+    }
 
     return track
 }

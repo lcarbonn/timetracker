@@ -45,10 +45,8 @@
   const selectedTrack = ref()
 
   // init at setup
-  const { data, execute:reloadTrack } = await useAsyncData('fetchTrack', () => getLastOpenTrack(uid),
-  {
-      watch:[user]
-  })
+  const { data } = await useAsyncData('fetchTrack', () => getTrackOfTheDay(uid))
+  //const { data } = await useAsyncData('fetchTrack', () => getLastOpenTrack(uid))
   if(data.value) {
       todayTrack.value = data.value as ITimeTrack
       const pauses = todayTrack.value.pauses
