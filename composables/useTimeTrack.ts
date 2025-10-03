@@ -178,6 +178,10 @@ export const deleteStateTrack = async (id:number) :Promise<void> => {
       method: 'DELETE',
       params:{
         id:id
+      },
+      onResponseError ({ response}) {
+        // Handle the response errors
+        errorToSnack("Error deleting track", response.statusText)
       }
     })
     return

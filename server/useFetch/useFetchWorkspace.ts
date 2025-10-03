@@ -42,6 +42,5 @@ export const fetchWorkspacePermisssions = async (token:string) : Promise<IPermis
  */
 export const fetchWorkspaceUsers = async () : Promise<IBrUser[]> => {
     const endpoint = `/api/workspaces/users/workspace/${WORKSPACE_ID}/`
-    return await rawFetch(endpoint)
-
+    return await rawFetch<IBrUser[]>(endpoint)
 }
