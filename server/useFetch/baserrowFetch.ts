@@ -1,8 +1,12 @@
+import { result } from "happy-dom/lib/PropertySymbol.js";
+
 const config = useRuntimeConfig()
 
 const BASEROW_URL = config.baserowApiUrl
 
 let accessToken: string | null = null;
+
+const isLog = false
 
 // for test purposes
 export const setAccessToken = (newAccessToken:string) => {
@@ -16,12 +20,12 @@ export const setAccessToken = (newAccessToken:string) => {
  */
 async function refreshAccessToken(event:any): Promise<boolean> {
 
-  // console.log("➡️ Refresh start");
+  if(isLog) console.log("➡️ Refresh start");
 
   const session = await getUserSession(event)
   if (!session.secure?.refresh_token) return false;
 
-  // console.log("➡️ Refresh refresh token is set");
+  if(isLog) console.log("➡️ Refresh refresh token is set");
 
   const response = await fetch(`${BASEROW_URL}/api/user/token-refresh/`, {
     method: "POST",
@@ -30,13 +34,13 @@ async function refreshAccessToken(event:any): Promise<boolean> {
   });
 
   if (!response.ok) {
-    // console.log("➡️ Refresh error:", response.status, ", ",response.statusText);
+    if(isLog) console.log("➡️ Refresh error:", response.status, ", ",response.statusText);
     await clearUserSession(event)
     return false;
   }
 
   const data = await response.json();
-  // console.log("➡️ Refresh data:", data);
+  if(isLog) console.log("➡️ Refresh data:", data);
   accessToken = data.access_token
   await setUserSession(event, {
     secure:{
@@ -44,7 +48,7 @@ async function refreshAccessToken(event:any): Promise<boolean> {
     }
   })
 
-  // console.log("➡️ Refresh end");
+  if(isLog) console.log("➡️ Refresh end");
   return true;
 }
 /**
@@ -60,65 +64,68 @@ export async function baserowExecute<E, T extends any[], R>(
   ...args: T
 ): Promise<R> {
   try {
-    // console.log("➡️ Fetch start:", method.name);
+    if(isLog) console.log("➡️ Fetch start:", method.name);
 
     // get the accessToken
     const session = await getUserSession(event as any)
-    // console.log("✅ Fetch access_token:", session.secure?.access_token?true:false);
+    if(isLog) console.log("✅ Fetch access_token:", session.secure?.access_token?true:false);
     if(session.secure?.access_token)
       accessToken = session.secure?.access_token
 
     // first call of the method
     const result = await method(...args);
 
-    // console.log("✅ Fetch success:", method.name);
+    if(isLog) console.log("✅ Fetch success:", method.name, result);
     
     return result;
   } catch (err: any) {
     // try to refresh in case of 401 and recall method
-    // console.log("🔄 Fetch error before refresh:", err.statusCode);
+    if(isLog) console.log("🔄 Fetch error before refresh:", err.statusCode);
     if (err.statusCode === 401 && (await refreshAccessToken(event))) {
-      // console.log("🔄 Fetch retry after refresh:", method.name);
-      return await method(...args);
+      if(isLog) console.log("🔄 Fetch retry after refresh:", method.name);
+      const res = await method(...args);
+      if(isLog) console.log("🔄 Fetch result after refresh:", res);
+      return res
+
     }
-    // console.error("❌ Fetch failed:", method.name, err.statusMessage);
+    if(isLog) console.error("❌ Fetch failed:", method.name, err.statusMessage);
     throw err;
   }
 }
 
 export async function rawFetch<T>(
   endpoint: string,
-  options: RequestInit = {},
-  query?: Record<string, string | number | boolean | undefined>
+  options: any = {},
+  // query?: Record<string, string | number | boolean | undefined>
 ): Promise<T> {
   options.headers = {
     ...(options.headers || {}),
     "Content-Type": "application/json",
   };
 
-if (query) {
-    const searchParams = new URLSearchParams();
-    for (const [key, value] of Object.entries(query)) {
-      if (value !== undefined) {
-        searchParams.append(key, String(value));
-      }
-    }
-    const qs = searchParams.toString();
-    if (qs) endpoint += `?${qs}`;
-  }
   if (accessToken) {
     (options.headers as Record<string, string>)["Authorization"] =
       `JWT ${accessToken}`;
   }
 
-  const response = await fetch(`${BASEROW_URL}${endpoint}`, options);
+  if(isLog) console.log("🔄 rawFetch :", endpoint, " options:", options);
 
-  if (!response.ok) {
+    const result = await $fetch<T>(`${BASEROW_URL}${endpoint}`, {
+    onRequest ({request, options:reqOptions }) {
+      if(isLog) console.log("🔄 rawFetch onRequest :", endpoint, " options:", reqOptions);
+      reqOptions.method = options.method || "GET"
+      reqOptions.headers = options.headers || {}
+      reqOptions.body = options.body
+      reqOptions.query = options.query
+    },
+    onResponseError ({ response }) {
+      // Handle the response errors
       throw createError({
         statusCode: response.status,
         statusMessage: response.statusText,
       })
-  }
-
-  return response.json() as Promise<T>;
+    },
+  })
+  if(isLog) console.log("rawFetch result:", result)
+  return result as Promise<T>
 }

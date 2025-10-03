@@ -14,6 +14,7 @@ export  const getTracksOfTheWeek = (uid:number, week:number) :Promise<ITimeTrack
       },
       onResponseError ({ response}) {
         // Handle the response errors
+        console.error("❌ Fetch failed:", response.statusText)
         errorToSnack("Error in get week tracks", response.statusText)
       }
     })
