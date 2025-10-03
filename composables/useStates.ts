@@ -6,12 +6,12 @@ export const useSnackBarMessage = () => useState<ISnackMessage>("snackBarMessage
 /**
  * State for Time Tracks of a week
  */
-export const useTimeTracksOfTheWeek = () => useState<ITimeTrack[]>("timeTracksWeek");
+export const useStateTracksOfTheWeek = () => useState<ITimeTrack[]>("timeTracksWeek");
 
 /**
  * State for Time Track
  */
-export const useTimeTrack = () => useState<ITimeTrack|undefined>("timeTrack");
+export const useStateTrack = () => useState<ITimeTrack|undefined>("timeTrack");
 
 /**
  * State for Pause Track

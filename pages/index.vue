@@ -32,11 +32,12 @@
   const { user } = useUserSession()
 
   // const
+  const uid = user.value?user.value.id:0
   const now = new Date()
   const currentWeek:number = getWeekNumber(now)
 
   // local refs
-  const todayTrack = useTimeTrack()
+  const todayTrack = useStateTrack()
   const currentPause = usePauseTrack()
 
   // local refs
@@ -44,7 +45,12 @@
   const selectedTrack = ref()
 
   // init at setup
-  getStateTodayTimeTrack()
+  const { data, execute:reloadTrack } = await useAsyncData('fetchTrack', () => getLastOpenTrack(uid),
+  {
+      watch:[user]
+  })
+  if(data.value) todayTrack.value = data.value as ITimeTrack
+  // getStateTodayTimeTrack(user.value?.id)
 
   // computed properties
   // start time of the day

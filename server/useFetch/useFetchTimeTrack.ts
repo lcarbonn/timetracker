@@ -8,35 +8,6 @@ const BASEROW_URL = config.baserowApiUrl
 const TIMETRACK_ID = config.public.tableTimetrackId
 const TOKEN = config.baserowToken
 
-// /**
-//  * Get time tracks
-//  * @returns Promise - the time traks or the error
-//  */
-// export const fetchTimeTracks = () : Promise<ITimeTrack[]> => {
-//   return new Promise((resolve, reject) => {
-//     const uri = `${BASEROW_URL}/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
-//     const params = 
-//       {
-//         page:1,
-//         size:200,
-//         order_by:'-UID'
-//       }
-//     // Use fetch with the runtime config values
-//     $fetch<ListTimeResponse>(
-//       uri,
-//       {
-//         query: params,
-//         headers: {
-//           //Authorization: `JWT ${user?.token}`,
-//           Authorization: `Token ${TOKEN}`
-//         },
-//       }
-//     ).then((res) => {
-//         resolve(res.results)
-//     })
-//   })
-// }
-
 /**
  * Get one time track
  * @param id of the track
@@ -64,12 +35,9 @@ export const fetchTimeTrack = (id:number) : Promise<ITimeTrack> => {
  * @param timeTrack Create the time track in db
  * @returns a Promise with the created time track from db or the error
  */
-export const fetchCreateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack> => {
-  return new Promise((resolve, reject) => {
-    const uri = `${BASEROW_URL}/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
-   // Use fetch with the runtime config values
-   $fetch<ITimeTrack>(
-    uri,
+export const fetchCreateTimeTrack = async (timeTrack:ITimeTrack) : Promise<ITimeTrack> => {
+    const endpoint = `/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
+    const track =  await rawFetch<ITimeTrack>(endpoint, 
      {
         method:"POST",
         headers: {
@@ -78,10 +46,8 @@ export const fetchCreateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack>
         },
         body:JSON.stringify(timeTrack),
      },
-   ).then((res) => {
-        resolve(res)
-   })
-  })
+   )
+   return track
 }
 
 /**
@@ -107,9 +73,8 @@ export const fetchUpdateTimeTrack = async (timeTrack:ITimeTrack) : Promise<ITime
  * @param uid, the uid
  * @returns Promise - the time trak or the error
  */
-export const fetchTodayTimeTrack = (uid:number) : Promise<ITimeTrack> => {
-  return new Promise((resolve, reject) => {
-    const uri = `${BASEROW_URL}/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
+export const fetchTodayTimeTrack = async (uid:number) : Promise<ITimeTrack> => {
+    let endpoint = `/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
     const params = 
       {
         page:1,
@@ -132,18 +97,12 @@ export const fetchTodayTimeTrack = (uid:number) : Promise<ITimeTrack> => {
         }
       }
     // Use fetch with the runtime config values
-    $fetch<ListTimeResponse>(
-      uri,
+    const response =  await rawFetch<ListTimeResponse>(endpoint, 
       {
-        query: params,
-        headers: {
-          Authorization: `Token ${TOKEN}`,
-        },
-      }
-    ).then((res) => {
-      resolve(res.results[0])
-    })
-  })
+        method:"GET",
+        query : params
+      })
+    return response.results[0]
 }
 
 /**
@@ -214,9 +173,8 @@ export const fetchTimeTracksWeekUid = async (uid:number, week:number) : Promise<
  * @param uid, the uid
  * @returns Promise - the time trak or the error
  */
-export const fetchTimeTracksTodayUid = (uid:number) : Promise<ITimeTrack[]> => {
-  return new Promise((resolve, reject) => {
-    const uri = `${BASEROW_URL}/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
+export const fetchTimeTracksTodayUid = async (uid:number) : Promise<ITimeTrack[]> => {
+    let endpoint = `/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
     const params = 
       {
         page:1,
@@ -238,21 +196,12 @@ export const fetchTimeTracksTodayUid = (uid:number) : Promise<ITimeTrack[]> => {
           ]
         }
       }
-   // Use fetch with the runtime config values
-   $fetch<ListTimeResponse>(
-     uri,
-     {
-      query: params,
-       headers: {
-         Authorization: `Token ${TOKEN}`,
-       },
-     }
-   ).then((res) => {
-    if(res.results) {
-      resolve(res.results)
-    }
-   })
-  })
+    const response =  await rawFetch<ListTimeResponse>(endpoint, 
+      {
+        method:"GET",
+        query : params
+      })
+    return response.results
 }
 
 /**
@@ -261,7 +210,7 @@ export const fetchTimeTracksTodayUid = (uid:number) : Promise<ITimeTrack[]> => {
  * @returns Promise - the time trak or the error
  */
 export const fetchLastOpenTimeTrack = async (uid:number) : Promise<ITimeTrack> => {
-    let endpoint = `${BASEROW_URL}/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
+    let endpoint = `/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
     const params = 
       {
         page:1,
@@ -283,6 +232,40 @@ export const fetchLastOpenTimeTrack = async (uid:number) : Promise<ITimeTrack> =
           ]
         }
       }
-   return await rawFetch(endpoint)
+    const response =  await rawFetch<ListTimeResponse>(endpoint, 
+      {
+        method:"GET",
+        query : params
+      })
+    return response.results[0]
 }
+
+// /**
+//  * Get time tracks
+//  * @returns Promise - the time traks or the error
+//  */
+// export const fetchTimeTracks = () : Promise<ITimeTrack[]> => {
+//   return new Promise((resolve, reject) => {
+//     const uri = `${BASEROW_URL}/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
+//     const params = 
+//       {
+//         page:1,
+//         size:200,
+//         order_by:'-UID'
+//       }
+//     // Use fetch with the runtime config values
+//     $fetch<ListTimeResponse>(
+//       uri,
+//       {
+//         query: params,
+//         headers: {
+//           //Authorization: `JWT ${user?.token}`,
+//           Authorization: `Token ${TOKEN}`
+//         },
+//       }
+//     ).then((res) => {
+//         resolve(res.results)
+//     })
+//   })
+// }
 
