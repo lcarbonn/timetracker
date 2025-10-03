@@ -68,7 +68,7 @@
       updatePauseTrack(track.id, track.start, track.end )
       .then((pt) => {
         if(pt) {
-        refreshPauseInTimeTracksOfTheWeek(pt)
+        // refreshPauseInTracksOfTheWeek(pt)
         messageToSnack("Pause changed to "+new Date(pt.Start).toLocaleString())
         }
       })
@@ -85,7 +85,7 @@
     } else {
       deleteStatePause(track.id)
       .then(() => {
-        deletePauseFromTimeTracksOfTheWeek(track.id)
+        // deletePauseFromTracksOfTheWeek(track.id)
         messageToSnack("Pause deleted")
       })
     }

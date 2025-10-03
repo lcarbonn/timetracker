@@ -1,26 +1,3 @@
-// /**
-//  * get pause tracks for the time track id
-//  * @param timeId
-//  */
-// export const getTimeTrackPauses = async (timeId:number) :Promise<IPauseTrack[]|void> => {
-//     $fetch<IPauseTrack[]>('/api/pausetracks', {
-//       method: 'GET',
-//         params: {
-//             timeId:timeId,
-//         }
-//     })
-//     .then((list) => {
-//       const last = list.length-1
-//       if(last!=-1 && list[last].End==null) {
-//         useStatePause().value = list[last]
-//       }      
-//       return list
-//     })
-//     .catch((error) => {
-//       errorToSnack("Error get track pauses", error)
-//     })
-// }
-
 /**
  * Open a new pause track for the time
  * @param timeId
@@ -64,6 +41,7 @@ export const closePauseTrack = async (id:number) :Promise<IPauseTrack> => {
         const pause = response._data
         useStatePause().value = undefined
         refreshPauseInStateTrack(pause)
+        refreshPauseInTracksOfTheWeek(pause)
       },
       onResponseError ({ response }) {
         // Handle the response errors
@@ -90,6 +68,7 @@ export const reopenPauseTrack = async (id:number) :Promise<IPauseTrack> => {
         const pause = response._data
         refreshCurrentStatePause(pause)
         refreshPauseInStateTrack(pause)
+        refreshPauseInTracksOfTheWeek(pause)
       },
       onResponseError ({ response }) {
         // Handle the response errors
@@ -115,6 +94,7 @@ export const deleteStatePause = async (id:number) :Promise<void> => {
         const pause = response._data
         deleteCurrentStatePause(id)
         deletePauseFromStateTrack(id)
+        deletePauseFromTracksOfTheWeek(id)
       },
       onResponseError ({ response }) {
         // Handle the response errors
@@ -144,6 +124,7 @@ export const updatePauseTrack = async (id:number, start:Date, end:Date) :Promise
         const pause = response._data
         refreshCurrentStatePause(pause)
         refreshPauseInStateTrack(pause)
+        refreshPauseInTracksOfTheWeek(pause)
       },
       onResponseError ({ response }) {
         // Handle the response errors
@@ -152,22 +133,13 @@ export const updatePauseTrack = async (id:number, start:Date, end:Date) :Promise
       },
     })
     return result
-
-    // })
-    // .then ((pt) => {
-    //   refreshCurrentStatePauseTrack(pt)
-    //   return pt
-    // })
-    // .catch((error) => {
-    //   useStatePause().value = undefined
-    //   errorToSnack("Error update pause", error)
-    // })
 }
 /**
  * Refresh the pause in the tracks of the week
  * @param pause , the pause to refresh
  */
-export const refreshPauseInTimeTracksOfTheWeek = (pause:IPauseTrack) => {
+export const refreshPauseInTracksOfTheWeek = (pause:IPauseTrack) => {
+  if(!useStateTracksOfTheWeek().value) return
   const tracks = useStateTracksOfTheWeek().value
   tracks.forEach(track => {
     if(track.pauses) {
@@ -184,7 +156,8 @@ export const refreshPauseInTimeTracksOfTheWeek = (pause:IPauseTrack) => {
  * Delete the pause from time tracks of the week
  * @param id , the pause id
  */
-export const deletePauseFromTimeTracksOfTheWeek = (id:number) => {
+export const deletePauseFromTracksOfTheWeek = (id:number) => {
+  if(!useStateTracksOfTheWeek().value) return
   const tracks = useStateTracksOfTheWeek().value
   tracks.forEach(track => {
     if(track.pauses) {
@@ -217,19 +190,11 @@ export const refreshPauseInStateTrack = (pause:IPauseTrack) => {
 }
 
 /**
- * Refresh the pauses in the current time track
- * @param pauses, the pauses to refresh
- */
-export const refreshPausesInTimeTrack = (pauses:IPauseTrack[]) => {
-    const timeTrack = useStateTrack().value
-    if(timeTrack) timeTrack.pauses = pauses
-}
-
-/**
  * Delete pause form the state track
  * @param id, the id of the track
  */
 export const deletePauseFromStateTrack = (id:number) => {
+    if(!useStateTrack().value) return
     const pauses = useStateTrack().value?.pauses
     if(!pauses) return
     for (let index = 0; index < pauses.length; index++) {
