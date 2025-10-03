@@ -91,7 +91,6 @@ export const deleteStatePause = async (id:number) :Promise<void> => {
       },
       onResponse ({ response }) {
         // Handle the response errors
-        const pause = response._data
         deleteCurrentStatePause(id)
         deletePauseFromStateTrack(id)
         deletePauseFromTracksOfTheWeek(id)

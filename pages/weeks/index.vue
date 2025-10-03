@@ -61,7 +61,7 @@
     if(track.isTrack) {
       updateTimeTrack(track.id, track.start, track.end )
       .then((tt) => {
-        refreshTrackInTracksOfTheWeek(tt)
+        // refreshTrackInTracksOfTheWeek(tt)
         messageToSnack("Day changed to "+new Date(tt.Start).toLocaleString())
       })
     } else {
@@ -79,7 +79,7 @@
     if(track.isTrack) {
       deleteTimeTrack(track.id )
       .then(() => {
-        deleteTrackFromTracksOfTheWeek(track.id)
+        // deleteTrackFromTracksOfTheWeek(track.id)
         messageToSnack("Day deleted")
       })
     } else {

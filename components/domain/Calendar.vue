@@ -64,7 +64,7 @@
         let i = 1
         const length = track.pauses?.length
         track.pauses?.forEach(pause => {
-          events.push( pauseToEvent(pause, true))
+          events.push( pauseToEvent(pause, (i==length)))
           i++
         });        
       });

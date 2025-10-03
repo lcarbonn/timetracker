@@ -1,3 +1,5 @@
+import { state } from "happy-dom/lib/PropertySymbol.js"
+
 /**
  * Get tracks of the week for the user
  * @param uid 
@@ -69,7 +71,9 @@ export  const updateTimeTrack = async (id:number, start:Date, end:Date) :Promise
         },
       onResponse ({ response }) {
         // Handle the response errors
-        useStateTrack().value = response._data
+        const track = response._data
+        refreshStateTrack(track)
+        refreshTrackInTracksOfTheWeek(track)
       },
       onResponseError ({ response }) {
         // Handle the response errors
@@ -120,7 +124,9 @@ export const closeTimeTrack = async (id:number) :Promise<ITimeTrack> => {
         },
       onResponse ({ response }) {
         // Handle the response errors
-        useStateTrack().value = response._data
+        const track = response._data
+        refreshStateTrack(track)
+        refreshTrackInTracksOfTheWeek(track)
       },
       onResponseError ({ response}) {
         // Handle the response errors
@@ -144,7 +150,9 @@ export const reopenTimeTrack = async (id:number) :Promise<ITimeTrack> => {
         },
       onResponse ({ response }) {
         // Handle the response errors
-        useStateTrack().value = response._data
+        const track = response._data
+        refreshStateTrack(track)
+        refreshTrackInTracksOfTheWeek(track)
       },
       onResponseError ({ response}) {
         // Handle the response errors
@@ -168,6 +176,7 @@ export const deleteTimeTrack = async (id:number) :Promise<void> => {
       onResponse ({ response }) {
         // Handle the response errors
         useStateTrack().value = undefined
+        deleteTrackFromTracksOfTheWeek(id)
       },
       onResponseError ({ response}) {
         // Handle the response errors
@@ -179,10 +188,20 @@ export const deleteTimeTrack = async (id:number) :Promise<void> => {
 }
 
 /**
+ * Refresh the state track
+ * @param track, the track to refresh
+ */
+export const refreshStateTrack = (track:ITimeTrack) => {
+    const stateTrack = useStateTrack()
+    if(stateTrack.value?.pauses) track.pauses = stateTrack.value.pauses
+    stateTrack.value = Object.assign([], track)
+}
+/**
  * Refresh the state of tracks with the track
  * @param track, the track to refresh
  */
 export const refreshTrackInTracksOfTheWeek = (track:ITimeTrack) => {
+    if(!useStateTracksOfTheWeek().value) return
     const tracks = useStateTracksOfTheWeek().value
     for (let index = 0; index < tracks.length; index++) {
       const stateTrack = tracks[index];
@@ -198,6 +217,7 @@ export const refreshTrackInTracksOfTheWeek = (track:ITimeTrack) => {
  * @param track, the track to refresh
  */
 export const deleteTrackFromTracksOfTheWeek = (id:number) => {
+    if(!useStateTracksOfTheWeek().value) return
     const tracks = useStateTracksOfTheWeek().value
     for (let index = 0; index < tracks.length; index++) {
       const stateTrack = tracks[index];
