@@ -19,6 +19,10 @@
 
   // props
   const props = defineProps({
+      isWeekGrid: {
+        type: Boolean,
+        default: false
+      },
       tracks: {
           type: Array<TimeTrack>,
           default: undefined
@@ -87,11 +91,11 @@
     const cal:CalendarOptions = {
       plugins: [timeGridPlugin, interactionPlugin],
       locale:"fr-fr",
-      initialView: props.tracks?"timeGridWeek":"timeGridDay",
+      initialView: props.isWeekGrid?"timeGridWeek":"timeGridDay",
       editable: true,
       nowIndicator: true,
       scrollTime:"08:00:00",
-      dayHeaders:props.todayTrack?false:true,
+      dayHeaders:props.isWeekGrid,
       stickyHeaderDates: true,
       allDaySlot:false,
       firstDay:1,
@@ -106,9 +110,9 @@
         endTime: '18:00',
       },
       headerToolbar: {
-        left: props.todayTrack?"":"myPrevButton,myTodayButton,myNextButton",
-        center: props.todayTrack?"title":"",
-        right: props.todayTrack?"":"timeGridWeek,timeGridDay",
+        left: props.isWeekGrid?"myPrevButton,myTodayButton,myNextButton": undefined,
+        center: props.isWeekGrid?"":"title",
+        right: props.isWeekGrid?"timeGridWeek,timeGridDay":undefined,
       },
       customButtons: {
         myPrevButton: {

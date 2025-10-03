@@ -5,7 +5,7 @@
           Effective Duration : <b>{{ effectiveDuration }}</b>
         </BCardText>
       </BCard>
-      <DomainCalendar v-if="tracks" :selectedWeek="selectedWeek" :tracks="tracks" @nav-to-week="navToWeek" @update-track="updateTrack" @delete-track="deleteTrack"/>
+      <DomainCalendar v-if="tracks" is-week-grid :selectedWeek="selectedWeek" :tracks="tracks" @nav-to-week="navToWeek" @update-track="updateTrack" @delete-track="deleteTrack"/>
     </div>
 </template>
 
