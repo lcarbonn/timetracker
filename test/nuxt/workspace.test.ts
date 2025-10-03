@@ -15,6 +15,7 @@ describe('baserow workspace', () => {
     // TODO : get env for server
     tokenAuth = await fetchSignInUser(login, mdp)
     user_id = tokenAuth.user.id
+    setAccessToken(tokenAuth.access_token)
   })
 
   // get workspace permissions for a user
@@ -32,7 +33,6 @@ describe('baserow workspace', () => {
 
   // get workspace list of user
   it('get workspace users', async () => {
-    setAccessToken(tokenAuth.access_token)
     const users = await fetchWorkspaceUsers()
     // console.log("users="+JSON.stringify(users,null,' '))
     expect(users.length).toEqual(2)

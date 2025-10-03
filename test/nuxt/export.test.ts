@@ -1,4 +1,5 @@
 import { beforeAll, describe, expect, it, test } from 'vitest'
+import { setAccessToken } from '~/server/useFetch/baserrowFetch'
 import { fetchSignInUser } from '~/server/useFetch/useFetchAuth'
 import { fetchAllTimeTracks } from '~/server/useFetch/useFetchTimeTrack'
 
@@ -20,6 +21,7 @@ describe('baserow export', () => {
     // TODO : get env for server
     tokenAuth = await fetchSignInUser(login, mdp)
     user_id = tokenAuth.user.id
+    setAccessToken(tokenAuth.access_token)
   })
 
   // count all times

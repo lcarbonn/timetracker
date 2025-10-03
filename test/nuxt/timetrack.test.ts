@@ -1,4 +1,5 @@
 import { beforeAll, describe, expect, it, test } from 'vitest'
+import { setAccessToken } from '~/server/useFetch/baserrowFetch'
 import { fetchSignInUser } from '~/server/useFetch/useFetchAuth'
 import { fetchCreateTimeTrack, fetchDeleteTimeTrack, fetchTimeTrack, fetchTracksOfTheWeek, fetchTodayTimeTrack, fetchUpdateTimeTrack, fetchAllTimeTracks } from '~/server/useFetch/useFetchTimeTrack'
 
@@ -18,6 +19,7 @@ describe('baserow time tracker', () => {
     // TODO : get env for server
     tokenAuth = await fetchSignInUser(login, mdp)
     user_id = tokenAuth.user.id
+    setAccessToken(tokenAuth.access_token)
   })
 
   // count all times
@@ -32,6 +34,7 @@ describe('baserow time tracker', () => {
 
   // count all times for an uid
   it('count times for an uid week 36', async () => {
+
     const date = new Date()
     const tts:ITimeTrack[] = await fetchTracksOfTheWeek(user_id, 36)
     console.log("tts="+tts.length)

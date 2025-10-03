@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it, test } from 'vitest'
+import { setAccessToken } from '~/server/useFetch/baserrowFetch'
 import { fetchSignInUser } from '~/server/useFetch/useFetchAuth'
 import { fetchCreatePauseTrack, fetchDeletePauseTrack, fetchPauseTrack, fetchPauseTracks, fetchPauseTracksForTimeTrack, fetchUpdatePauseTrack } from '~/server/useFetch/useFetchPauseTrack'
 import { fetchCreateTimeTrack, fetchDeleteTimeTrack } from '~/server/useFetch/useFetchTimeTrack'
@@ -20,6 +21,8 @@ describe('baserow pause tracker', () => {
     // TODO : get env for server
     tokenAuth = await fetchSignInUser(login, mdp)
     user_id = tokenAuth.user.id
+    setAccessToken(tokenAuth.access_token)
+
     const now = new Date()
     const ct = {
       "UID":[
