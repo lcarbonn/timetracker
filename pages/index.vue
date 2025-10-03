@@ -50,7 +50,6 @@
       watch:[user]
   })
   if(data.value) todayTrack.value = data.value as ITimeTrack
-  // getStateTodayTimeTrack(user.value?.id)
 
   // computed properties
   // start time of the day
@@ -153,7 +152,7 @@
 
   // restart today track
   const restartDay = () => {
-    selectedTrack.value = useTimeTrack().value
+    selectedTrack.value = useStateTrack().value
     modalRestartDay.value = !modalRestartDay.value
   }
 
