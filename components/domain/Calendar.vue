@@ -27,10 +27,6 @@
           type: Array<TimeTrack>,
           default: undefined
       },
-      todayTrack: {
-          type: TimeTrack,
-          default: undefined
-      },
       selectedWeek: {
         type: Number,
         defaut: getWeekNumber(new Date())
@@ -49,7 +45,7 @@
   // watch changes date to go to associated calendar week
   watch(() => props.tracks, async(newTracks) => {
     if(newTracks) {
-      fullCalendar.value.getApi().changeView("timeGridWeek")
+      // fullCalendar.value.getApi().changeView("timeGridWeek")
         if(newTracks.length>0) {
           fullCalendar.value.getApi().gotoDate(newTracks[0].Start)
         }
@@ -63,24 +59,14 @@
     if(props.tracks) {
       props.tracks.forEach(track => {
         // add the track to the calendar
-        events.push( trackToEvent(track, false))
+        events.push( trackToEvent(track, !props.isWeekGrid))
         // add the pauses to the calendar
-        let i = 1
-        const length = track.pauses?.length
+        let pi = 1
+        const plentgth = track.pauses?.length
         track.pauses?.forEach(pause => {
-          events.push( pauseToEvent(pause, (i==length)))
-          i++
+          events.push( pauseToEvent(pause, (!props.isWeekGrid && (pi==plentgth))))
+          pi++
         });        
-      });
-    }
-    const today = props.todayTrack
-    if(today) {
-      events.push( trackToEvent(today, true))
-      let i = 1
-      const length = today.pauses?.length
-      today.pauses?.forEach(pause => {
-        events.push( pauseToEvent(pause, (i==length)))
-        i++
       });
     }
     return events
@@ -100,7 +86,7 @@
       allDaySlot:false,
       firstDay:1,
       snapDuration:"00:15:00",
-      dragScroll:false,
+      // dragScroll:false,
       // navLinks:true,
       events: calendarEvents.value,
       businessHours: {

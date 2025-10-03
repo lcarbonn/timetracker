@@ -17,7 +17,7 @@
         <BCardText v-if="currentPause && !currentPause.End">  Pause started at : <b>{{ currentPauseStartTime }}</b></BCardText>
         <BCardText v-if="currentPause && !currentPause.End"> Duration : <b>{{ pauseTimer }}</b></BCardText>
       </BCard>
-      <DomainCalendar :today-track="todayTrack" @update-track="updateTrack" @delete-track="deleteTrack"/>
+      <DomainCalendar v-if="tracks" :tracks="tracks" @update-track="updateTrack" @delete-track="deleteTrack"/>
       <BModal v-model="modalRestartDay" title="Restart day" @ok="confirmRestartDay"> Really ? </BModal>
     </div>
 </template>
@@ -43,6 +43,12 @@
   // local refs
   const modalRestartDay = ref(false)
   const selectedTrack = ref()
+  const tracks = computed(() => {
+    const tracks = []
+    if(todayTrack.value) tracks.push(todayTrack.value)
+    return tracks
+  })
+
 
   // init at setup
   const { data } = await useAsyncData('fetchTrack', () => getTrackOfTheDay(uid))
