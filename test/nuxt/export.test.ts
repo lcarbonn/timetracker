@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it, test } from 'vitest'
 import { fetchSignInUser } from '~/server/useFetch/useFetchAuth'
-import { fetchTimeTracks, fetchTracksOfTheWeek} from '~/server/useFetch/useFetchTimeTrack'
+import { fetchAllTimeTracks } from '~/server/useFetch/useFetchTimeTrack'
+
 import { convertToCSVFile } from '~/utils/exportCsv'
 
 function logTrack(tt:ITimeTrack) {
@@ -23,7 +24,7 @@ describe('baserow export', () => {
 
   // count all times
   it('count all times form baserow', async () => {
-    const tts:ITimeTrack[] = await fetchTimeTracks()
+    const tts:ITimeTrack[] = await fetchAllTimeTracks()
     console.log("tts="+tts.length)
     const csv:string = convertToCSVFile(tts)
     console.log("csv string:", csv)

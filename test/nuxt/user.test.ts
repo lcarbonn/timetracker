@@ -16,7 +16,7 @@ describe('baserow user', async () => {
   // login
   it('login to baserow', async () => {
     console.log("firstName:", tokenAuth.user.first_name, ", userName:", tokenAuth.user.username, ", language:", tokenAuth.user.language, ", id:", tokenAuth.user.id)
-    console.log("token:", tokenAuth.token, ", access_token:", tokenAuth.access_token, ", refresh_token:", tokenAuth.refresh_token)
+    console.log("access_token:", tokenAuth.access_token, ", refresh_token:", tokenAuth.refresh_token)
     expect(tokenAuth.user.username).toEqual(LOGIN)
     expect(tokenAuth.user.id).toEqual(Number(USER_ID).valueOf())
   })

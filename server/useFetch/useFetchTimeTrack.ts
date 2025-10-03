@@ -240,32 +240,24 @@ export const fetchLastOpenTrack = async (uid:number) : Promise<ITimeTrack> => {
     return response.results[0]
 }
 
-// /**
-//  * Get time tracks
-//  * @returns Promise - the time traks or the error
-//  */
-// export const fetchTimeTracks = () : Promise<ITimeTrack[]> => {
-//   return new Promise((resolve, reject) => {
-//     const uri = `${BASEROW_URL}/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
-//     const params = 
-//       {
-//         page:1,
-//         size:200,
-//         order_by:'-UID'
-//       }
-//     // Use fetch with the runtime config values
-//     $fetch<ListTimeResponse>(
-//       uri,
-//       {
-//         query: params,
-//         headers: {
-//           //Authorization: `JWT ${user?.token}`,
-//           Authorization: `Token ${TOKEN}`
-//         },
-//       }
-//     ).then((res) => {
-//         resolve(res.results)
-//     })
-//   })
-// }
+/**
+ * Get time tracks
+ * @returns Promise - the time traks or the error
+ */
+export const fetchAllTimeTracks = async () : Promise<ITimeTrack[]> => {
+    let endpoint = `/api/database/rows/table/${TIMETRACK_ID}/?user_field_names=true`
+    const params = 
+      {
+        page:1,
+        size:200,
+        order_by:'-UID'
+      }
+    // Use fetch with the runtime config values
+    const response =  await rawFetch<ListTimeResponse>(endpoint, 
+      {
+        method:"GET",
+        query : params
+      })
+    return response.results
+}
 

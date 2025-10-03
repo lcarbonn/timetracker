@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it, test } from 'vitest'
 import { fetchSignInUser } from '~/server/useFetch/useFetchAuth'
-import { fetchCreateTimeTrack, fetchDeleteTimeTrack, fetchTimeTrack, fetchTimeTracks, fetchTracksOfTheWeek, fetchTodayTimeTrack, fetchUpdateTimeTrack } from '~/server/useFetch/useFetchTimeTrack'
+import { fetchCreateTimeTrack, fetchDeleteTimeTrack, fetchTimeTrack, fetchTracksOfTheWeek, fetchTodayTimeTrack, fetchUpdateTimeTrack, fetchAllTimeTracks } from '~/server/useFetch/useFetchTimeTrack'
 
 function logTrack(tt:ITimeTrack) {
   console.log(tt.id,", ",tt.UID, ", ", tt.UID[0].name, ", ", tt.Start, ", ", tt.End, ', ', tt.Duration, ', ', tt.Year)
@@ -22,7 +22,7 @@ describe('baserow time tracker', () => {
 
   // count all times
   it('count all times form baserow', async () => {
-    const tts:ITimeTrack[] = await fetchTimeTracks()
+    const tts:ITimeTrack[] = await fetchAllTimeTracks()
     console.log("tts="+tts.length)
     tts.forEach(tt => {
       logTrack(tt)
