@@ -3,17 +3,14 @@ import { rawFetch } from "./baserrowFetch"
 
 const config = useRuntimeConfig()
 
-const URL = config.baserowApiUrl
 const PAUSETRACK_ID = config.public.tablePausetrackId
-const TOKEN = config.baserowToken
 
 /**
  * Get pause tracks
  * @returns Promise - the pause traks or the error
  */
-export const fetchPauseTracks = () : Promise<IPauseTrack[]> => {
-  return new Promise((resolve, reject) => {
-    const uri = `${URL}/api/database/rows/table/${PAUSETRACK_ID}/?user_field_names=true`
+export const fetchAllPauseTracks = async () : Promise<IPauseTrack[]> => {
+    const endpoint = `/api/database/rows/table/${PAUSETRACK_ID}/?user_field_names=true`
     const params = 
       {
         page:1,
@@ -21,19 +18,12 @@ export const fetchPauseTracks = () : Promise<IPauseTrack[]> => {
         order_by:'-TimeTrack'
       }
     // Use fetch with the runtime config values
-    $fetch<ListPauseResponse>(
-      uri,
+    const resutl = await rawFetch<ListPauseResponse>(endpoint,
       {
-        query: params,
-        headers: {
-          //Authorization: `JWT ${user?.token}`,
-          Authorization: `Token ${TOKEN}`
-        },
+        query: params
       }
-    ).then((res) => {
-        resolve(res.results)
-    })
-  })
+    )
+    return resutl.results
 }
 
 /**
@@ -41,21 +31,10 @@ export const fetchPauseTracks = () : Promise<IPauseTrack[]> => {
  * @param id of the track
  * @returns Promise - the pause trak or the error
  */
-export const fetchPauseTrack = (id:number) : Promise<IPauseTrack> => {
-  return new Promise((resolve, reject) => {
-    const uri = `${URL}/api/database/rows/table/${PAUSETRACK_ID}/${id}/?user_field_names=true`
-   // Use fetch with the runtime config values
-   $fetch<IPauseTrack>(
-     uri,
-     {
-       headers: {
-         Authorization: `Token ${TOKEN}`
-       },
-     }
-   ).then((data) => {
-        resolve(data)
-    })
-  })
+export const fetchPauseTrack = async (id:number) : Promise<IPauseTrack> => {
+  const endpoint = `/api/database/rows/table/${PAUSETRACK_ID}/${id}/?user_field_names=true`
+   const pause = rawFetch<IPauseTrack>(endpoint)
+   return pause
 }
 
 /**
@@ -63,24 +42,15 @@ export const fetchPauseTrack = (id:number) : Promise<IPauseTrack> => {
  * @param pauseTrack Create the pause track in db
  * @returns a Promise with the created pause track from db or the error
  */
-export const fetchCreatePauseTrack = (pauseTrack:IPauseTrackPost) : Promise<IPauseTrack> => {
-  return new Promise((resolve, reject) => {
-    const uri = `${URL}/api/database/rows/table/${PAUSETRACK_ID}/?user_field_names=true`
-   // Use fetch with the runtime config values
-   $fetch<IPauseTrack>(
-    uri,
+export const fetchCreatePauseTrack = async (pauseTrack:IPauseTrackPost) : Promise<IPauseTrack> => {
+  const endpoint = `/api/database/rows/table/${PAUSETRACK_ID}/?user_field_names=true`
+   const pause = await rawFetch<IPauseTrack>(endpoint,
      {
         method:"POST",
-        headers: {
-          Authorization: `Token ${TOKEN}`,
-          "Content-Type": "application/json"
-        },
         body:JSON.stringify(pauseTrack),
      },
-   ).then((res) => {
-        resolve(res)
-   })
-  })
+   )
+    return pause
 }
 
 /**
@@ -88,27 +58,18 @@ export const fetchCreatePauseTrack = (pauseTrack:IPauseTrackPost) : Promise<IPau
  * @param pauseTrack Update the pause track in db
  * @returns a Promise with the updated pause track from db or the error
  */
-export const fetchUpdatePauseTrack = (pauseTrack:IPauseTrack) : Promise<IPauseTrack> => {
-  return new Promise((resolve, reject) => {
-   const uri = `${URL}/api/database/rows/table/${PAUSETRACK_ID}/${pauseTrack.id}/?user_field_names=true`
-   // Use fetch with the runtime config values
-   $fetch<IPauseTrack>(
-    uri,
+export const fetchUpdatePauseTrack = async (pauseTrack:IPauseTrack) : Promise<IPauseTrack> => {
+   const endpoint = `/api/database/rows/table/${PAUSETRACK_ID}/${pauseTrack.id}/?user_field_names=true`
+   const pause = await rawFetch<IPauseTrack>(endpoint,
      {
         method:"PATCH",
-        headers: {
-          Authorization: `Token ${TOKEN}`,
-          "Content-Type": "application/json"
-        },
         body:{
           "Start":pauseTrack.Start,
           "End":pauseTrack.End
         }
      },
-   ).then((res) => {
-      resolve(res)
-   })
-  })
+    )
+    return pause
 }
 
 /**
@@ -116,22 +77,14 @@ export const fetchUpdatePauseTrack = (pauseTrack:IPauseTrack) : Promise<IPauseTr
  * @param id of the track
  * @returns a Promise with the deleted pause track from db or the error
  */
-export const fetchDeletePauseTrack = (id:number) : Promise<number> => {
-  return new Promise((resolve, reject) => {
-   const uri = `${URL}/api/database/rows/table/${PAUSETRACK_ID}/${id}/`
-   // Use fetch with the runtime config values
-   $fetch(
-    uri,
+export const fetchDeletePauseTrack = async (id:number) : Promise<number> => {
+   const endpoint = `/api/database/rows/table/${PAUSETRACK_ID}/${id}/`
+   await rawFetch(endpoint,
      {
         method:"DELETE",
-        headers: {
-          Authorization: `Token ${TOKEN}`,
-        }
      },
-   ).then(() => {
-    resolve(id)
-   })
-  })
+   )
+   return id
 }
 
 /**

@@ -5,30 +5,18 @@ import { fetchPausesOfTrack } from "./useFetchPauseTrack";
 
 const config = useRuntimeConfig()
 
-const BASEROW_URL = config.baserowApiUrl
 const TIMETRACK_ID = config.public.tableTimetrackId
-const TOKEN = config.baserowToken
 
 /**
  * Get one time track
  * @param id of the track
  * @returns Promise - the time traks or the error
  */
-export const fetchTimeTrack = (id:number) : Promise<ITimeTrack> => {
-  return new Promise((resolve, reject) => {
-    const uri = `${BASEROW_URL}/api/database/rows/table/${TIMETRACK_ID}/${id}/?user_field_names=true`
+export const fetchTimeTrack = async (id:number) : Promise<ITimeTrack> => {
+    const endpoint = `/api/database/rows/table/${TIMETRACK_ID}/${id}/?user_field_names=true`
    // Use fetch with the runtime config values
-   $fetch<ITimeTrack>(
-     uri,
-     {
-       headers: {
-         Authorization: `Token ${TOKEN}`
-       },
-     }
-   ).then((data) => {
-        resolve(data)
-    })
-  })
+   const track = await rawFetch<ITimeTrack>( endpoint )
+   return track
 }
 
 /**
@@ -41,10 +29,6 @@ export const fetchCreateTimeTrack = async (timeTrack:ITimeTrack) : Promise<ITime
     const track =  await rawFetch<ITimeTrack>(endpoint, 
      {
         method:"POST",
-        headers: {
-          Authorization: `Token ${TOKEN}`,
-          "Content-Type": "application/json"
-        },
         body:JSON.stringify(timeTrack),
      },
    )
@@ -123,16 +107,6 @@ export const fetchDeleteTimeTrack = async (id:number) : Promise<number> => {
         method:"DELETE",
       })
     return id
-  //  const uri = `${BASEROW_URL}/api/database/rows/table/${TIMETRACK_ID}/${id}/`
-  //  // Use fetch with the runtime config values
-  //  $fetch(
-  //   uri,
-  //    {
-  //       method:"DELETE",
-  //       headers: {
-  //         Authorization: `Token ${TOKEN}`,
-  //       }
-  //    },
 }
 
 /**

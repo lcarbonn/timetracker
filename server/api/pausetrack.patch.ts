@@ -1,15 +1,10 @@
 import { IPauseTrack } from "~/utils/tablePauseTrack"
 import { fetchUpdatePauseTrack } from "../useFetch/useFetchPauseTrack"
+import { baserowExecute } from "../useFetch/baserrowFetch"
 
 export default defineEventHandler(async (event) => {
-  try {
-    const { user } = await requireUserSession(event)
     const body = await readBody(event)
 
-    const pauseTrack = await fetchUpdatePauseTrack(body as IPauseTrack)
-    
-    return (pauseTrack)
-  } catch (error) {
-    return (error)    
-  }
+    return await baserowExecute(event, fetchUpdatePauseTrack, body as IPauseTrack)
+
 })

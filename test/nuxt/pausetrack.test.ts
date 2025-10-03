@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it, test } from 'vitest'
 import { setAccessToken } from '~/server/useFetch/baserrowFetch'
 import { fetchSignInUser } from '~/server/useFetch/useFetchAuth'
-import { fetchCreatePauseTrack, fetchDeletePauseTrack, fetchPauseTrack, fetchPauseTracks, fetchPausesOfTrack, fetchUpdatePauseTrack } from '~/server/useFetch/useFetchPauseTrack'
+import { fetchCreatePauseTrack, fetchDeletePauseTrack, fetchPauseTrack, fetchAllPauseTracks, fetchPausesOfTrack, fetchUpdatePauseTrack } from '~/server/useFetch/useFetchPauseTrack'
 import { fetchCreateTimeTrack, fetchDeleteTimeTrack } from '~/server/useFetch/useFetchTimeTrack'
 
 function logPause(pt:IPauseTrack) {
@@ -43,7 +43,7 @@ describe('baserow pause tracker', () => {
 
   // count all pauses
   it('count all pauses form baserow', async () => {
-    const pts:IPauseTrack[] = await fetchPauseTracks()
+    const pts:IPauseTrack[] = await fetchAllPauseTracks()
     console.log("tts="+pts.length)
     pts.forEach(tt => {
       logPause(tt)

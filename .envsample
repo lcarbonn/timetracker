@@ -8,7 +8,6 @@ NUXT_PUBLIC_WORKSPACE_ID = 'workspace id'
 
 # private keys
 NUXT_BASEROW_API_URL = 'https://api.baserow.io'
-NUXT_BASEROW_TOKEN = 'your baserow token'
 NUXT_SESSION_PASSWORD = "a-random-password-with-at-least-32-characters"
 
 # for tests only
