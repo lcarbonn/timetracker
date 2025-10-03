@@ -89,27 +89,33 @@ export const fetchCreateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack>
  * @param timeTrack Update the time track in db
  * @returns a Promise with the updated time track from db or the error
  */
-export const fetchUpdateTimeTrack = (timeTrack:ITimeTrack) : Promise<ITimeTrack> => {
-  return new Promise((resolve, reject) => {
-   const uri = `${BASEROW_URL}/api/database/rows/table/${TIMETRACK_ID}/${timeTrack.id}/?user_field_names=true`
-   // Use fetch with the runtime config values
-   $fetch<ITimeTrack>(
-    uri,
-     {
+export const fetchUpdateTimeTrack = async (timeTrack:ITimeTrack) : Promise<ITimeTrack> => {
+    const endpoint = `/api/database/rows/table/${TIMETRACK_ID}/${timeTrack.id}/?user_field_names=true`
+    const track =  await rawFetch<ITimeTrack>(endpoint, 
+      {
         method:"PATCH",
-        headers: {
-          Authorization: `Token ${TOKEN}`,
-          "Content-Type": "application/json"
-        },
-        body:{
+        body : {
           "Start":timeTrack.Start,
           "End":timeTrack.End
         }
-     },
-   ).then((res) => {
-      resolve(res)
-   })
-  })
+      })
+    return track
+
+  //  const uri = `${BASEROW_URL}/api/database/rows/table/${TIMETRACK_ID}/${timeTrack.id}/?user_field_names=true`
+  //  // Use fetch with the runtime config values
+  //  $fetch<ITimeTrack>(
+  //   uri,
+  //    {
+  //       method:"PATCH",
+  //       headers: {
+  //         Authorization: `Token ${TOKEN}`,
+  //         "Content-Type": "application/json"
+  //       },
+  //       body:{
+  //         "Start":timeTrack.Start,
+  //         "End":timeTrack.End
+  //       }
+  //    },
 }
 
 /**
@@ -214,8 +220,8 @@ export const fetchTimeTracksWeekUid = async (uid:number, week:number) : Promise<
       method:"GET",
       query : params
     })
-    if(response?.results) tracks = response.results
-   return tracks
+  if(response?.results) tracks = response.results
+  return tracks
 }
 
 /**

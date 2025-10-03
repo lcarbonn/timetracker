@@ -59,12 +59,12 @@
     if(props.tracks) {
       props.tracks.forEach(track => {
         // add the track to the calendar
-        events.push( trackToEvent(track, false))
+        events.push( trackToEvent(track, true))
         // add the pauses to the calendar
         let i = 1
         const length = track.pauses?.length
         track.pauses?.forEach(pause => {
-          events.push( pauseToEvent(pause, false))
+          events.push( pauseToEvent(pause, true))
           i++
         });        
       });
