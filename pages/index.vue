@@ -13,7 +13,7 @@
         </BCardText>
         <BCardText v-if="todayTrack && !todayTrack.End"> Timer : <b>{{ dayTimer }}</b></BCardText>
         <BButton v-if="todayTrack && !todayTrack.End && !currentPause" size="lg" class="mx-1" @click="startPause" variant="primary">Have a break</BButton>
-        <BButton v-if="todayTrack && !todayTrack.End && currentPause && !currentPause.End" size="lg" class="mx-1" @click="endPause" variant="primary">Back to work</BButton>
+        <BButton v-if="todayTrack && currentPause && !currentPause.End" size="lg" class="mx-1" @click="endPause" variant="primary">Back to work</BButton>
         <BCardText v-if="currentPause && !currentPause.End">  Pause started at : <b>{{ currentPauseStartTime }}</b></BCardText>
         <BCardText v-if="currentPause && !currentPause.End"> Duration : <b>{{ pauseTimer }}</b></BCardText>
       </BCard>
@@ -137,6 +137,7 @@
     if(todayTrack.value) {
       closeTimeTrack(todayTrack.value.id)
       .then((tt) => {
+        endPause()
         if(tt.End) messageToSnack("Day end at "+new Date(tt.End).toLocaleString())
       })
     }
