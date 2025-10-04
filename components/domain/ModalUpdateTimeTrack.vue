@@ -3,7 +3,7 @@
       <BModal
       v-model="modalUpdateTrack.show"
       id="modal-update"
-      title="Update event"
+      :title="'Update ' + title"
       header-bg-variant="primary"
       size="lg"
       cancel-title="Cancel"
@@ -51,8 +51,8 @@
         <BButton v-if="isRestart && isEnded"  class="mx-1" @click="restartTrack()" size="sm" v-b-tooltip.focus.top="'Restart this event'"><Reset/></BButton>
         <BButton v-if="!isEnded"  class="mx-1" @click="closeTrack()" size="sm" v-b-tooltip.focus.top="'End this event'">Close this event</BButton>
       </BModal>
-      <BModal v-model="modalDelete" title="Delete event" @ok="confirmDelete"> Really ? </BModal>
-      <BModal v-model="modalRestart" title="Restart event" @ok="confirmRestart"> Really ? </BModal>
+      <BModal v-model="modalDelete" :title="'Delete ' +title" @ok="confirmDelete"> Really ? </BModal>
+      <BModal v-model="modalRestart" :title="'Restart ' +title" @ok="confirmRestart"> Really ? </BModal>
   </div>
 </template>
 
@@ -61,7 +61,6 @@
   // import datepicker vue component
   import VueDatePicker from '@vuepic/vue-datepicker'
   import '@vuepic/vue-datepicker/dist/main.css'
-  import { fr } from 'date-fns/locale';
 
   // icons
   import Trash from '~icons/bi/trash'
@@ -80,7 +79,7 @@
   })
 
   // emits declaration
-  const emit = defineEmits(['updateTrack', 'deleteTrack', 'closeTrack'])
+  const emit = defineEmits(['updateTrack', 'deleteTrack', 'closeTrack', 'restartTrack'])
 
   // local refs
   const startDateForm = ref(props.timeTrack.start)
@@ -100,6 +99,9 @@
   })
 
   // computed properties
+  const title = computed(() => {
+    return props.timeTrack.extendedProps.isTrack?"Day":"Pause"
+  })
   const startDateState = computed(() => {
     return startDateForm.value != null ? true:false
   })
@@ -140,17 +142,16 @@
   const confirmRestart = () => {
     props.modalUpdateTrack.show = false
     const start = new Date(startDateForm.value)
-    emit('updateTrack', props.timeTrack.id, start, null)
+    emit('restartTrack', props.timeTrack.id, start, null)
   }
   // ask for close track
   const closeTrack = () => {
-    // // modalRestart.value = !modalRestart.value
     endDateForm.value = new Date()
     isEnded.value = true
     isCloseAsked.value = true
   }
   const cancel = () => {
-    // // endDateForm.value = props.timeTrack.end
+    // reset values
     isEnded.value = props.timeTrack.extendedProps.isEnded
     isCloseAsked.value = false
   }

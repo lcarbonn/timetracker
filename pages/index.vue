@@ -17,7 +17,12 @@
         <BCardText v-if="currentPause && !currentPause.End">  Pause started at : <b>{{ currentPauseStartTime }}</b></BCardText>
         <BCardText v-if="currentPause && !currentPause.End"> Duration : <b>{{ pauseTimer }}</b></BCardText>
       </BCard>
-      <DomainCalendar v-if="tracks" :tracks="tracks" @update-track="updateTrack" @delete-track="deleteTrack"/>
+      <DomainCalendar v-if="tracks" 
+        :tracks="tracks"
+        @update-track="updateTrack"
+        @close-track="closeTrack"
+        @delete-track="deleteTrack"
+        @restart-track="restartTrack"/>
       <BModal v-model="modalRestartDay" title="Restart day" @ok="confirmRestartDay"> Really ? </BModal>
     </div>
 </template>
@@ -172,9 +177,23 @@
 
   // confirm restart received
   const confirmRestartDay = () => {
-    if(selectedTrack.value) reopenTimeTrack(selectedTrack.value.id)
+    reopenTimeTrack(selectedTrack.value.id)
   }
 
+  const restartTrack = (track:any) => {
+    updateTrack(track)
+    // if pause reopen, reopen day also
+    if(!track.isTrack && todayTrack.value) { 
+      reopenTimeTrack(todayTrack.value.id)
+    }
+  }
+  const closeTrack = (track:any) => {
+    updateTrack(track)
+    // if day closed, the clause current pause also
+    if(track.isTrack && currentPause.value) { 
+      closePauseTrack(currentPause.value.id)
+    }
+  }
   const updateTrack = (track:any) => {
     // alert(track.id + " was dropped on " + track.start.toISOString() + ', isTrack:'+track.isTrack)
     if(track.isTrack) {

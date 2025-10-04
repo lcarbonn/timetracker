@@ -7,7 +7,8 @@
         :time-track="selectedEvent"
         @update-track="updateTrack"
         @delete-track="deleteTrack"
-        @close-track="closeTrack"></LazyDomainModalUpdateTimeTrack>
+        @close-track="closeTrack"
+        @restart-track="restartTrack"></LazyDomainModalUpdateTimeTrack>
     </div>
 </template>
 
@@ -34,7 +35,7 @@
   })
 
   // emits declaration
-  const emit = defineEmits(['navToWeek', 'updateTrack', 'deleteTrack'])
+  const emit = defineEmits(['navToWeek', 'updateTrack', 'closeTrack', 'deleteTrack', 'restartTrack'])
 
   const fullCalendar = ref()
   const selectedEvent = ref()
@@ -161,6 +162,15 @@
     }
     emit('updateTrack', track)
   }
+  const restartTrack = (id:string, start:Date, end:Date) => {
+    const track = {
+      id:id,
+      start:start,
+      end:selectedEvent.value.extendedProps.isEnded?end:null,
+      isTrack:selectedEvent.value.extendedProps.isTrack
+    }
+    emit('restartTrack', track)
+  }
   const closeTrack = (id:string, start:Date, end:Date) => {
     const track = {
       id:id,
@@ -168,7 +178,7 @@
       end:end,
       isTrack:selectedEvent.value.extendedProps.isTrack
     }
-    emit('updateTrack', track)
+    emit('closeTrack', track)
   }
   const deleteTrack = (id:string) => {
     const track = {

@@ -5,7 +5,14 @@
           Effective Duration : <b>{{ effectiveDuration }}</b>
         </BCardText>
       </BCard>
-      <DomainCalendar v-if="tracks" is-week-grid :selectedWeek="selectedWeek" :tracks="tracks" @nav-to-week="navToWeek" @update-track="updateTrack" @delete-track="deleteTrack"/>
+      <DomainCalendar v-if="tracks" 
+        is-week-grid 
+        :selectedWeek="selectedWeek" 
+        :tracks="tracks" 
+        @nav-to-week="navToWeek"
+        @update-track="updateTrack"
+        @close-track="closeTrack"
+        @delete-track="deleteTrack"/>
     </div>
 </template>
 
@@ -53,6 +60,10 @@
     selectedWeek.value = newWeek
     await reloadTracks()
     if(data.value) tracks.value = data.value as ITimeTrack[]
+  }
+
+  const closeTrack = (track:any) => {
+    updateTrack(track)
   }
 
   // update track
