@@ -252,6 +252,10 @@ export const refreshPausesInStateTrack = (pauses:IPauseTrack[]) => {
     const track = useStateTrack()
     if(!track.value) return
     track.value.pauses = pauses
+    const last = pauses.length -1
+    if(last!=-1 && pauses[last].End==null) {
+      useStatePause().value = pauses[last]
+    } 
 }
 
 /**
