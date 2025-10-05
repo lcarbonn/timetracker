@@ -60,12 +60,10 @@
   const { data } = await useAsyncData('fetchTrack', () => getLastOpenTrack(uid))
   if(data.value) {
       todayTrack.value = data.value as ITimeTrack
-      const pauses = todayTrack.value.pauses
-      if(pauses) {
-        const last = pauses.length -1
-        if(last!=-1 && pauses[last].End==null) {
-          useStatePause().value = pauses[last]
-        }      
+      const timeId = todayTrack.value.id
+      if(timeId) {
+        const pauses = await getPausesOfTrack(timeId)
+        if(pauses) refreshPausesInStateTrack(pauses)
       }
   }
 

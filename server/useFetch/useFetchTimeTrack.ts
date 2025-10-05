@@ -88,10 +88,10 @@ export const fetchTodayTrack = async (uid:number) : Promise<ITimeTrack> => {
       })
     // get associated pauses
     const track = response.results[0]
-    if(track) {
-      const pauses = await fetchPausesOfTrack(track.id)
-      track.pauses = pauses
-    }
+    // if(track) {
+    //   const pauses = await fetchPausesOfTrack(track.id)
+    //   track.pauses = pauses
+    // }
     return track
 }
 
@@ -146,11 +146,11 @@ export const fetchTracksOfTheWeek = async (uid:number, week:number) : Promise<IT
     })
   if(response?.results) {
     tracks = response.results
-    for (let index = 0; index < tracks.length; index++) {
-      const track = tracks[index];
-      const pauses = await fetchPausesOfTrack(track.id)
-      track.pauses = pauses
-    }
+    // for (let index = 0; index < tracks.length; index++) {
+    //   const track = tracks[index];
+    //   const pauses = await fetchPausesOfTrack(track.id)
+    //   track.pauses = pauses
+    // }
   }
   return tracks
 }
@@ -180,30 +180,6 @@ export const fetchLastOpenTrack = async (uid:number) : Promise<ITimeTrack> => {
               ]
               }
             ]
-
-          // filter_type:"AND",
-          // filters: [
-          //   {
-          //     field:"UID",
-          //     type: "multiple_collaborators_has",
-          //     value: uid
-          //   },
-          //   groups: [
-          //     filter_type:"OR",
-          //     filters: [
-          //       {
-          //         field:"End",
-          //         type: "empty",
-          //         value: ""
-          //       },
-          //       {
-          //         field:"End",
-          //         type: "date_is",
-          //         value: "Europe/Paris??today"
-          //       },
-          //     ],
-          //   ]
-          // ]
         }
       }
     const response =  await rawFetch<ListTimeResponse>(endpoint, 
@@ -213,11 +189,10 @@ export const fetchLastOpenTrack = async (uid:number) : Promise<ITimeTrack> => {
       })
     // get associated pauses
     const track = response.results[0]
-    if(track) {
-      const pauses = await fetchPausesOfTrack(track.id)
-      track.pauses = pauses
-    }
-
+    // if(track) {
+    //   const pauses = await fetchPausesOfTrack(track.id)
+    //   track.pauses = pauses
+    // }
     return track
 }
 

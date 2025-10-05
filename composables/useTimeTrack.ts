@@ -12,6 +12,13 @@ export const getTracksOfTheWeek = (uid:number, week:number) :Promise<ITimeTrack[
         uid:uid,
         week:week
       },
+      onResponse ({response}) {
+        const tracks:ITimeTrack[] = response._data
+        // tracks?.forEach(track => {
+        //   getPausesOfTrack(track.id)
+        // });
+      },
+
       onResponseError ({ response}) {
         // Handle the response errors
         console.error("❌ Fetch failed:", response.statusText)
@@ -29,6 +36,12 @@ export const getTrackOfTheDay = async (uid:number) :Promise<ITimeTrack>=> {
       query: {
         uid:uid
       },
+      onResponse ({response}) {
+        const track:ITimeTrack = response._data
+        // if(track) {
+        //   getPausesOfTrack(track.id)
+        // }
+      },
       onResponseError ({ response}) {
         // Handle the response errors
         console.error("❌ Fetch failed:", response.statusText)
@@ -45,6 +58,12 @@ export const getLastOpenTrack = async (uid:number) :Promise<ITimeTrack>=> {
     const result = $fetch<ITimeTrack>('/api/lastopentrack', {
       query: {
         uid:uid
+      },
+      onResponse ({response}) {
+        const track:ITimeTrack = response._data
+        // if(track) {
+        //   getPausesOfTrack(track.id)
+        // }
       },
       onResponseError ({ response}) {
         // Handle the response errors

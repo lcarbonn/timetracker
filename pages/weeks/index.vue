@@ -37,8 +37,35 @@
   {
       watch:[selectedWeek]
   })
-  if(data.value) tracks.value = data.value as ITimeTrack[]
-  
+  if(data.value) {
+    tracks.value = data.value as ITimeTrack[]
+    tracks.value.forEach(async track => {
+      const id = track.id
+      // const { data:pauses } = await useAsyncData('fetchPauses', () => getPausesOfTrack(id))
+        const pauses = await getPausesOfTrack(track.id)
+        if(pauses) {
+          refreshPausesInStateTrack(pauses)
+          refreshPausesInTracksOfTheWeek(id, pauses)
+        }
+    });
+  }
+  // methods
+  // navigation to week
+  const navToWeek = async (newWeek:number) => {
+    selectedWeek.value = newWeek
+    await reloadTracks()
+    if(data.value) {
+      tracks.value = data.value as ITimeTrack[]
+      tracks.value.forEach(async track => {
+          const pauses = await getPausesOfTrack(track.id)
+          if(pauses) {
+            refreshPausesInStateTrack(pauses)
+            refreshPausesInTracksOfTheWeek(track.id, pauses)
+          }
+      });
+    }
+  }
+
   // computed properties
   // effectiveDuration calculated instead of filed form base
   const effectiveDuration = computed(() => {
@@ -53,14 +80,6 @@
     }
     return formatDuration(efd)
   })
-
-  // methods
-  // navigation to week
-  const navToWeek = async (newWeek:number) => {
-    selectedWeek.value = newWeek
-    await reloadTracks()
-    if(data.value) tracks.value = data.value as ITimeTrack[]
-  }
 
   const closeTrack = (track:any) => {
     updateTrack(track)

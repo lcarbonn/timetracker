@@ -1,4 +1,26 @@
-import { track } from "happy-dom/lib/PropertySymbol.js"
+/**
+ * get pause tracks for the time track id
+ * @param timeId
+ */
+export const getPausesOfTrack = async (timeId:number) :Promise<IPauseTrack[]> => {
+    const result = await $fetch<IPauseTrack[]>('/api/pausetracks', {
+      query: {
+        timeId:timeId,
+      },
+      onResponse ({ response }) {
+        // Handle the response errors
+        // const pauses = response._data
+        // refreshPausesInStateTrack(pauses)
+        // refreshPausesInTracksOfTheWeek(timeId, pauses)
+      },
+      onResponseError ({ response}) {
+        // Handle the response errors
+        console.error("❌ Fetch failed:", response.statusText)
+        errorToSnack("Error get pauses of track", response.statusText)
+      }
+    })
+    return result
+}
 
 /**
  * Open a new pause track for the time
@@ -153,6 +175,7 @@ export const refreshPauseInTracksOfTheWeek = (pause:IPauseTrack) => {
     }
   });
 }
+
 /**
  * Delete the pause from time tracks of the week
  * @param id , the pause id
@@ -219,4 +242,28 @@ const refreshCurrentStatePause = (pause:IPauseTrack) => {
 const deleteCurrentStatePause = (id:number) => {
   const currentPause = useStatePause().value
   if(currentPause?.id == id) useStatePause().value = undefined
+}
+
+/**
+ * Refresh pauses in the current time track
+ * @param pauses, the pauses to refresh
+ */
+export const refreshPausesInStateTrack = (pauses:IPauseTrack[]) => {
+    const track = useStateTrack()
+    if(!track.value) return
+    track.value.pauses = pauses
+}
+
+/**
+ * Refresh pauses in the tracks of the week
+ * @param pauses , the pauses to refresh
+ */
+export const refreshPausesInTracksOfTheWeek = (timeId:number, pauses:IPauseTrack[]) => {
+  if(!useStateTracksOfTheWeek().value) return
+  const tracks = useStateTracksOfTheWeek().value
+  tracks.forEach(track => {
+    if(track.id == timeId ){
+      track.pauses = pauses
+    }
+ });
 }
