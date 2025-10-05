@@ -12,6 +12,7 @@ export const trackToEvent = (track:ITimeTrack, isRestart:boolean) :object => {
           id:track.id,
           isTrack:true,
           isEnded:track.End?true:false,
+          durationEditable:track.End?true:false,
           isRestart:isRestart
         }
         return event
@@ -30,6 +31,7 @@ export const pauseToEvent = (pause:IPauseTrack, isRestart:boolean) :object => {
         id:pause.id,
         isTrack:false,
         isEnded:pause.End?true:false,
+        durationEditable:pause.End?true:false,
         isRestart:isRestart
     }
     return event
