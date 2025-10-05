@@ -235,8 +235,8 @@ export const deletePauseFromStateTrack = (id:number) => {
 
 const refreshCurrentStatePause = (pause:IPauseTrack) => {
   const currentPause = useStatePause().value
-  if(currentPause?.id == pause.id) useStatePause().value = pause
-  if(!pause.End) useStatePause().value = pause
+  if(currentPause?.id == pause.id) useStatePause().value = Object.assign([], pause)
+  if(!pause.End) useStatePause().value = Object.assign([], pause)
 }
 
 const deleteCurrentStatePause = (id:number) => {

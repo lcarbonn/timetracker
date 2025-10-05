@@ -202,7 +202,6 @@
     } else {
       updatePauseTrack(track.id, track.start, track.end )
       .then((pt) => {
-        // refreshPauseInTimeTrack(pt)
         messageToSnack("Pause changed to "+new Date(pt.Start).toLocaleString())
       })
     }
