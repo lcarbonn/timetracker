@@ -193,8 +193,14 @@ export const deleteTimeTrack = async (id:number) :Promise<void> => {
  */
 export const refreshStateTrack = (track:ITimeTrack) => {
     const stateTrack = useStateTrack()
-    if(stateTrack.value?.pauses) track.pauses = stateTrack.value.pauses
-    stateTrack.value = Object.assign([], track)
+    if(!stateTrack.value) return
+    const now = new Date(new Date().toDateString())
+    const end = track.End? new Date(new Date(track.End).toDateString()):null
+    if(end && (end.getTime() != now.getTime())) stateTrack.value = undefined
+    else {
+      if(stateTrack.value.pauses) track.pauses = stateTrack.value.pauses
+      stateTrack.value = Object.assign([], track)
+    }
 }
 /**
  * Refresh the state of tracks with the track

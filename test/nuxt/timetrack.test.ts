@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it, test } from 'vitest'
 import { setAccessToken } from '~/server/useFetch/baserrowFetch'
 import { fetchSignInUser } from '~/server/useFetch/useFetchAuth'
-import { fetchCreateTimeTrack, fetchDeleteTimeTrack, fetchTimeTrack, fetchTracksOfTheWeek, fetchTodayTrack, fetchUpdateTimeTrack, fetchAllTimeTracks } from '~/server/useFetch/useFetchTimeTrack'
+import { fetchCreateTimeTrack, fetchDeleteTimeTrack, fetchTimeTrack, fetchTracksOfTheWeek, fetchTodayTrack, fetchUpdateTimeTrack, fetchAllTimeTracks, fetchLastOpenTrack } from '~/server/useFetch/useFetchTimeTrack'
 
 function logTrack(tt:ITimeTrack) {
   console.log(tt.id,", ",tt.UID, ", ", tt.UID[0].name, ", ", tt.Start, ", ", tt.End, ', ', tt.Duration, ', ', tt.Year)
@@ -69,6 +69,14 @@ describe('baserow time tracker', () => {
   // get  time track of the day
   it('get time track of the day for an uid', async () => {
     const tt:ITimeTrack = await fetchTodayTrack(user_id)
+    logTrack(tt)
+    expect(tt.id).toEqual(TEST_TT.id)
+    expect(tt.End).toBeNull()
+  })
+
+  // get  last open track
+  it('get last open track', async () => {
+    const tt:ITimeTrack = await fetchLastOpenTrack(user_id)
     logTrack(tt)
     expect(tt.id).toEqual(TEST_TT.id)
     expect(tt.End).toBeNull()
