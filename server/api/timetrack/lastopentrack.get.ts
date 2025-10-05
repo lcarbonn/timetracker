@@ -1,5 +1,5 @@
-import { baserowExecute } from '../useFetch/baserrowFetch'
-import { fetchLastOpenTrack } from '../useFetch/useFetchTimeTrack'
+import { baserowExecute } from "~/server/useFetch/baserrowFetch"
+import { fetchLastOpenTrack } from "~/server/useFetch/useFetchTimeTrack"
 
 export default defineEventHandler(async (event) => {
     const query = getQuery(event)

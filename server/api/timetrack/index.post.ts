@@ -1,6 +1,6 @@
 import { ITimeTrack } from '~/utils/tableTimeTrack'
-import { fetchCreateTimeTrack} from '../useFetch/useFetchTimeTrack'
-import { baserowExecute } from '../useFetch/baserrowFetch'
+import { fetchCreateTimeTrack} from '~/server/useFetch/useFetchTimeTrack'
+import { baserowExecute } from '~/server/useFetch/baserrowFetch'
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event)

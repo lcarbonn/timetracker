@@ -1,5 +1,3 @@
-import { state } from "happy-dom/lib/PropertySymbol.js"
-
 /**
  * Get tracks of the week for the user
  * @param uid 
@@ -7,7 +5,7 @@ import { state } from "happy-dom/lib/PropertySymbol.js"
  * @returns 
  */
 export const getTracksOfTheWeek = (uid:number, week:number) :Promise<ITimeTrack[]> => {
-    const result = $fetch<ITimeTrack[]>('/api/timetracks', {
+    const result = $fetch<ITimeTrack[]>('/api/timetrack/timetracks', {
       query: {
         uid:uid,
         week:week
@@ -32,7 +30,7 @@ export const getTracksOfTheWeek = (uid:number, week:number) :Promise<ITimeTrack[
  * Get the today time track
  */
 export const getTrackOfTheDay = async (uid:number) :Promise<ITimeTrack>=> {
-    const result = $fetch<ITimeTrack>('/api/todaytrack', {
+    const result = $fetch<ITimeTrack>('/api/timetrack/todaytrack', {
       query: {
         uid:uid
       },
@@ -55,7 +53,7 @@ export const getTrackOfTheDay = async (uid:number) :Promise<ITimeTrack>=> {
  * Get the last open track
  */
 export const getLastOpenTrack = async (uid:number) :Promise<ITimeTrack>=> {
-    const result = $fetch<ITimeTrack>('/api/lastopentrack', {
+    const result = $fetch<ITimeTrack>('/api/timetrack/lastopentrack', {
       query: {
         uid:uid
       },

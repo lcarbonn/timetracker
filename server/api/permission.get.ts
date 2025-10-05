@@ -1,5 +1,4 @@
-import { baserowExecute } from "../useFetch/baserrowFetch"
-import { fetchWorkspacePermisssions } from "../useFetch/useFetchWorkspace"
+import { fetchWorkspacePermisssions } from "~/server/useFetch/useFetchWorkspace"
 
 export default defineEventHandler(async (event) => {
     // const { user } = await requireUserSession(event)

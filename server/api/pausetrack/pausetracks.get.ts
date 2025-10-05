@@ -1,5 +1,5 @@
-import { baserowExecute } from "../useFetch/baserrowFetch"
-import { fetchPausesOfTrack } from "../useFetch/useFetchPauseTrack"
+import { baserowExecute } from "~/server/useFetch/baserrowFetch"
+import { fetchPausesOfTrack } from "~/server/useFetch/useFetchPauseTrack"
 
 export default defineEventHandler(async (event) => {
     const query = getQuery(event)

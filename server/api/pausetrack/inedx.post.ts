@@ -1,6 +1,6 @@
 import { IPauseTrackPost } from "~/utils/tablePauseTrack"
-import { fetchCreatePauseTrack } from "../useFetch/useFetchPauseTrack"
-import { baserowExecute } from "../useFetch/baserrowFetch"
+import { fetchCreatePauseTrack } from "~/server/useFetch/useFetchPauseTrack"
+import { baserowExecute } from "~/server/useFetch/baserrowFetch"
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event)

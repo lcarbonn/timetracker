@@ -3,7 +3,7 @@
  * @param timeId
  */
 export const getPausesOfTrack = async (timeId:number) :Promise<IPauseTrack[]> => {
-    const result = await $fetch<IPauseTrack[]>('/api/pausetracks', {
+    const result = await $fetch<IPauseTrack[]>('/api/pausetrack/pausetracks', {
       query: {
         timeId:timeId,
       },
