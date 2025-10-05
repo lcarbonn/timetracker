@@ -68,13 +68,15 @@
   const signOut = async () => {
     show.value = false
     // signOutUser()
+    useStatePause().value = undefined
+    useStateTrack().value = undefined
     await clearSession()
     await navigateTo('/login')
   }
 
   // methods
   const exportCsv = () => {
-    const tracks = useTimeTracksOfTheWeek().value
+    const tracks = useStateTracksOfTheWeek().value
     if(tracks) exportCSVFile(tracks)
   }
 
