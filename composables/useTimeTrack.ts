@@ -289,3 +289,19 @@ export const deleteTrackFromTracksOfTheWeek = (id:number) => {
     }
 }
 
+export const getTracksForExport = async (uid:number) :Promise<globalThis.ITimeTrack[]> => {
+    const tracksOfTheWeek = useStateTracksOfTheWeek().value
+    let tracks = tracksOfTheWeek
+    if(!tracks) {
+      const now = new Date()
+      const currentWeek:number = getWeekNumber(now)
+      // load tracks and listen to week change
+      if(uid) {
+        const { data } = await useAsyncData('fetchTracks', () => getTracksOfTheWeek(uid, currentWeek))
+        if(data.value) {
+          tracks = data.value
+        }
+      }
+    }
+    return tracks
+}

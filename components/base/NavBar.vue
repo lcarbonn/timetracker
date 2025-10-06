@@ -38,6 +38,7 @@
   const { loggedIn, user, clear: clearSession } = useUserSession()
   const config = useRuntimeConfig()
 
+import { getTracksForExport } from '~/composables/useTimeTrack'
   // icons
   import Person from '~icons/bi/person'
   
@@ -76,17 +77,9 @@
 
   // methods
   const exportCsv = async () => {
-    const tracksOfTheWeek = useStateTracksOfTheWeek().value
-    let tracks = tracksOfTheWeek
-    if(!tracks) {
-      const now = new Date()
-      const currentWeek:number = getWeekNumber(now)
-      // load tracks and listen to week change
-      const { data } = await useAsyncData('fetchTracks', () => getTracksOfTheWeek(uid, selectedWeek.value))
-      if(data.value) {
-        tracks = data.value
-      }
-    }
+    const uid = user.value?.id
+    if(!uid) return
+    const tracks = await getTracksForExport(uid)
     exportCSVFile(tracks)
   }
 
