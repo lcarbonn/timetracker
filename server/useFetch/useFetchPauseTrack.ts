@@ -43,7 +43,6 @@ export const fetchPauseTrack = async (id:number) : Promise<IPauseTrack> => {
  * @returns a Promise with the created pause track from db or the error
  */
 export const fetchCreatePauseTrack = async (pauseTrack:IPauseTrackPost) : Promise<IPauseTrack> => {
-  console.log("Pausetrack:", JSON.stringify(pauseTrack))
   const endpoint = `/api/database/rows/table/${PAUSETRACK_ID}/?user_field_names=true`
    const pause = await rawFetch<IPauseTrack>(endpoint,
      {

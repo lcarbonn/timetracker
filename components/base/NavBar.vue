@@ -75,9 +75,19 @@
   }
 
   // methods
-  const exportCsv = () => {
-    const tracks = useStateTracksOfTheWeek().value
-    if(tracks) exportCSVFile(tracks)
+  const exportCsv = async () => {
+    const tracksOfTheWeek = useStateTracksOfTheWeek().value
+    let tracks = tracksOfTheWeek
+    if(!tracks) {
+      const now = new Date()
+      const currentWeek:number = getWeekNumber(now)
+      // load tracks and listen to week change
+      const { data } = await useAsyncData('fetchTracks', () => getTracksOfTheWeek(uid, selectedWeek.value))
+      if(data.value) {
+        tracks = data.value
+      }
+    }
+    exportCSVFile(tracks)
   }
 
 </script>

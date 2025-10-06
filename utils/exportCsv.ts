@@ -1,18 +1,3 @@
-// export const convertPlayers = (separator:string, lovingPlayers:String[], players:IPlayer[]) => {
-//     const comma = separator==',' ? ';' : separator
-//     let list = ""
-//     let i=0
-//     lovingPlayers.forEach((lovingPlayer) => {
-//         players.forEach((player) => {
-//             if(lovingPlayer == player.uid) {
-//                 if(i++>0) list += comma
-//                 list += player.name
-//             }
-//         })
-//     })
-//     return list
-// }
-
 export const convertTimeTrackToCSV = (tracks:ITimeTrack[], separator:string|void) => {
     const comma = !separator ? ',' : separator
     let str = ''
