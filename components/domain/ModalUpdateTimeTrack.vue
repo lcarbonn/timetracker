@@ -26,6 +26,9 @@
           time-picker-inline
           minutes-increment="5"
           text-input
+          :start-date="minDate"
+          :min-date="minDate"
+          :max-date="maxDate"
           :state="startDateState"/>
         </BFormGroup>
         <BFormGroup
@@ -45,6 +48,9 @@
           time-picker-inline
           minutes-increment="5"
           text-input
+          :start-date="minDate"
+          :min-date="minDate"
+          :max-date="maxDate"
           :state="endDateState"/>
         </BFormGroup>
         <BButton v-if="!isNew" class="mx-1" @click="deleteTrack()" size="sm" v-b-tooltip.focus.top="'Delete this event'"><Trash/></BButton>
@@ -75,7 +81,9 @@
     timeTrack: {
         type: Object,
         default: null
-    }
+    },
+    minDate:Date,
+    maxDate:Date
   })
 
   // emits declaration
@@ -113,6 +121,16 @@
   const endDateState = computed(() => {
     return endDateForm.value != null ? true:false
   })
+
+  // const minDate = computed(() => {
+  //   // Sunday - Saturday : 0 - 6
+  //   const now = new Date()
+  //   const day = now.getDay()
+  //   const firstDay = new Date()
+  //   firstDay.setDate(-day)
+  //   alert("first day:" + day + ", " +firstDay.toLocaleString())
+  //   return firstDay
+  // })
 
   // close modal on ok before send submit
   const preventOk = () => {

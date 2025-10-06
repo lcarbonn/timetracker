@@ -1,10 +1,12 @@
 <template>
     <div>
-      <FullCalendar ref="fullCalendar" :options="calendarOptions" />
+      <FullCalendar  ref="fullCalendar" :options="calendarOptions"/>
       <LazyDomainModalUpdateTimeTrack
         v-if="selectedEvent"
         :modalUpdateTrack="modalUpdateTrack"
         :time-track="selectedEvent"
+        :minDate="minDate"
+        :maxDate="maxDate"
         @update-track="updateTrack"
         @delete-track="deleteTrack"
         @close-track="closeTrack"
@@ -44,33 +46,32 @@
   const currentWeek = ref(props.selectedWeek?props.selectedWeek:todayWeek)
   const modalUpdateTrack = ref(new ModalShow()) 
 
-  // watch changes date to go to associated calendar week
-  watch(() => props.tracks, async(newTracks) => {
-    if(newTracks) {
-      // fullCalendar.value.getApi().changeView("timeGridWeek")
-        if(newTracks.length>0) {
-          fullCalendar.value.getApi().gotoDate(newTracks[0].Start)
-        }
-      }
-    }
-  )
+  const minDate = ref()
+  minDate.value = getMinDate(new Date())
+  
+  const maxDate = ref()
+  maxDate.value = getMaxDate(new Date())
+  const isToday = ref(true)
 
+  const resetMinMaxDates = () => {
+    const now = fullCalendar.value.getApi().getDate()
+    minDate.value = getMinDate(now)
+    maxDate.value = getMaxDate(now)
+  }
   // set events
   const calendarEvents = computed (() => {
     const events:any[] = []
-    if(props.tracks) {
-      props.tracks.forEach(track => {
-        // add the track to the calendar
-        events.push( trackToEvent(track, !props.isWeekGrid))
-        // add the pauses to the calendar
-        let pi = 1
-        const plentgth = track.pauses?.length
-        track.pauses?.forEach(pause => {
-          events.push( pauseToEvent(pause, (!props.isWeekGrid && (pi==plentgth))))
-          pi++
-        });        
-      });
-    }
+    props.tracks?.forEach(track => {
+      // add the track to the calendar
+      events.push( trackToEvent(track, !props.isWeekGrid))
+      // add the pauses to the calendar
+      let pi = 1
+      const plentgth = track.pauses?.length
+      track.pauses?.forEach(pause => {
+        events.push( pauseToEvent(pause, (!props.isWeekGrid && (pi==plentgth))))
+        pi++
+      });        
+    });
     return events
   })
 
@@ -108,6 +109,8 @@
           click: function() {
             currentWeek.value = currentWeek.value-1
             fullCalendar.value.getApi().prev()
+            resetMinMaxDates()
+            isToday.value = false
             emit('navToWeek', currentWeek.value)
           }
         },
@@ -116,6 +119,8 @@
           click: function() {
             currentWeek.value = todayWeek
             fullCalendar.value.getApi().today()
+            resetMinMaxDates()
+            isToday.value = true
             emit('navToWeek', currentWeek.value)
           }
         },
@@ -124,14 +129,15 @@
           click: function() {
             currentWeek.value = currentWeek.value+1
             fullCalendar.value.getApi().next()
+            resetMinMaxDates()
+            isToday.value = false
             emit('navToWeek', currentWeek.value)
           }
         },
         addEventButton: {
           text: 'Add day',
           click: function() {
-            // alert("add track")
-            selectedEvent.value = newTrackToEvent()
+            selectedEvent.value = newTrackToEvent(!isToday.value?minDate.value:null)
             modalUpdateTrack.value.show = !modalUpdateTrack.value.show
           }
         },

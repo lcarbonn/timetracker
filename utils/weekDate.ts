@@ -24,3 +24,23 @@ export const getWeekNumber = (date: Date): number => {
     // and the Thursday in the target week
     return 1 + Math.ceil((firstThursday - tempDate.valueOf()) / 604800000); // 604800000 = number of milliseconds in a week
 }
+
+export const getMinDate = (now?:Date) :Date|null => {
+    // Sunday - Saturday : 0 - 6
+    if(!now) return null
+    const day = now.getDay() -1
+    const firstDay = new Date()
+    firstDay.setTime((now.getTime() - (24*60*60*1000 * day)))
+    // console.log("first day: " + day + ", " +firstDay.toLocaleString())
+    return firstDay
+}
+
+export const getMaxDate = (now?:Date) :Date|null => {
+    // Sunday - Saturday : 0 - 6
+    if(!now) return null
+    const day = (7 - now.getDay())
+    const lastDay = new Date()
+    lastDay.setTime((now.getTime() + (24*60*60*1000 * day)))
+    // console.log("last day: " + day + ", " +lastDay.toLocaleString())
+    return lastDay
+}

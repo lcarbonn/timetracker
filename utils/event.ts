@@ -42,9 +42,10 @@ export const pauseToEvent = (pause:IPauseTrack, isRestart:boolean) :object => {
  * @param track 
  * @returns 
  */
-export const newTrackToEvent = () :object => {
+export const newTrackToEvent = (date?:Date) :object => {
        const track = new TimeTrack()
-       const now = new Date()
+       let now = new Date()
+       if(date) now = date
        track.Start = new Date(now.toDateString())
        track.Start.setHours(8)
        track.End = new Date(now.toDateString())
