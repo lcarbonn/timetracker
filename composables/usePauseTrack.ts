@@ -30,7 +30,7 @@ export const openPauseTrack = async (timeId:number) :Promise<IPauseTrack>=> {
     const result = await $fetch<IPauseTrack>('/api/pausetrack', {
         method: 'POST',
         body: {
-          "TimeTrack":timeId,
+          "TimeTrack": Number(timeId),
           "Start": new Date()
         },
       onResponse ({ response }) {
@@ -46,8 +46,35 @@ export const openPauseTrack = async (timeId:number) :Promise<IPauseTrack>=> {
       },
     })
     return result
-
 }
+
+/**
+ * Create a new pause track for the user
+ * @param user_id
+ */
+export const createPauseTrack = async (timeId:number, start:Date, end:Date) :Promise<IPauseTrack> => {
+    const result = await $fetch<IPauseTrack>('/api/pausetrack', {
+        method: 'POST',
+        body: {
+          "TimeTrack": Number(timeId),
+          "Start": new Date(start),
+          "End": new Date(end)
+        },
+      onResponse ({ response }) {
+        // Handle the response errors
+        const pause = response._data
+        refreshCurrentStatePause(pause)
+        refreshPauseInStateTrack(pause)
+      },
+      onResponseError ({ response }) {
+        // Handle the response errors
+        useStatePause().value = undefined
+        errorToSnack("Error creating pause", response.statusText)
+      },
+    })
+    return result
+}
+
 
 /**
  * Close the pause track

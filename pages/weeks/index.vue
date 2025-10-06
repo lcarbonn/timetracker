@@ -92,7 +92,6 @@
     if(track.isTrack) {
       updateTimeTrack(track.id, track.start, track.end )
       .then((tt) => {
-        // refreshTrackInTracksOfTheWeek(tt)
         if(tt.End) messageToSnack("Day closed at "+new Date(tt.End).toLocaleString())
         else messageToSnack("Day changed to "+new Date(tt.Start).toLocaleString())
       })
@@ -100,7 +99,6 @@
       updatePauseTrack(track.id, track.start, track.end )
       .then((pt) => {
         if(pt) {
-        // refreshPauseInTracksOfTheWeek(pt)
         if(pt.End) messageToSnack("Pause closed at "+new Date(pt.End).toLocaleString())
         else messageToSnack("Pause changed to "+new Date(pt.Start).toLocaleString())
         }
@@ -112,13 +110,11 @@
     if(track.isTrack) {
       deleteTimeTrack(track.id )
       .then(() => {
-        // deleteTrackFromTracksOfTheWeek(track.id)
         messageToSnack("Day deleted")
       })
     } else {
       deleteStatePause(track.id)
       .then(() => {
-        // deletePauseFromTracksOfTheWeek(track.id)
         messageToSnack("Pause deleted")
       })
     }
@@ -126,19 +122,19 @@
 
   // create track
   const createTrack = (track:any) => {
-    // alert(track.id + " was dropped on " + track.start.toISOString() + ', end:'+track.end)
-    if(track.isTrack && user.value) {
+    if(!user.value) return
+    if(track.isTrack) {
       createTimeTrack(user.value?.id, track.start, track.end )
       .then((tt) => {
         messageToSnack("Day added to "+new Date(tt.Start).toLocaleString())
       })
     } else {
-      // updatePauseTrack(track.id, track.start, track.end )
-      // .then((pt) => {
-      //   if(pt) {
-      //   messageToSnack("Pause changed to "+new Date(pt.Start).toLocaleString())
-      //   }
-      // })
+      createPauseTrack(track.timeId, track.start, track.end )
+      .then((pt) => {
+        if(pt) {
+        messageToSnack("Pause added to "+new Date(pt.Start).toLocaleString())
+        }
+      })
     }
   }
 

@@ -42,7 +42,7 @@ export const pauseToEvent = (pause:IPauseTrack, isRestart:boolean) :object => {
  * @param track 
  * @returns 
  */
-export const newTrackToEvent = (date?:Date) :object => {
+export const newTrackToEvent = (date?:Date) :any => {
        const track = new TimeTrack()
        let now = new Date()
        if(date) now = date
@@ -51,16 +51,34 @@ export const newTrackToEvent = (date?:Date) :object => {
        track.End = new Date(now.toDateString())
        track.End.setHours(18)
        const event = {
-          title: track.End?"Day of effective "+formatDuration(track.EffectiveDuration):"Day not yet completed",
+          // title: track.End?"Day of effective "+formatDuration(track.EffectiveDuration):"Day not yet completed",
           start:track.Start,
           end:track.End,
-          color:'#378006',
-          id:track.id,
-          durationEditable:track.End?true:false,
+          // color:'#378006',
+          // // id:track.id,
+          // durationEditable:track.End?true:false,
           extendedProps: {
             isTrack:true,
             isEnded:true,
-            isRestart:false
+            // isRestart:false
+          }
+        }
+        return event
+}
+
+/**
+ * Return a event from a track
+ * @param track 
+ * @returns 
+ */
+export const newPauseToEvent = (timeId:number, start:Date, end:Date) :any => {
+       const event = {
+          start:start,
+          end:end?end:new Date(),
+          extendedProps: {
+            isTrack:false,
+            isEnded:true,
+            timeId:timeId,
           }
         }
         return event

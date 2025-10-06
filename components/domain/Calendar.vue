@@ -11,6 +11,7 @@
         @delete-track="deleteTrack"
         @close-track="closeTrack"
         @create-track="createTrack"
+        @add-pause="addPause"
         @restart-track="restartTrack"></LazyDomainModalUpdateTimeTrack>
     </div>
 </template>
@@ -169,13 +170,21 @@
     modalUpdateTrack.value.show = !modalUpdateTrack.value.show
   }
 
-  const createTrack = (id:string, start:Date, end:Date) => {
+  const createTrack = (start:Date, end:Date) => {
     const track = {
       start:start,
       end:end,
-      isTrack:selectedEvent.value.extendedProps.isTrack
+      isTrack:selectedEvent.value.extendedProps.isTrack,
+      timeId:selectedEvent.value.extendedProps.timeId
     }
     emit('createTrack', track)
+  }
+
+  const addPause = () => {
+    const track  = selectedEvent.value
+    const pause = newPauseToEvent(track.id, track.start, track.end)
+    selectedEvent.value = pause
+    modalUpdateTrack.value.show = !modalUpdateTrack.value.show
   }
 
   const updateTrack = (id:string, start:Date, end:Date) => {
