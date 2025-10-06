@@ -1,6 +1,6 @@
 <template>
     <div>
-      <FullCalendar ref="fullCalendar":options="calendarOptions" />
+      <FullCalendar ref="fullCalendar" :options="calendarOptions" />
       <LazyDomainModalUpdateTimeTrack
         v-if="selectedEvent"
         :modalUpdateTrack="modalUpdateTrack"
@@ -8,6 +8,7 @@
         @update-track="updateTrack"
         @delete-track="deleteTrack"
         @close-track="closeTrack"
+        @create-track="createTrack"
         @restart-track="restartTrack"></LazyDomainModalUpdateTimeTrack>
     </div>
 </template>
@@ -35,7 +36,7 @@
   })
 
   // emits declaration
-  const emit = defineEmits(['navToWeek', 'updateTrack', 'closeTrack', 'deleteTrack', 'restartTrack'])
+  const emit = defineEmits(['navToWeek', 'updateTrack', 'closeTrack', 'deleteTrack', 'restartTrack', 'createTrack'])
 
   const fullCalendar = ref()
   const selectedEvent = ref()
@@ -98,7 +99,7 @@
       },
       headerToolbar: {
         left: props.isWeekGrid?"myPrevButton,myTodayButton,myNextButton": undefined,
-        center: props.isWeekGrid?"":"title",
+        center: props.isWeekGrid?'addEventButton':"title",
         right: props.isWeekGrid?"timeGridWeek,timeGridDay":undefined,
       },
       customButtons: {
@@ -125,7 +126,15 @@
             fullCalendar.value.getApi().next()
             emit('navToWeek', currentWeek.value)
           }
-        }
+        },
+        addEventButton: {
+          text: 'Add day',
+          click: function() {
+            // alert("add track")
+            selectedEvent.value = newTrackToEvent()
+            modalUpdateTrack.value.show = !modalUpdateTrack.value.show
+          }
+        },
       },    
       eventDrop(info) {
         dropResizeEvent(info)
@@ -153,6 +162,16 @@
     selectedEvent.value = info.event
     modalUpdateTrack.value.show = !modalUpdateTrack.value.show
   }
+
+  const createTrack = (id:string, start:Date, end:Date) => {
+    const track = {
+      start:start,
+      end:end,
+      isTrack:selectedEvent.value.extendedProps.isTrack
+    }
+    emit('createTrack', track)
+  }
+
   const updateTrack = (id:string, start:Date, end:Date) => {
     const track = {
       id:id,

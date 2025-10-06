@@ -122,6 +122,35 @@ export const openTimeTrack = async (user_id:number) :Promise<ITimeTrack> => {
       onResponseError ({ response }) {
         // Handle the response errors
         useStateTrack().value = undefined
+        errorToSnack("Error opening track", response.statusText)
+      },
+    })
+    return result
+}
+
+/**
+ * Create a new time track for the user
+ * @param user_id
+ */
+export const createTimeTrack = async (user_id:number, start:Date, end:Date) :Promise<ITimeTrack> => {
+    const result = await $fetch<ITimeTrack>('/api/timetrack', {
+        method: 'POST',
+        body: {
+          "UID":[
+            {"id":user_id}
+          ],
+          "Start": start,
+          "End": end
+        },
+      onResponse ({ response }) {
+        // Handle the response errors
+        const track = response._data
+        // refreshStateTrack(track)
+        addTrackInTracksOfTheWeek(track)
+      },
+      onResponseError ({ response }) {
+        // Handle the response errors
+        // useStateTrack().value = undefined
         errorToSnack("Error creating track", response.statusText)
       },
     })
@@ -236,6 +265,16 @@ export const refreshTrackInTracksOfTheWeek = (track:ITimeTrack) => {
 }
 
 /**
+ * Add the state of tracks with the track
+ * @param track, the track to refresh
+ */
+export const addTrackInTracksOfTheWeek = (track:ITimeTrack) => {
+    if(!useStateTracksOfTheWeek().value) return
+    const tracks = useStateTracksOfTheWeek().value
+    tracks.push(track)
+}
+
+/**
  * Delete the track from the state of tracks
  * @param track, the track to refresh
  */
@@ -249,3 +288,4 @@ export const deleteTrackFromTracksOfTheWeek = (id:number) => {
       }
     }
 }
+

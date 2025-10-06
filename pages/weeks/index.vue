@@ -12,6 +12,7 @@
         @nav-to-week="navToWeek"
         @update-track="updateTrack"
         @close-track="closeTrack"
+        @create-track="createTrack"
         @delete-track="deleteTrack"/>
     </div>
 </template>
@@ -118,6 +119,24 @@
         // deletePauseFromTracksOfTheWeek(track.id)
         messageToSnack("Pause deleted")
       })
+    }
+  }
+
+  // create track
+  const createTrack = (track:any) => {
+    // alert(track.id + " was dropped on " + track.start.toISOString() + ', end:'+track.end)
+    if(track.isTrack && user.value) {
+      createTimeTrack(user.value?.id, track.start, track.end )
+      .then((tt) => {
+        messageToSnack("Day added to "+new Date(tt.Start).toLocaleString())
+      })
+    } else {
+      // updatePauseTrack(track.id, track.start, track.end )
+      // .then((pt) => {
+      //   if(pt) {
+      //   messageToSnack("Pause changed to "+new Date(pt.Start).toLocaleString())
+      //   }
+      // })
     }
   }
 
