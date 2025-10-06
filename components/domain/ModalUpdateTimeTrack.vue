@@ -21,14 +21,13 @@
         <VueDatePicker id="startDate"
           v-model="startDateForm"
           format="dd/MM/yyyy HH:mm"
-          auto-apply 
+          auto-apply
           enable-time-picker
-          time-picker-inline
-          minutes-increment="5"
           text-input
           :start-date="minDate"
           :min-date="minDate"
           :max-date="maxDate"
+          prevent-min-max-navigation
           :state="startDateState"/>
         </BFormGroup>
         <BFormGroup
@@ -43,14 +42,13 @@
         <VueDatePicker id="endDate"
           v-model="endDateForm"
           format="dd/MM/yyyy HH:mm"
-          auto-apply 
+          auto-apply
           enable-time-picker
-          time-picker-inline
-          minutes-increment="5"
           text-input
           :start-date="minDate"
           :min-date="minDate"
           :max-date="maxDate"
+          prevent-min-max-navigation
           :state="endDateState"/>
         </BFormGroup>
         <BButton v-if="!isNew" class="mx-1" @click="deleteTrack()" size="sm" v-b-tooltip.focus.top="'Delete this '+title"><Trash/></BButton>

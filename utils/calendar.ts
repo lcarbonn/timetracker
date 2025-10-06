@@ -31,6 +31,7 @@ export const getMinDate = (now?:Date) :Date|null => {
     const day = now.getDay() -1
     const firstDay = new Date()
     firstDay.setTime((now.getTime() - (24*60*60*1000 * day)))
+    firstDay.setHours(0,0,0)
     // console.log("first day: " + day + ", " +firstDay.toLocaleString())
     return firstDay
 }
@@ -41,6 +42,7 @@ export const getMaxDate = (now?:Date) :Date|null => {
     const day = (7 - now.getDay())
     const lastDay = new Date()
     lastDay.setTime((now.getTime() + (24*60*60*1000 * day)))
+    lastDay.setHours(23,59,59)
     // console.log("last day: " + day + ", " +lastDay.toLocaleString())
     return lastDay
 }
