@@ -122,16 +122,6 @@
     return endDateForm.value != null ? true:false
   })
 
-  // const minDate = computed(() => {
-  //   // Sunday - Saturday : 0 - 6
-  //   const now = new Date()
-  //   const day = now.getDay()
-  //   const firstDay = new Date()
-  //   firstDay.setDate(-day)
-  //   alert("first day:" + day + ", " +firstDay.toLocaleString())
-  //   return firstDay
-  // })
-
   // close modal on ok before send submit
   const preventOk = () => {
     if(startDateForm.value && endDateForm.value) {
@@ -143,9 +133,9 @@
   const submit = () => {
     const start = new Date(startDateForm.value)
     const end = new Date(endDateForm.value)
-    isCloseAsked.value = false
     if(isCloseAsked.value) {
       emit('closeTrack', props.timeTrack.id, start, end) 
+      isCloseAsked.value = false
       return
     }
     if(isNew.value) {

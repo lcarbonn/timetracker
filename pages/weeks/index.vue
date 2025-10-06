@@ -93,14 +93,16 @@
       updateTimeTrack(track.id, track.start, track.end )
       .then((tt) => {
         // refreshTrackInTracksOfTheWeek(tt)
-        messageToSnack("Day changed to "+new Date(tt.Start).toLocaleString())
+        if(tt.End) messageToSnack("Day closed at "+new Date(tt.End).toLocaleString())
+        else messageToSnack("Day changed to "+new Date(tt.Start).toLocaleString())
       })
     } else {
       updatePauseTrack(track.id, track.start, track.end )
       .then((pt) => {
         if(pt) {
         // refreshPauseInTracksOfTheWeek(pt)
-        messageToSnack("Pause changed to "+new Date(pt.Start).toLocaleString())
+        if(pt.End) messageToSnack("Pause closed at "+new Date(pt.End).toLocaleString())
+        else messageToSnack("Pause changed to "+new Date(pt.Start).toLocaleString())
         }
       })
     }
