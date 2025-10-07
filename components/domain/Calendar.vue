@@ -1,6 +1,6 @@
 <template>
     <div>
-      <FullCalendar  ref="fullCalendar" :options="calendarOptions"/>
+      <FullCalendar ref="fullCalendar" :options="calendarOptions" height="100%"/>
       <LazyDomainModalUpdateTimeTrack
         v-if="selectedEvent"
         :modalUpdateTrack="modalUpdateTrack"

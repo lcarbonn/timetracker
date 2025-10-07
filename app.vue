@@ -8,7 +8,7 @@
         <NuxtPage />
       </BContainer>
     </div>
-    <div class="d-flex flex-column justify-content-end">
+    <div class="justify-content-end">
       <BaseFooter :appVersion="version"></BaseFooter>
     </div>
   </div>
