@@ -38,7 +38,6 @@
   const { loggedIn, user, clear: clearSession } = useUserSession()
   const config = useRuntimeConfig()
 
-import { getTracksForExport } from '~/composables/useTimeTrack'
   // icons
   import Person from '~icons/bi/person'
   

@@ -1,5 +1,3 @@
-import { result } from "happy-dom/lib/PropertySymbol.js";
-
 const config = useRuntimeConfig()
 
 const BASEROW_URL = config.baserowApiUrl
