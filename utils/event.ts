@@ -8,7 +8,6 @@ export const trackToEvent = (track:ITimeTrack, isRestart:boolean) :object => {
           title: track.End?"Day of effective "+formatDuration(track.EffectiveDuration):"Day not yet completed",
           start:track.Start,
           end:track.End?track.End:new Date(),
-          color:'#378006',
           id:track.id,
           durationEditable:track.End?true:false,
           isTrack:true,

@@ -60,12 +60,18 @@
     maxDate.value = getMaxDate(now)
   }
   // set events
-  const calendarEvents = computed (() => {
+  const trackEvents = computed (() => {
     const events:any[] = []
     props.tracks?.forEach(track => {
       // add the track to the calendar
       events.push( trackToEvent(track, !props.isWeekGrid))
-      // add the pauses to the calendar
+    });
+    return events
+  })
+
+  const pauseEvents = computed (() => {
+    const events:any[] = []
+    props.tracks?.forEach(track => {
       let pi = 1
       const plentgth = track.pauses?.length
       track.pauses?.forEach(pause => {
@@ -92,7 +98,19 @@
       snapDuration:"00:15:00",
       // dragScroll:false,
       // navLinks:true,
-      events: calendarEvents.value,
+      eventSources : [
+        {
+          events: trackEvents.value,
+          color:'#378006',
+        },
+        {
+          events: pauseEvents.value,
+        }
+      ],
+      eventOverlap : function(stillEvent, movingEvent) {
+        // no pause overlap
+        return !(!stillEvent?.extendedProps.isTrack && !movingEvent?.extendedProps.isTrack)
+      },
       businessHours: {
         // days of week. an array of zero-based day of week integers (0=Sunday)
         daysOfWeek: [ 1, 2, 3, 4, 5 ], // Monday - Friday
