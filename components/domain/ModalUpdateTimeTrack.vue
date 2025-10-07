@@ -7,6 +7,7 @@
       header-bg-variant="primary"
       size="lg"
       cancel-title="Cancel"
+      no-close-on-backdrop
       :ok-title="titleHead"
       @ok.prevent="preventOk"
       @cancel="cancel">
