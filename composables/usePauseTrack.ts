@@ -65,6 +65,7 @@ export const createPauseTrack = async (timeId:number, start:Date, end:Date) :Pro
         const pause = response._data
         refreshCurrentStatePause(pause)
         refreshPauseInStateTrack(pause)
+        refreshPauseInTracksOfTheWeek(pause)
       },
       onResponseError ({ response }) {
         // Handle the response errors
@@ -191,14 +192,20 @@ export const updatePauseTrack = async (id:number, start:Date, end:Date) :Promise
 export const refreshPauseInTracksOfTheWeek = (pause:IPauseTrack) => {
   if(!useStateTracksOfTheWeek().value) return
   const tracks = useStateTracksOfTheWeek().value
+  let isFound = false
   tracks.forEach(track => {
-    if(track.pauses) {
+    if(track.id == pause.TimeTrack[0].id) {
+      if(!track.pauses) {
+        track.pauses = []
+      }
       for (let index = 0; index < track.pauses.length; index++) {
         const statePause = track.pauses[index];
         if(statePause.id == pause.id) {
           track.pauses[index] = Object.assign([], pause)
+          isFound = true
         }
       }
+      if(!isFound) track.pauses.push(pause)
     }
   });
 }

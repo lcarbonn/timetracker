@@ -22,6 +22,7 @@
         @update-track="updateTrack"
         @close-track="closeTrack"
         @delete-track="deleteTrack"
+        @create-track="createTrack"
         @restart-track="restartTrack"/>
       <BModal v-model="modalRestartDay" title="Restart day" @ok="confirmRestartDay"> Really ? </BModal>
     </div>
@@ -222,4 +223,23 @@
       })
     }
   }
+
+  // create track
+  const createTrack = (track:any) => {
+    if(!user.value) return
+    if(track.isTrack) {
+      createTimeTrack(user.value?.id, track.start, track.end )
+      .then((tt) => {
+        messageToSnack("Day added to "+new Date(tt.Start).toLocaleString())
+      })
+    } else {
+      createPauseTrack(track.timeId, track.start, track.end )
+      .then((pt) => {
+        if(pt) {
+        messageToSnack("Pause added to "+new Date(pt.Start).toLocaleString())
+        }
+      })
+    }
+  }
+
 </script>
