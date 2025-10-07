@@ -5,6 +5,7 @@
  */
 export const trackToEvent = (track:ITimeTrack, isRestart:boolean) :object => {
        const event = {
+          groupId: "constraint"+track.id,
           title: track.End?"Day of effective "+formatDuration(track.EffectiveDuration):"Day not yet completed",
           start:track.Start,
           end:track.End?track.End:new Date(),
@@ -24,6 +25,7 @@ export const trackToEvent = (track:ITimeTrack, isRestart:boolean) :object => {
  */
 export const pauseToEvent = (pause:IPauseTrack, isRestart:boolean) :object => {
     const event = {
+        constraint: "constraint"+pause.TimeTrack[0].id,
         title: pause.End?"Pause of "+formatDuration(pause.Duration):"Pause started",
         start:pause.Start,
         end:pause.End?pause.End:new Date(),
