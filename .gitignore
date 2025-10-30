@@ -24,3 +24,5 @@ logs
 .env.*
 !.env.example
 
+.env copy.test
+.env old
