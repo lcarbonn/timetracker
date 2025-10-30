@@ -7,12 +7,6 @@ export const getPausesOfTrack = async (timeId:number) :Promise<IPauseTrack[]> =>
       query: {
         timeId:timeId,
       },
-      onResponse ({ response }) {
-        // Handle the response errors
-        // const pauses = response._data
-        // refreshPausesInStateTrack(pauses)
-        // refreshPausesInTracksOfTheWeek(timeId, pauses)
-      },
       onResponseError ({ response}) {
         // Handle the response errors
         console.error("❌ Fetch failed:", response.statusText)

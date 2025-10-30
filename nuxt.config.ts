@@ -79,7 +79,6 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     baserowApiUrl:'',
-    // baserowToken:'',
     sessionPassword:'',
     public: {
       baseUrl:'',

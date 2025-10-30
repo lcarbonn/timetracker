@@ -1,6 +1,5 @@
 import type { ListTimeResponse, ITimeTrack } from "~/utils/tableTimeTrack";
 import { rawFetch } from "./baserrowFetch";
-import { fetchPausesOfTrack } from "./useFetchPauseTrack";
 
 const config = useRuntimeConfig()
 
@@ -96,9 +95,9 @@ export const fetchTodayTrack = async (uid:number) : Promise<ITimeTrack> => {
 }
 
 /**
- * Dalete the time track in the db
+ * Delete the time track in the db
  * @param id of the track
- * @returns a Promise with the deleted time track from db or the error
+ * @returns a Promise with the deleted id
  */
 export const fetchDeleteTimeTrack = async (id:number) : Promise<number> => {
     const endpoint = `/api/database/rows/table/${TIMETRACK_ID}/${id}/`
@@ -146,11 +145,6 @@ export const fetchTracksOfTheWeek = async (uid:number, week:number) : Promise<IT
     })
   if(response?.results) {
     tracks = response.results
-    // for (let index = 0; index < tracks.length; index++) {
-    //   const track = tracks[index];
-    //   const pauses = await fetchPausesOfTrack(track.id)
-    //   track.pauses = pauses
-    // }
   }
   return tracks
 }
