@@ -65,6 +65,7 @@ export function deletePauseFromTracksOfTheWeek(id: number) {
  * @param pause, the pause to refresh
  */
 export function refreshPauseInStateTrack(pause: IPauseTrack) {
+  if(!useStateTrack().value) return
   const track = useStateTrack().value;
   if (!track) return;
   let pauses = track.pauses;
