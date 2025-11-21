@@ -9,7 +9,6 @@ export async function getTracksOfTheWeek(uid: number, week: number): Promise<ITi
   const TIMETRACK_TABLE_ID = config.public.tableTimetrackId;
   const { $api } = useNuxtApp();
 
-  let list: ITimeTrack[] = [];
   const endpoint = `/api/database/rows/table/${TIMETRACK_TABLE_ID}/?user_field_names=true`;
   const tracksdata = await $api(endpoint, {
     method: "GET",
@@ -34,11 +33,7 @@ export async function getTracksOfTheWeek(uid: number, week: number): Promise<ITi
       }
     }
   });
-  if (tracksdata) {
-    const resList = tracksdata as IBaserowListResponse;
-    list = resList.results;
-  }
-  return list;
+  return (tracksdata as IBaserowListResponse).results
 }
 
 /**
@@ -280,7 +275,7 @@ export async function deleteTimeTrack(id: number): Promise<void> {
   const TIMETRACK_TABLE_ID = config.public.tableTimetrackId;
   const { $api } = useNuxtApp();
 
-  const endpoint = `/api/database/rows/table/${TIMETRACK_TABLE_ID}/${id}`;
+  const endpoint = `/api/database/rows/table/${TIMETRACK_TABLE_ID}/${id}/`;
   await $api(endpoint, {
     method: 'DELETE',
   });
