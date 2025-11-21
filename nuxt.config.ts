@@ -78,15 +78,15 @@ export default defineNuxtConfig({
     }    
   },
   runtimeConfig: {
-    baserowApiUrl:'',
-    sessionPassword:'',
     public: {
+      baseApiUrl:'',
       baseUrl:'',
       baseId:'',
       baseName:'',
       tableTimetrackId:'',
       tablePausetrackId:'',
-      workspaceId:''
+      workspaceId:'',
+      token:''
     }
   },  
 })

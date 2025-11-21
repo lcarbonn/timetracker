@@ -1,6 +1,6 @@
 import { IBrUser } from "~/utils/bruser";
-import { IPermissions } from "~/utils/permission";
 import { rawFetch } from "./baserrowFetch";
+import { IPermissions } from "~/utils/worspacePermission";
 
 const config = useRuntimeConfig()
 

@@ -8,10 +8,6 @@ declare module '#auth-utils' {
     isAdmin:boolean
   }
 
-  // interface UserSession {
-  //   // Add your own fields
-  // }
-
   interface SecureSessionData {
     // Add your own fields
     token:string

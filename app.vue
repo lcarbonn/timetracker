@@ -19,8 +19,6 @@
   import { name, version } from '~/package.json';
 
   // nuxt cycle hooks
-  onMounted(() => {
-    console.log("starting app : "+name + ", appVersion:" +version)
-  })
+  console.log("starting app : "+name + ", appVersion:" +version)
 
 </script>

@@ -36,7 +36,6 @@
     </BContainer>
 </template>
 <script setup lang="ts">
-    const { loggedIn, user, fetch: refreshSession } = useUserSession()
     //local ref
     const credentials = reactive({
         email: '',
@@ -47,7 +46,6 @@
     const emit = defineEmits(['submit'])
 
     const login = async () => {
-        // TODO : emit to login page and move code to useAuthUSer
         signInUser(credentials.email, credentials.password)
     }
 </script>

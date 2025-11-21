@@ -1,6 +1,6 @@
 const config = useRuntimeConfig()
 
-const BASEROW_URL = config.baserowApiUrl
+const BASEROW_URL = config.public.baseApiUrl
 
 let accessToken: string | null = null;
 
@@ -41,6 +41,7 @@ async function refreshAccessToken(event:any): Promise<boolean> {
   if(isLog) console.log("➡️ Refresh data:", data);
   accessToken = data.access_token
   await setUserSession(event, {
+    access_token:data.access_token,
     secure:{
       access_token:data.access_token
     }

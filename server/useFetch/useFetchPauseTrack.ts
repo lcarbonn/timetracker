@@ -1,5 +1,6 @@
-import type { IPauseTrack, IPauseTrackPost, ListPauseResponse } from "~/utils/tablePauseTrack"
+import type { IPauseTrack, IPauseTrackPost } from "~/utils/tablePauseTrack"
 import { rawFetch } from "./baserrowFetch"
+import { IBaserowListResponse } from "~/utils/tableBaserow"
 
 const config = useRuntimeConfig()
 
@@ -18,7 +19,7 @@ export const fetchAllPauseTracks = async () : Promise<IPauseTrack[]> => {
         order_by:'-TimeTrack'
       }
     // Use fetch with the runtime config values
-    const resutl = await rawFetch<ListPauseResponse>(endpoint,
+    const resutl = await rawFetch<IBaserowListResponse>(endpoint,
       {
         query: params
       }
@@ -110,7 +111,7 @@ export const fetchPausesOfTrack = async (id:number) : Promise<IPauseTrack[]> => 
           ]
         }
       }
-    const response =  await rawFetch<ListPauseResponse>(endpoint, 
+    const response =  await rawFetch<IBaserowListResponse>(endpoint, 
       {
         method:"GET",
         query: params,
