@@ -9,7 +9,5 @@
         default: ''
       }
   });
-  const year = computed(() => {
-    return new Date().getFullYear
-  })
+  const year = new Date().getFullYear()
 </script>
