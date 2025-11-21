@@ -278,8 +278,32 @@ export async function deleteTimeTrack(id: number): Promise<void> {
   const endpoint = `/api/database/rows/table/${TIMETRACK_TABLE_ID}/${id}/`;
   await $api(endpoint, {
     method: 'DELETE',
+    onResponse ({ response }) {
+      // Handle the response errors
+      useStateTrack().value = undefined
+      deleteTrackFromTracksOfTheWeek(id)
+    },
+    onResponseError ({ response}) {
+      // Handle the response errors
+      useStateTrack().value = undefined
+      errorToSnack("Error deleting track", response.statusText)
+    }
   });
   return;
+}
+
+export async function getTracksForExport(uid: number): Promise<globalThis.ITimeTrack[]> {
+  const tracksOfTheWeek = useStateTracksOfTheWeek().value
+  let tracks = tracksOfTheWeek
+  if (!tracks) {
+    const now = new Date()
+    const currentWeek: number = getWeekNumber(now)
+    // load tracks and listen to week change
+    if (uid) {
+      tracks = await getTracksOfTheWeek(uid, currentWeek)
+    }
+  }
+  return tracks
 }
 
 // OLD METHODS
@@ -504,76 +528,3 @@ export async function deleteTimeTrack(id: number): Promise<void> {
 //     })
 //     return
 // }
-
-/**
- * Refresh the state track
- * @param track, the track to refresh
- */
-export const refreshStateTrack = (track:ITimeTrack) => {
-    const stateTrack = useStateTrack()
-    if(!stateTrack.value) return
-    const now = new Date(new Date().toDateString())
-    const end = track.End? new Date(new Date(track.End).toDateString()):null
-    if(end && (end.getTime() != now.getTime())) stateTrack.value = undefined
-    else {
-      if(stateTrack.value.pauses) track.pauses = stateTrack.value.pauses
-      stateTrack.value = Object.assign([], track)
-    }
-}
-/**
- * Refresh the state of tracks with the track
- * @param track, the track to refresh
- */
-export const refreshTrackInTracksOfTheWeek = (track:ITimeTrack) => {
-    if(!useStateTracksOfTheWeek().value) return
-    const tracks = useStateTracksOfTheWeek().value
-    for (let index = 0; index < tracks.length; index++) {
-      const stateTrack = tracks[index];
-      if(stateTrack.id == track.id) {
-        track.pauses = stateTrack.pauses
-        tracks[index] = Object.assign([], track)
-      }
-    }
-}
-
-/**
- * Add the state of tracks with the track
- * @param track, the track to refresh
- */
-export const addTrackInTracksOfTheWeek = (track:ITimeTrack) => {
-    if(!useStateTracksOfTheWeek().value) return
-    const tracks = useStateTracksOfTheWeek().value
-    tracks.push(track)
-}
-
-/**
- * Delete the track from the state of tracks
- * @param track, the track to refresh
- */
-export const deleteTrackFromTracksOfTheWeek = (id:number) => {
-    if(!useStateTracksOfTheWeek().value) return
-    const tracks = useStateTracksOfTheWeek().value
-    for (let index = 0; index < tracks.length; index++) {
-      const stateTrack = tracks[index];
-      if(stateTrack.id == id) {
-        tracks.splice(index, 1)
-      }
-    }
-}
-
-export const getTracksForExport = async (uid:number) :Promise<globalThis.ITimeTrack[]> => {
-    const tracksOfTheWeek = useStateTracksOfTheWeek().value
-    let tracks = tracksOfTheWeek
-    if(!tracks) {
-      const now = new Date()
-      const currentWeek:number = getWeekNumber(now)
-      // load tracks and listen to week change
-      if(uid) {
-        const { data } = await useAsyncData('fetchTracks', () => getTracksOfTheWeek(uid, currentWeek))
-        if(data.value) {
-          tracks = data.value
-        }
-      }
-    }
-    return tracks
-}
