@@ -2,7 +2,7 @@
 /**
  * Type for user for baserow
  */
-export interface IBrUser {
+export interface IWorkspaceUser {
   name:string,
   id:number,
   email:string,

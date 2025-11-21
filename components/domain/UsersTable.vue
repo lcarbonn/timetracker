@@ -42,7 +42,7 @@
   // props
   const props = defineProps({
       users: {
-          type: Array<IBrUser>,
+          type: Array<IWorkspaceUser>,
           default: undefined
       }
   })
