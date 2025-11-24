@@ -34,12 +34,13 @@
   const tracks = useStateTracksOfTheWeek()
 
   // load tracks and listen to week change
-  const { data, execute:reloadTracks } = await useAsyncData('fetchTracks', () => getTracksOfTheWeek(uid, selectedWeek.value),
-  {
-      watch:[selectedWeek]
-  })
-  if(data.value) {
-    tracks.value = data.value as ITimeTrack[]
+  // const { data, execute:reloadTracks } = await useAsyncData('fetchTracks', () => getTracksOfTheWeek(uid, selectedWeek.value),
+  const data = await getTracksOfTheWeek(uid, selectedWeek.value)
+  // {
+  //     watch:[selectedWeek]
+  // })
+  if(data) {
+    tracks.value = data as ITimeTrack[]
     tracks.value.forEach(async track => {
       const id = track.id
         const pauses = await getPausesOfTrack(track.id)
@@ -69,9 +70,9 @@
   // navigation to week
   const navToWeek = async (newWeek:number) => {
     selectedWeek.value = newWeek
-    await reloadTracks()
-    if(data.value) {
-      tracks.value = data.value as ITimeTrack[]
+    const data = await getTracksOfTheWeek(uid, selectedWeek.value)
+    if(data) {
+      tracks.value = data as ITimeTrack[]
       tracks.value.forEach(async track => {
           const pauses = await getPausesOfTrack(track.id)
           if(pauses) {
