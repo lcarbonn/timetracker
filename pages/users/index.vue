@@ -15,7 +15,9 @@
   })
 
   // init on setup
-  // const { data:users } = await useAsyncData('fetchUsers', () => getWorkspaceUsers())
-  const users = await getWorkspaceUsers()
+  const { data:users } = await useAsyncData('fetchUsers', () => getWorkspaceUsers())
+  // // onMounted(async () => {
+  //   users.value = await getWorkspaceUsers()
+  // // })
 
 </script>
