@@ -1,46 +1,33 @@
 {
   "name": "timetracker",
-  "version": "0.7.3",
+  "version": "0.8.0",
   "description": "NocoLowco Time Tracker",
   "author": "laurent",
-  "private": true,
   "type": "module",
+  "private": true,
   "scripts": {
-    "dev": "nuxt dev",
     "build": "nuxt build",
+    "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "test": "vitest"
+    "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@bootstrap-vue-next/nuxt": "^0.40.0",
     "@fullcalendar/core": "^6.1.19",
     "@fullcalendar/interaction": "^6.1.19",
     "@fullcalendar/timegrid": "^6.1.19",
     "@fullcalendar/vue3": "^6.1.19",
-    "@nuxtjs/i18n": "^9.3.1",
-    "@vite-pwa/nuxt": "^0.10.6",
-    "@vuepic/vue-datepicker": "^11.0.2",
-    "bootstrap": "^5.3.8",
-    "bootstrap-vue-next": "^0.40.0",
-    "jwt-decode": "^4.0.0",
-    "nuxt": "^3.16.0",
-    "nuxt-auth-utils": "^0.5.24",
-    "unplugin-icons": "^22.1.0",
-    "vue": "^3.5.13",
-    "vue-router": "^4.5.0",
-    "zod": "^4.1.8"
+    "@nuxt/ui": "^4.2.1",
+    "@vite-pwa/nuxt": "^1.1.0",
+    "@vuepic/vue-datepicker": "^12.0.5",
+    "nuxt": "^4.2.1",
+    "nuxt-auth-utils": "^0.5.25",
+    "vue": "^3.5.25",
+    "vue-router": "^4.6.3",
+    "zod": "^4.1.13"
   },
   "devDependencies": {
-    "@iconify-json/bi": "^1.2.2",
-    "@nuxt/test-utils": "^3.20.1",
-    "@vite-pwa/assets-generator": "^0.2.6",
-    "@vue/test-utils": "^2.4.6",
-    "happy-dom": "^20.0.10",
-    "jsdom": "^26.1.0",
-    "playwright-core": "^1.57.0",
-    "sass": "^1.93.2",
-    "vitest": "^3.2.4"
+    "@iconify-json/lucide": "^1.2.77",
+    "@iconify-json/streamline-color": "^1.2.2"
   }
 }

@@ -1,4 +1,4 @@
-import { IBaserowAuth } from "~/utils/baserowAuth"
+import { IBaserowAuth } from "../utils/baserowAuth"
 import { rawFetch } from "./baserrowFetch"
 
 /**

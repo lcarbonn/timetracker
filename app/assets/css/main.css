@@ -1,0 +1,39 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+/* Custom Colors */
+@theme static {
+  --color-brand-50: #f1fcfd;
+  --color-brand-100: #e4f8fc;
+  --color-brand-200: #c0eff7;
+  --color-brand-300: #89e2f0;
+  --color-brand-400: #4ad3e8;
+  --color-brand-500: #17A2B8;
+  --color-brand-600: #15b7d0;
+  --color-brand-700: #0c8497;
+  --color-brand-800: #0b5d6b;
+  --color-brand-900: #083c44;
+  --color-brand-950: #06282d;
+  --color-brand-sec-50: #f2fcfd;
+  --color-brand-sec-100: #e4f8fb;
+  --color-brand-sec-200: #c0eff6;
+  --color-brand-sec-300: #8be2ef;
+  --color-brand-sec-400: #4cd2e6;
+  --color-brand-sec-500: #137786;
+  --color-brand-sec-600: #18b6cd;
+  --color-brand-sec-700: #0e8395;
+  --color-brand-sec-800: #0c5d69;
+  --color-brand-sec-900: #093c43;
+  --color-brand-sec-950: #06282d;
+  --color-brand-info-50: #f7f7f8;
+  --color-brand-info-100: #eff0f1;
+  --color-brand-info-200: #d9dbde;
+  --color-brand-info-300: #b8bdc2;
+  --color-brand-info-400: #9299a0;
+  --color-brand-info-500: #6C757D;
+  --color-brand-info-600: #6a737c;
+  --color-brand-info-700: #4b5258;
+  --color-brand-info-800: #363b3f;
+  --color-brand-info-900: #232629;
+  --color-brand-info-950: #181a1b;
+}

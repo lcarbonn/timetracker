@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { fetchSignInUser } from '~/server/useFetch/useFetchAuth'
+import { fetchSignInUser } from '../useFetch/useFetchAuth'
 import { fetchWorkspacePermisssions } from '../useFetch/useFetchWorkspace'
 
 const bodySchema = z.object({

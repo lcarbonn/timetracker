@@ -1,6 +1,6 @@
-import { IWorkspaceUser } from "~/utils/workspaceUser";
 import { rawFetch } from "./baserrowFetch";
-import { IPermissions } from "~/utils/worspacePermission";
+import { IPermissions } from "../utils/worspacePermission";
+import { IWorkspaceUser } from "../utils/workspaceUser";
 
 /**
  * Get the workspace permissions for the connected user

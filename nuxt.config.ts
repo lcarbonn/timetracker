@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   app:{
     head: {
@@ -18,25 +18,21 @@ export default defineNuxtConfig({
   },
 
   modules: [
-    '@bootstrap-vue-next/nuxt',
-    'unplugin-icons/nuxt',
+    '@nuxt/ui',
     '@vite-pwa/nuxt',
-    '@nuxt/test-utils/module',
-    "nuxt-auth-utils"
-  ],
+    "nuxt-auth-utils"],
 
-  css: [
-    'bootstrap/dist/css/bootstrap.min.css',
-    '~/assets/scss/custom-theme.scss'
-  ],
+  css: ['~/assets/css/main.css'],
 
   build: {
     transpile: [
       '/@fullcalendar.*/'
     ]
   },
+
   pwa: {
     /* PWA options */
+    registerType: 'autoUpdate',
     manifest: {
       name: 'Time Tracker',
       short_name: 'Time Tracker',
@@ -88,5 +84,5 @@ export default defineNuxtConfig({
       workspaceId:'',
       token:''
     }
-  },  
+  }  
 })
