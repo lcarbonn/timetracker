@@ -5,7 +5,7 @@
         class="rounded-lg"
         src="/icon.png"/> Time Tracker
     </template>
-    <UNavigationMenu :items="items" />
+    <UNavigationMenu :items="items"/>
     <template #right>
       <UColorModeButton />
       <NuxtLink
@@ -27,7 +27,7 @@
 
 import type { NavigationMenuItem } from '@nuxt/ui'
 
-  // get env variables form config
+  // get env variables from config
   const config = useRuntimeConfig()
   const baseUrl = computed(() => {
     return config.public.baseUrl
@@ -41,57 +41,53 @@ import type { NavigationMenuItem } from '@nuxt/ui'
 
     // get user session
   const { loggedIn, user, clear: clearSession } = useUserSession()
-  const isConnected = computed(() => {
-    return loggedIn.value
-  })
-  const isAdmin = computed(() => {
-   return user.value?.isAdmin
-  })
+
   const userEmail = computed(() => {
     return user.value?.username
   })
 
-  const items = computed<NavigationMenuItem[]>(() => [
-    {
-      label: userEmail.value,
-      icon:"streamline-color:user-circle-single-flat",
-      children: [
-      {
-        label: 'Sign Out',
-        icon: 'streamline-color:logout-1-flat',
-        onSelect: () => {
-          signOut()
-        }
-      }]
-    },
-  ])
-
-  // add others menus
-  if(isConnected) {
-    items.value.push(
-      {
-        label: "Week",
-        icon: "streamline-color:blank-calendar-flat",
-        to: '/weeks'
-      },
-      {
-        label: "Export",
-        icon: "streamline-color:arrow-down-2-flat",
-        onSelect: () => {
-          exportCsv()
-        }
-      },
-    )
-    if(isAdmin) {
-    items.value.push(
-      {
-        label: "Users",
-        icon: "streamline-color:user-multiple-group-flat",
-        to: '/users'
-      },
-    )
+  const items = computed<NavigationMenuItem[]>(() => {
+    const items:NavigationMenuItem[] = []
+    if (!loggedIn.value) return []
+    else {
+      items.push(
+        {
+          label: userEmail.value,
+          icon:"streamline-color:user-circle-single-flat",
+          children: [
+            {
+            label: 'Sign Out',
+            icon: 'streamline-color:logout-1-flat',
+            onSelect: () => {
+              signOut()
+            },
+          }]
+        },
+        {
+          label: "Week",
+          icon: "streamline-color:blank-calendar-flat",
+          to: '/weeks'
+        },
+        {
+          label: "Export",
+          icon: "streamline-color:arrow-down-2-flat",
+          onSelect: () => {
+            exportCsv()
+          }
+        },
+      )
+      if(user.value?.isAdmin) {
+        items.push(
+          {
+            label: "Users",
+            icon: "streamline-color:user-multiple-group-flat",
+            to: '/users'
+          },
+        )
+      }
     }
-  }
+    return items
+  })
 
   const signOut = async () => {
     useStatePause().value = undefined

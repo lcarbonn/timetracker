@@ -4,7 +4,7 @@
         :schema="schema"
         title="Login"
         description="Enter your credentials to access your account."
-        icon="i-lucide-user"
+        icon="streamline-color:user-circle-single-flat"
         :fields="fields"
         @submit="onSubmit">
         <template #password-hint>

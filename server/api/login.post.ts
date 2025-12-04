@@ -16,11 +16,13 @@ export default defineEventHandler(async (event) => {
     let isAdmin = false
     const permissions = await fetchWorkspacePermisssions(tokenAuth.access_token)
     permissions.forEach(permission => {
+      // console.log(permission)
       isAdmin = isAdmin || Boolean(permission.permissions.is_admin)
     });
+    // console.log("isAdmin",isAdmin)
     tokenAuth.user.isAdmin = isAdmin
         
-    await setUserSession(event, {
+    await replaceUserSession(event, {
       user:tokenAuth.user,
       secure:{
         refresh_token:tokenAuth.refresh_token,

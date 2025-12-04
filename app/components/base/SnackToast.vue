@@ -15,14 +15,14 @@
                 title:'Error',
                 description: ''+newMessage.message ,
                 color:'error',
-                icon:'mdi-error'
+                icon:'mdi:error'
             })
         else
             toast.add({
                 title:'Noco Lowco Time Tracker',
                 description: ''+newMessage.message,
                 color:'primary',
-                icon:'mdi-information'
+                icon:'mdi:information'
             })
       }
     })

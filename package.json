@@ -1,6 +1,6 @@
 {
   "name": "timetracker",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "NocoLowco Time Tracker",
   "author": "laurent",
   "type": "module",
@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.77",
+    "@iconify-json/mdi": "^1.2.3",
     "@iconify-json/streamline-color": "^1.2.2"
   }
 }
