@@ -8,8 +8,8 @@ export async function getWorkspaceUsers(): Promise<IWorkspaceUser[]> {
   const  { data } = await useFetch('/api/workspaceusers', {
     onResponseError({ request, response, options }) {
       // Handle the response errors
-      console.log("Error in get users", response.statusText)
-      // errorToSnack("Error in get users", response.statusText)
+      // console.log("Error in get users", response.statusText)
+      errorToSnack("Error in get users", response.statusText)
     },
   })
   return data.value as IWorkspaceUser[]

@@ -11,12 +11,12 @@ export const messageToSnack = (message:string) => {
 
 /**
  * Send error to snackbar
- * @param error - the error
  * @param message - the message
+ * @param error - the error message
  */
-export const errorToSnack = (message:string, error:any) => {
+export const errorToSnack = (message:string, error:string) => {
     const snackBarMessage = new SnackMessage()
-    snackBarMessage.message = new String(message + " : " + error?.message).toString()
+    snackBarMessage.message = new String(message + " : " + error).toString()
     snackBarMessage.isError = true
     useSnackBarMessage().value = snackBarMessage
 }

@@ -52,16 +52,9 @@ import type { NavigationMenuItem } from '@nuxt/ui'
     else {
       items.push(
         {
-          label: userEmail.value,
-          icon:"streamline-color:user-circle-single-flat",
-          children: [
-            {
-            label: 'Sign Out',
-            icon: 'streamline-color:logout-1-flat',
-            onSelect: () => {
-              signOut()
-            },
-          }]
+          label: "Today",
+          icon:"streamline-color:home-4-flat",
+          to:'/'
         },
         {
           label: "Week",
@@ -85,6 +78,20 @@ import type { NavigationMenuItem } from '@nuxt/ui'
           },
         )
       }
+      items.push(
+        {
+          label: userEmail.value,
+          icon:"streamline-color:user-circle-single-flat",
+          children: [
+            {
+            label: 'Sign Out',
+            icon: 'streamline-color:logout-1-flat',
+            onSelect: () => {
+              signOut()
+            },
+          }]
+        },
+      )
     }
     return items
   })

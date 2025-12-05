@@ -63,15 +63,28 @@
   })
 
   // init at setup
-  const data = await getLastOpenTrack(uid)
-  if(data) {
-      todayTrack.value = data as ITimeTrack
-      const timeId = todayTrack.value.id
-      if(timeId) {
-        const pauses = await getPausesOfTrack(timeId)
-        if(pauses) refreshPausesInStateTrack(pauses)
-      }
+  const getTodayTrackAndPauses = async () => {
+    const data = await getLastOpenTrack(uid)
+    if(data) {
+        todayTrack.value = data as ITimeTrack
+        const timeId = todayTrack.value.id
+        if(timeId) {
+          const pauses = await getPausesOfTrack(timeId)
+          if(pauses) refreshPausesInStateTrack(pauses)
+        }
+    }
   }
+
+  getTodayTrackAndPauses()
+  // const data = await getLastOpenTrack(uid)
+  // if(data) {
+  //     todayTrack.value = data as ITimeTrack
+  //     const timeId = todayTrack.value.id
+  //     if(timeId) {
+  //       const pauses = await getPausesOfTrack(timeId)
+  //       if(pauses) refreshPausesInStateTrack(pauses)
+  //     }
+  // }
 
   // computed properties
   // start time of the day
@@ -147,7 +160,7 @@
     })
   })
 
-   // starting the day
+  // starting the day
   const startDay = () => {
     if(user.value) {
       openTimeTrack(user.value.id)
@@ -223,8 +236,12 @@
       })
     } else {
       updatePauseTrack(track.id, track.start, track.end )
-      .then((pt) => {
+      .then(async (pt) => {
         messageToSnack("Pause changed to "+new Date(pt.Start).toLocaleString())
+        // refresh today track if ended
+        if(todayEndTime.value!="") {
+          getTodayTrackAndPauses()
+        }
       })
     }
   }

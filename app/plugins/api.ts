@@ -16,10 +16,10 @@ export default defineNuxtPlugin((nuxtApp) => {
       // console.log("response data:", response._data)
     },
     async onResponseError ({ response }) {
-      // console.log("error", response.status, ":", response.status)
-      if (response.status != 200) {
-        errorToSnack("Erreur accés baserow", response.status)
-      }
+      console.log("error", response.status, ":", response.status)
+      // if (response.status != 200) {
+      //   errorToSnack("Erreur accés baserow", response.statusText)
+      // }
     },
   })
 
