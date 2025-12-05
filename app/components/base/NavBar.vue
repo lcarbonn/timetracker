@@ -76,7 +76,15 @@ import type { NavigationMenuItem } from '@nuxt/ui'
             icon: "streamline-color:user-multiple-group-flat",
             to: '/users'
           },
+        ),
+        items.push(
+          {
+            label: "Tables",
+            icon: "streamline-color:database-flat",
+            to: '/tables'
+          },
         )
+
       }
       items.push(
         {

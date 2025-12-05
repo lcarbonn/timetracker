@@ -14,7 +14,8 @@
         @update-track="updateTrack"
         @close-track="closeTrack"
         @create-track="createTrack"
-        @delete-track="deleteTrack"/>
+        @delete-track="deleteTrack"
+        class="mt-4"/>
     </div>
 </template>
 
@@ -35,7 +36,6 @@
   const tracks = useStateTracksOfTheWeek()
 
   // load tracks and listen to week change
-  // const { data, execute:reloadTracks } = await useAsyncData('fetchTracks', () => getTracksOfTheWeek(uid, selectedWeek.value),
   const data = await getTracksOfTheWeek(uid, selectedWeek.value)
   // {
   //     watch:[selectedWeek]

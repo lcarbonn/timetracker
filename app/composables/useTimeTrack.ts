@@ -305,3 +305,38 @@ export async function getTracksForExport(uid: number): Promise<globalThis.ITimeT
   }
   return tracks
 }
+
+/**
+ * Get all tracks (for time tables)
+ * @returns 
+ */
+export async function getAllTimeTracks(itemsPerPage:number, page?:number, filter?:Filter): Promise<IBaserowListResponse> {
+  const config = useRuntimeConfig();
+  const TIMETRACK_TABLE_ID = config.public.tableTimetrackId;
+  const { $api } = useNuxtApp();
+
+  const endpoint = `/api/database/rows/table/${TIMETRACK_TABLE_ID}/?user_field_names=true`;
+  const queryBase = {
+      page: page?page:1,
+      size: itemsPerPage,
+      order_by: '-Start',
+    }
+  const queryFilter = filter?.user? {
+      filters: {
+        filter_type: "AND",
+        filters: [
+          {
+            field: "UID",
+            type: "multiple_collaborators_has",
+            value: filter.user
+          }
+        ]
+      }
+  }:{}
+  const query = Object.assign({}, queryBase, queryFilter)
+  const tracksdata = await $api(endpoint, {
+    method: "GET",
+    query: query
+  });
+  return (tracksdata as IBaserowListResponse)
+}

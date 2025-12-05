@@ -74,17 +74,7 @@
         }
     }
   }
-
   getTodayTrackAndPauses()
-  // const data = await getLastOpenTrack(uid)
-  // if(data) {
-  //     todayTrack.value = data as ITimeTrack
-  //     const timeId = todayTrack.value.id
-  //     if(timeId) {
-  //       const pauses = await getPausesOfTrack(timeId)
-  //       if(pauses) refreshPausesInStateTrack(pauses)
-  //     }
-  // }
 
   // computed properties
   // start time of the day
