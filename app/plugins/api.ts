@@ -17,9 +17,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     },
     async onResponseError ({ response }) {
       console.log("error", response.status, ":", response.status)
-      // if (response.status != 200) {
-      //   errorToSnack("Erreur accés baserow", response.statusText)
-      // }
     },
   })
 
