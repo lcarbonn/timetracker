@@ -116,10 +116,13 @@
         startTime: '07:00',
         endTime: '18:00',
       },
+      // footerToolbar: {
+      //   center: !props.isWeekGrid?"myPrevButton,myTodayButton,myNextButton": undefined,
+      // },
       headerToolbar: {
         left: props.isWeekGrid?"myPrevButton,myTodayButton,myNextButton": undefined,
         center: props.isWeekGrid?'addEventButton':"title",
-        right: props.isWeekGrid?"timeGridWeek":undefined,
+        right: undefined //props.isWeekGrid?"timeGridWeek":undefined,
       },
       customButtons: {
         myPrevButton: {
