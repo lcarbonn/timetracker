@@ -96,15 +96,14 @@
       allDaySlot:false,
       firstDay:1,
       snapDuration:"00:15:00",
-      // dragScroll:false,
-      // navLinks:true,
       eventSources : [
         {
           events: trackEvents.value,
-          color:'#378006',
+          color:'#17A2B8',
         },
         {
           events: pauseEvents.value,
+          color:'#137786',
         }
       ],
       eventOverlap : function(stillEvent, movingEvent) {
