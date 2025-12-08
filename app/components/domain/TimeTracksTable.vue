@@ -21,7 +21,8 @@
   // props
   const props = defineProps<{
       tracks: IBaserowListResponse
-      pageSize: number
+      pageSize: number,
+      pageIndex:number
     }>()
 
   // emits declaration
@@ -30,7 +31,7 @@
   }>()
 
   const pagination = ref({
-    pageIndex: 0,
+    pageIndex: props.pageIndex,
     pageSize: props.pageSize
   })
 

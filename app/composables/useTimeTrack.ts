@@ -321,19 +321,14 @@ export async function getAllTimeTracks(itemsPerPage:number, page?:number, filter
       size: itemsPerPage,
       order_by: '-Start',
     }
-  const queryFilter = filter?.user? {
-      filters: {
-        filter_type: "AND",
-        filters: [
-          {
-            field: "UID",
-            type: "multiple_collaborators_has",
-            value: filter.user
-          }
-        ]
-      }
-  }:{}
-  const query = Object.assign({}, queryBase, queryFilter)
+    const queryFilters = new BaserowFilterBuilder()
+    if(filter) {
+      queryFilters.add("UID", "multiple_collaborators_has", filter.user)
+      queryFilters.add("Year", "equal", filter.year)
+      queryFilters.add("Month", "equal", filter.month)
+    }
+  
+  const query = Object.assign({}, queryBase, queryFilters.toJSON())
   const tracksdata = await $api(endpoint, {
     method: "GET",
     query: query
