@@ -26,13 +26,13 @@ export function refreshPauseInTracksOfTheWeek(pause: IPauseTrack) {
   const tracks = useStateTracksOfTheWeek().value;
   let isFound = false;
   tracks.forEach(track => {
-    if (track.id == pause.TimeTrack[0].id) {
+    if (track.id == pause.TimeTrack[0]?.id) {
       if (!track.pauses) {
         track.pauses = [];
       }
       for (let index = 0; index < track.pauses.length; index++) {
         const statePause = track.pauses[index];
-        if (statePause.id == pause.id) {
+        if (statePause?.id == pause.id) {
           track.pauses[index] = Object.assign([], pause);
           isFound = true;
         }
@@ -53,7 +53,7 @@ export function deletePauseFromTracksOfTheWeek(id: number) {
     if (track.pauses) {
       for (let index = 0; index < track.pauses.length; index++) {
         const statePause = track.pauses[index];
-        if (statePause.id == id) {
+        if (statePause?.id == id) {
           track.pauses.splice(index, 1);
         }
       }
@@ -76,7 +76,7 @@ export function refreshPauseInStateTrack(pause: IPauseTrack) {
   let isFound = false;
   for (let index = 0; index < pauses.length; index++) {
     const stateTrack = pauses[index];
-    if (stateTrack.id == pause.id) {
+    if (stateTrack?.id == pause.id) {
       pauses[index] = Object.assign([], pause);
       isFound = true;
     }
@@ -94,7 +94,7 @@ export function deletePauseFromStateTrack(id: number) {
   if (!pauses) return;
   for (let index = 0; index < pauses.length; index++) {
     const stateTrack = pauses[index];
-    if (stateTrack.id == id) {
+    if (stateTrack?.id == id) {
       pauses.splice(index, 1);
     }
   }
@@ -109,7 +109,7 @@ export function refreshPausesInStateTrack(pauses: IPauseTrack[]) {
   if (!track.value) return;
   track.value.pauses = pauses;
   const last = pauses.length - 1;
-  if (last != -1 && pauses[last].End == null) {
+  if (last != -1 && pauses[last]?.End == null) {
     useStatePause().value = pauses[last];
   }
 }

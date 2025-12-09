@@ -16,7 +16,7 @@
         @create-track="createTrack"
         @restart-track="restartTrack"/>
       <BaseSimpleModal
-        :open="modalRestartDay" 
+        :open="openModalRestartDay" 
         title="Restart day"
         description="Do you really want to restart your day ?"
         @on-ok="confirmRestartDay"/>
@@ -40,7 +40,7 @@
   const currentPause = useStatePause()
 
   // local refs
-  const modalRestartDay = ref(false)
+  const openModalRestartDay = ref(false)
   const selectedTrack = ref()
   const tracks = computed(() => {
     const tracks = []
@@ -62,80 +62,6 @@
   }
   getTodayTrackAndPauses()
 
-  // computed properties
-  // // start time of the day
-  // const todayStartTime = computed(() => {
-  //   let text = ""
-  //   if(todayTrack.value?.Start) {
-  //     const start = new Date(todayTrack.value.Start)
-  //     text = start.toLocaleDateString() +" - "+start.toLocaleTimeString()
-  //   }
-  //   return text
-  // })
-
-  // // end time of the day
-  // const todayEndTime = computed(() => {
-  //   let text = ""
-  //   if(todayTrack.value?.End) {
-  //     const end = new Date(todayTrack.value.End)
-  //     text = end.toLocaleDateString() +" - "+end.toLocaleTimeString()
-  //   }
-  //   return text
-  // })
-
-  // // start time of the current pause
-  // const currentPauseStartTime = computed(() => {
-  //   let text = ""
-  //   if(currentPause.value?.Start) {
-  //     const start = new Date(currentPause.value.Start)
-  //     text = start.toLocaleDateString() +" - "+start.toLocaleTimeString()
-  //   }
-  //   return text
-  // })
-
-  // const for chrono
-  // const dayTimer = ref()
-  // const dayChrono = ref()
-  
-  // const pauseTimer = ref()
-  // const pauseChrono = ref()
-
-  // // managing timer only on client side
-  // onNuxtReady(async () => {
-  //   const startPauseChrono = () => {
-  //     pauseChrono.value = setInterval(() => {
-  //       if(currentPause.value?.Start)
-  //         pauseTimer.value = formatTimer(new Date(currentPause.value.Start))
-  //       }, 1000);
-  //   }
-  //   const startDayChrono = () => {
-  //     dayChrono.value = setInterval(() => {
-  //       if(todayTrack.value?.Start)
-  //         dayTimer.value = formatTimer(new Date(todayTrack.value.Start))
-  //       }, 1000);
-  //   }
-  //   // start at init if track not ended
-  //   if(!todayTrack.value?.End) {
-  //     startDayChrono()
-  //   }
-  //   // watch track changes
-  //   watch(todayTrack, ()=> {
-  //     if(!todayTrack.value?.End) {
-  //       startDayChrono()
-  //     }
-  //   })
-  //   // start at init if pause not ended
-  //   if(!currentPause.value?.End) {
-  //     startPauseChrono()
-  //   }
-  //   // watch pause changes
-  //   watch(currentPause, ()=> {
-  //     if(!currentPause.value?.End) {
-  //       startPauseChrono()
-  //     }
-  //   })
-  // })
-
   // starting the day
   const startDay = () => {
     if(user.value) {
@@ -155,7 +81,6 @@
         if(tt.End) messageToSnack("Day end at "+new Date(tt.End).toLocaleString())
       })
     }
-    // clearInterval(dayChrono.value)
   }
 
   // staring a pause
@@ -174,19 +99,18 @@
       .then((tt) => {
         if(tt.End) messageToSnack("Pause ended at "+new Date(tt.End).toLocaleString())
       })
-      // clearInterval(pauseChrono.value)
     }
   }
 
   // restart today track
   const restartDay = () => {
     selectedTrack.value = useStateTrack().value
-    modalRestartDay.value = !modalRestartDay.value
+    openModalRestartDay.value = !openModalRestartDay.value
   }
 
   // confirm restart received
   const confirmRestartDay = () => {
-    modalRestartDay.value = !modalRestartDay.value
+    openModalRestartDay.value = !openModalRestartDay.value
     reopenTimeTrack(selectedTrack.value.id)
   }
 

@@ -58,18 +58,28 @@
             </UTooltip>
           </template>
       </UModal>
-      <UModal v-model:open="modalDelete" :title="'Delete ' +title" description="Really ?">
+      <BaseSimpleModal 
+        :open="modalDelete"
+        :title="'Delete ' +title"
+        description="Really ?"
+        @on-ok="confirmDelete"/>
+      <BaseSimpleModal 
+        :open="modalRestart"
+        :title="'Restart ' +title"
+        description="Really ?"
+        @on-ok="confirmRestart"/>
+      <!-- <UModal v-model:open="modalDelete" :title="'Delete ' +title" description="Really ?">
         <template #footer="{ close }">
           <UButton label="Cancel" color="info"  @click="close"/>
           <UButton label="Ok" @click="confirmDelete" />
         </template>
-      </UModal>
-      <UModal v-model:open="modalRestart" :title="'Restart ' +title" description="Really ?">
+      </UModal> -->
+      <!-- <UModal v-model:open="modalRestart" :title="'Restart ' +title" description="Really ?">
         <template #footer="{ close }">
           <UButton label="Cancel" color="info"  @click="close"/>
           <UButton label="Ok" @click="confirmRestart" />
         </template>
-      </UModal>
+      </UModal> -->
   </div>
 </template>
 
