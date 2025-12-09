@@ -1,26 +1,13 @@
 <template>
     <div>
-      <UPageCard :title="'Today track for ' + user?.first_name">
-        <template #footer>
-          <USeparator label="Track"/>
-          <UButton v-if="!todayTrack" @click="startDay">Start my day</UButton>
-          <UButton v-if="todayTrack && !todayTrack.End" @click="endDay">End my day</UButton>
-          <UButton v-if="todayTrack && todayTrack.End" @click="restartDay">Restart my day</UButton>
-          <p v-if="todayTrack && !todayTrack.End"> Day started at : <b>{{ todayStartTime }}</b></p>
-          <p v-if="todayTrack && todayTrack.End">  Day started at : <b>{{ todayStartTime }}</b> - ended at : <b>{{ todayEndTime }}</b></p>
-          <p v-if="todayTrack && todayTrack.End">
-            Duration : <b>{{ formatDuration(todayTrack.Duration) }}</b> 
-            - Pause Duration : <b>{{ formatDuration(todayTrack.PauseDuration) }}</b> 
-            - Effective Duration : <b>{{ formatDuration(todayTrack.EffectiveDuration) }}</b>
-          </p>
-          <p v-if="todayTrack && !todayTrack.End"> Timer : <b>{{ dayTimer }}</b></p>
-          <USeparator label="Pause" v-if="todayTrack && !todayTrack.End"/>
-          <UButton v-if="todayTrack && !todayTrack.End && !currentPause" @click="startPause">Have a break</UButton>
-          <UButton v-if="todayTrack && currentPause && !currentPause.End" @click="endPause">Back to work</UButton>
-          <p v-if="currentPause && !currentPause.End">  Pause started at : <b>{{ currentPauseStartTime }}</b></p>
-          <p v-if="currentPause && !currentPause.End"> Duration : <b>{{ pauseTimer }}</b></p>
-        </template>
-      </UPageCard>
+      <DomainHeaderToday
+        :todayTrack="todayTrack"
+        :currentPause="currentPause"
+        @startDay="startDay"
+        @endDay="endDay"
+        @startPause="startPause"
+        @endPause="endPause"
+        @restartDay="restartDay"/>
       <DomainCalendar v-if="tracks" 
         :tracks="tracks"
         @update-track="updateTrack"
@@ -28,12 +15,11 @@
         @delete-track="deleteTrack"
         @create-track="createTrack"
         @restart-track="restartTrack"/>
-      <UModal v-model:open="modalRestartDay" title="Restart day" description="Do you really want to restart your day ?">
-        <template #footer="{ close }">
-          <UButton label="Cancel" color="info" @click="close"/>
-          <UButton label="Ok" @click="confirmRestartDay" />
-        </template>
-      </UModal>
+      <BaseSimpleModal
+        :open="modalRestartDay" 
+        title="Restart day"
+        description="Do you really want to restart your day ?"
+        @on-ok="confirmRestartDay"/>
     </div>
 </template>
 
@@ -77,78 +63,78 @@
   getTodayTrackAndPauses()
 
   // computed properties
-  // start time of the day
-  const todayStartTime = computed(() => {
-    let text = ""
-    if(todayTrack.value?.Start) {
-      const start = new Date(todayTrack.value.Start)
-      text = start.toLocaleDateString() +" - "+start.toLocaleTimeString()
-    }
-    return text
-  })
+  // // start time of the day
+  // const todayStartTime = computed(() => {
+  //   let text = ""
+  //   if(todayTrack.value?.Start) {
+  //     const start = new Date(todayTrack.value.Start)
+  //     text = start.toLocaleDateString() +" - "+start.toLocaleTimeString()
+  //   }
+  //   return text
+  // })
 
-  // end time of the day
-  const todayEndTime = computed(() => {
-    let text = ""
-    if(todayTrack.value?.End) {
-      const end = new Date(todayTrack.value.End)
-      text = end.toLocaleDateString() +" - "+end.toLocaleTimeString()
-    }
-    return text
-  })
+  // // end time of the day
+  // const todayEndTime = computed(() => {
+  //   let text = ""
+  //   if(todayTrack.value?.End) {
+  //     const end = new Date(todayTrack.value.End)
+  //     text = end.toLocaleDateString() +" - "+end.toLocaleTimeString()
+  //   }
+  //   return text
+  // })
 
-  // start time of the current pause
-  const currentPauseStartTime = computed(() => {
-    let text = ""
-    if(currentPause.value?.Start) {
-      const start = new Date(currentPause.value.Start)
-      text = start.toLocaleDateString() +" - "+start.toLocaleTimeString()
-    }
-    return text
-  })
+  // // start time of the current pause
+  // const currentPauseStartTime = computed(() => {
+  //   let text = ""
+  //   if(currentPause.value?.Start) {
+  //     const start = new Date(currentPause.value.Start)
+  //     text = start.toLocaleDateString() +" - "+start.toLocaleTimeString()
+  //   }
+  //   return text
+  // })
 
   // const for chrono
-  const dayTimer = ref()
-  const dayChrono = ref()
+  // const dayTimer = ref()
+  // const dayChrono = ref()
   
-  const pauseTimer = ref()
-  const pauseChrono = ref()
+  // const pauseTimer = ref()
+  // const pauseChrono = ref()
 
-  // managing timer only on client side
-  onNuxtReady(async () => {
-    const startPauseChrono = () => {
-      pauseChrono.value = setInterval(() => {
-        if(currentPause.value?.Start)
-          pauseTimer.value = formatTimer(new Date(currentPause.value.Start))
-        }, 1000);
-    }
-    const startDayChrono = () => {
-      dayChrono.value = setInterval(() => {
-        if(todayTrack.value?.Start)
-          dayTimer.value = formatTimer(new Date(todayTrack.value.Start))
-        }, 1000);
-    }
-    // start at init if track not ended
-    if(!todayTrack.value?.End) {
-      startDayChrono()
-    }
-    // watch track changes
-    watch(todayTrack, ()=> {
-      if(!todayTrack.value?.End) {
-        startDayChrono()
-      }
-    })
-    // start at init if pause not ended
-    if(!currentPause.value?.End) {
-      startPauseChrono()
-    }
-    // watch pause changes
-    watch(currentPause, ()=> {
-      if(!currentPause.value?.End) {
-        startPauseChrono()
-      }
-    })
-  })
+  // // managing timer only on client side
+  // onNuxtReady(async () => {
+  //   const startPauseChrono = () => {
+  //     pauseChrono.value = setInterval(() => {
+  //       if(currentPause.value?.Start)
+  //         pauseTimer.value = formatTimer(new Date(currentPause.value.Start))
+  //       }, 1000);
+  //   }
+  //   const startDayChrono = () => {
+  //     dayChrono.value = setInterval(() => {
+  //       if(todayTrack.value?.Start)
+  //         dayTimer.value = formatTimer(new Date(todayTrack.value.Start))
+  //       }, 1000);
+  //   }
+  //   // start at init if track not ended
+  //   if(!todayTrack.value?.End) {
+  //     startDayChrono()
+  //   }
+  //   // watch track changes
+  //   watch(todayTrack, ()=> {
+  //     if(!todayTrack.value?.End) {
+  //       startDayChrono()
+  //     }
+  //   })
+  //   // start at init if pause not ended
+  //   if(!currentPause.value?.End) {
+  //     startPauseChrono()
+  //   }
+  //   // watch pause changes
+  //   watch(currentPause, ()=> {
+  //     if(!currentPause.value?.End) {
+  //       startPauseChrono()
+  //     }
+  //   })
+  // })
 
   // starting the day
   const startDay = () => {
@@ -169,7 +155,7 @@
         if(tt.End) messageToSnack("Day end at "+new Date(tt.End).toLocaleString())
       })
     }
-    clearInterval(dayChrono.value)
+    // clearInterval(dayChrono.value)
   }
 
   // staring a pause
@@ -188,7 +174,7 @@
       .then((tt) => {
         if(tt.End) messageToSnack("Pause ended at "+new Date(tt.End).toLocaleString())
       })
-      clearInterval(pauseChrono.value)
+      // clearInterval(pauseChrono.value)
     }
   }
 
@@ -229,7 +215,7 @@
       .then(async (pt) => {
         messageToSnack("Pause changed to "+new Date(pt.Start).toLocaleString())
         // refresh today track if ended
-        if(todayEndTime.value!="") {
+        if(todayTrack.value?.End) {
           getTodayTrackAndPauses()
         }
       })
