@@ -12,12 +12,24 @@
       :columns="columns"
       @hover=""
       v-model:pagination="pagination"
-      />
+      >
+    <template #action-cell="{ row }">
+      <UDropdownMenu :items="getTrackActions(row.original)">
+        <UButton
+          icon="i-lucide-ellipsis-vertical"
+          color="neutral"
+          variant="ghost"
+          aria-label="Actions"
+        />
+      </UDropdownMenu>
+    </template>
+  </UTable>      
   </div>
 </template>
 <script setup lang="ts">
-  import type { TableColumn } from '@nuxt/ui';
-
+  import type { DropdownMenuItem, TableColumn } from '@nuxt/ui';
+  import type { Row } from '@tanstack/vue-table'
+  
   // props
   const props = defineProps<{
       tracks: IBaserowListResponse
@@ -75,6 +87,33 @@
         return formatDuration(row.getValue('Duration'))
       }
     },
+    {
+      id: 'action'
+    }
   ]
 
+  function getTrackActions(track:ITimeTrack): DropdownMenuItem[][] {
+    return [[
+      {
+        type: 'label',
+        label: 'Actions'
+      },
+      {
+        label: 'Copy payment ID',
+        icon: "streamline-color:blank-calendar-flat",
+        onSelect() {
+          messageToSnack("selected track: "+track.id)
+        }
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'View customer'
+      },
+      {
+        label: 'View payment details'
+      }
+    ]]
+}
 </script>
