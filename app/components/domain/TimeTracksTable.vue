@@ -14,21 +14,23 @@
       v-model:pagination="pagination"
       >
     <template #action-cell="{ row }">
-      <UDropdownMenu :items="getTrackActions(row.original)">
+      <UButton icon="streamline-color:pencil-flat" @click="messageToSnack('Open '+row.original.id)" class="mr-1"></UButton>
+      <UButton icon="streamline-color:recycle-bin-2-flat" @click="messageToSnack('Delete '+row.original.id)" class="mr-1"></UButton>
+      <UButton icon="streamline-color:copy-paste-flat" @click="messageToSnack('Copy '+row.original.id)"></UButton>
+      <!-- <UDropdownMenu :items="getTrackActions(row.original)">
         <UButton
           icon="i-lucide-ellipsis-vertical"
           color="neutral"
           variant="ghost"
           aria-label="Actions"
         />
-      </UDropdownMenu>
+      </UDropdownMenu> -->
     </template>
   </UTable>      
   </div>
 </template>
 <script setup lang="ts">
   import type { DropdownMenuItem, TableColumn } from '@nuxt/ui';
-  import type { Row } from '@tanstack/vue-table'
   
   // props
   const props = defineProps<{
