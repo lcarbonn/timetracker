@@ -19,22 +19,18 @@
     {
       accessorKey: 'name',
       header: 'Name',
-      // cell: ({ row }) => `#${row.getValue('id')}`
     },
     {
       accessorKey: 'email',
       header: 'Email',
-      // cell: ({ row }) => `#${row.getValue('id')}`
     },
     {
       accessorKey: 'permissions',
       header: 'Permissions',
-      // cell: ({ row }) => `#${row.getValue('id')}`
     },
     {
       accessorKey: 'user_id',
       header: 'User ID',
-      // cell: ({ row }) => `#${row.getValue('id')}`
     },
   ]
 </script>

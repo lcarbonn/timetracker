@@ -27,8 +27,6 @@
 
 <script setup lang="ts">
 
-  import type { SelectItem } from '@nuxt/ui'
-
   // middleware
   definePageMeta({
     middleware: 'admin'
@@ -41,8 +39,6 @@
     pageSize : 10
   })
 
-  // const pageSize = 10
-  // const pageIndex = ref(0)
   // init on setup
   const data = await getAllTimeTracks(pagination.value)
   tracks.value = data

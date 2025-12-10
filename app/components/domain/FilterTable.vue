@@ -31,7 +31,7 @@
   const filterMonth = ref()
 
   const years = ref(['2026', '2025', '2024'])
-  const months = getMonthSelectItems() //ref(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'])
+  const months = getMonthSelectItems()
 
   // watch local refs udpates
   watch(filterUser, (newValue) => {
@@ -76,9 +76,6 @@
     filterUser.value = null
     filterYear.value = null
     filterMonth.value = null
-    // filterTracks()
-    // pageIndex.value = 0
   }
-
 
 </script>
