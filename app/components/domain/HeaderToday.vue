@@ -22,7 +22,8 @@
   </UPageCard>
 </template>
 <script setup lang="ts">
-    // props
+
+  // props
   const props = defineProps<{
       todayTrack?: ITimeTrack;
       currentPause?: IPauseTrack;

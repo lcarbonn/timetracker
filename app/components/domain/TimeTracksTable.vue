@@ -1,8 +1,8 @@
 <template>
   <div>
     <UPagination
-      :page="pagination.pageIndex+1"
-      :items-per-page="pagination.pageSize"
+      :page="localPagination.pageIndex+1"
+      :items-per-page="localPagination.pageSize"
       :total="tracks.count"
       @update:page="(p) => paginate(p)"
     />
@@ -11,7 +11,7 @@
       :data="tracks.results"
       :columns="columns"
       @hover=""
-      v-model:pagination="pagination"
+      v-model:pagination="localPagination"
       >
     <template #action-cell="{ row }">
       <UButton icon="streamline-color:pencil-flat" @click="messageToSnack('Open '+row.original.id)" class="mr-1"></UButton>
@@ -34,9 +34,8 @@
   
   // props
   const props = defineProps<{
-      tracks: IBaserowListResponse
-      pageSize: number,
-      pageIndex:number
+      tracks: IBaserowListResponse;
+      pagination: Pagination;
     }>()
 
   // emits declaration
@@ -44,15 +43,21 @@
     paginate: [page: number]
   }>()
 
-  const pagination = ref({
-    pageIndex: props.pageIndex,
-    pageSize: props.pageSize
+
+  const localPagination = ref({
+    pageIndex: props.pagination.pageIndex,
+    pageSize: props.pagination.pageSize
+  })
+
+  watch(props.pagination, (newValue, oldValue) => {
+    localPagination.value.pageIndex = newValue.pageIndex,
+    localPagination.value.pageSize = newValue.pageSize
   })
 
   const paginate = async (p:number) => {
-      emit('paginate', p)
+      emit('paginate', p-1)
       // tracks.value = await getTimeTracks(pageSize, p)
-      pagination.value.pageIndex = (p-1)
+      localPagination.value.pageIndex = (p-1)
   }
 
   const columns: TableColumn<ITimeTrack>[] = [

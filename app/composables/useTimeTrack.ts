@@ -310,15 +310,15 @@ export async function getTracksForExport(uid: number): Promise<globalThis.ITimeT
  * Get all tracks (for time tables)
  * @returns 
  */
-export async function getAllTimeTracks(itemsPerPage:number, page?:number, filter?:Filter): Promise<IBaserowListResponse> {
+export async function getAllTimeTracks(pagination:Pagination, filter?:Filter): Promise<IBaserowListResponse> {
   const config = useRuntimeConfig();
   const TIMETRACK_TABLE_ID = config.public.tableTimetrackId;
   const { $api } = useNuxtApp();
 
   const endpoint = `/api/database/rows/table/${TIMETRACK_TABLE_ID}/?user_field_names=true`;
   const queryBase = {
-      page: page?page:1,
-      size: itemsPerPage,
+      page: pagination.pageIndex?pagination.pageIndex:1,
+      size: pagination.pageSize,
       order_by: '-Start',
     }
     const queryFilters = new BaserowFilterBuilder()

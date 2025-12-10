@@ -1,3 +1,13 @@
+import type { SelectItem } from "@nuxt/ui";
+
+/**
+ * Pagination type
+ */
+export type Pagination = {
+    pageIndex: number;
+    pageSize:number;
+}
+
 /**
  * Filter type
  */
@@ -60,4 +70,21 @@ export class BaserowFilterBuilder {
   clear() {
     this.filters = [];
   }
+}
+
+export const getMonthSelectItems = () => {
+  const years = ref<SelectItem[]>([])
+  years.value.push({label: "January", value: 1})
+  years.value.push({label: "February", value: 2})
+  years.value.push({label: "March", value: 3})
+  years.value.push({label: "April", value: 4})
+  years.value.push({label: "May", value: 5})
+  years.value.push({label: "June", value: 6})
+  years.value.push({label: "July", value: 7})
+  years.value.push({label: "August", value: 8})
+  years.value.push({label: "September", value: 9})
+  years.value.push({label: "October", value: 10})
+  years.value.push({label: "November", value: 11})
+  years.value.push({label: "December", value: 12})
+  return years
 }
