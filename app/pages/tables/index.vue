@@ -1,27 +1,17 @@
 <template>
     <div>
       <UPageCard title="Tables"></UPageCard>
-      <DomainFilterTable :users="users" @filter="filterTracks"/>
-      <!-- <UPageGrid>
-        <UFormField label="User">
-          <USelect v-model="filterUser" value-key="id" :items="users" placeholder="Select a user" class="w-48"/>
-        </UFormField>
-        <UFormField label="Year">
-          <USelect v-model="filterYear" :items="years" placeholder="Select a year" class="w-48"/>
-        </UFormField>
-        <UFormField label="Month">
-          <USelect v-model="filterMonth" :items="months" placeholder="Select a month" class="w-48"/>
-        </UFormField>
-        <UFormField label="Filters">
-          <UButton @click="resetAllFilter">Reset filters</UButton>
-        </UFormField>
-      </UPageGrid> -->
+      <DomainFilterTable
+        v-if="tracks"
+        :users="users"
+        @filter="filterTracks"
+        class="mt-1"/>
       <DomainTimeTracksTable
         v-if="tracks"
         :tracks="tracks"
         :pagination="pagination"
         @paginate="paginate"
-        class="mt-4"/>
+        class="mt-1"/>
     </div>
 </template>
 
@@ -40,8 +30,7 @@
   })
 
   // init on setup
-  const data = await getAllTimeTracks(pagination.value)
-  tracks.value = data
+  tracks.value = await getAllTimeTracks(pagination.value)
   const wsusers = await getWorkspaceUsers()
   const users = getUsersSelectItems(wsusers)
 

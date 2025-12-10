@@ -36,18 +36,15 @@
   const tracks = useStateTracksOfTheWeek()
 
   // load tracks and listen to week change
-  const data = await getTracksOfTheWeek(uid, selectedWeek.value)
-  if(data) {
-    tracks.value = data as ITimeTrack[]
-    tracks.value.forEach(async track => {
-      const id = track.id
-        const pauses = await getPausesOfTrack(track.id)
-        if(pauses) {
-          refreshPausesInStateTrack(pauses)
-          refreshPausesInTracksOfTheWeek(id, pauses)
-        }
-    });
-  }
+  tracks.value = await getTracksOfTheWeek(uid, selectedWeek.value)
+  tracks.value.forEach(async track => {
+    const id = track.id
+      const pauses = await getPausesOfTrack(track.id)
+      if(pauses) {
+        refreshPausesInStateTrack(pauses)
+        refreshPausesInTracksOfTheWeek(id, pauses)
+      }
+  });
 
   // computed properties
   // effectiveDuration calculated instead of filed form base
@@ -56,9 +53,12 @@
     if(tracks.value) {
       tracks.value.forEach(track => {
         efd = efd + Number(track.Duration)
-        track.pauses?.forEach(pause => {
-          efd = efd - pause.Duration
-        });
+        // count only pauses from ended time
+        if(track.End) {
+          track.pauses?.forEach(pause => {
+            efd = efd - pause.Duration
+          });
+        }
       })
     }
     return formatDuration(efd)

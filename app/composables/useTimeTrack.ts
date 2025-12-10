@@ -317,7 +317,7 @@ export async function getAllTimeTracks(pagination:Pagination, filter?:Filter): P
 
   const endpoint = `/api/database/rows/table/${TIMETRACK_TABLE_ID}/?user_field_names=true`;
   const queryBase = {
-      page: pagination.pageIndex?pagination.pageIndex:1,
+      page: pagination.pageIndex?pagination.pageIndex+1:1,
       size: pagination.pageSize,
       order_by: '-Start',
     }

@@ -50,14 +50,11 @@
 
   // init at setup
   // cannot be called in a method at setup
-  const data = await getLastOpenTrack(uid)
-  if(data) {
-      todayTrack.value = data as ITimeTrack
-      const timeId = todayTrack.value.id
-      if(timeId) {
-        const pauses = await getPausesOfTrack(timeId)
-        if(pauses) refreshPausesInStateTrack(pauses)
-      }
+  todayTrack.value = await getLastOpenTrack(uid)
+  const timeId = todayTrack.value.id
+  if(timeId) {
+    const pauses = await getPausesOfTrack(timeId)
+    if(pauses) refreshPausesInStateTrack(pauses)
   }
 
   // starting the day
@@ -114,14 +111,14 @@
 
   const restartTrack = (track:any) => {
     updateTrack(track)
-    // if pause reopen, reopen day also
+    // if pause reopened, then reopen the current day also
     if(!track.isTrack && todayTrack.value) { 
       reopenTimeTrack(todayTrack.value.id)
     }
   }
   const closeTrack = (track:any) => {
     updateTrack(track)
-    // if day closed, the clause current pause also
+    // if day closed, then clause current pause also
     if(track.isTrack && currentPause.value) { 
       closePauseTrack(currentPause.value.id)
     }
@@ -138,14 +135,11 @@
         messageToSnack("Pause changed to "+new Date(pt.Start).toLocaleString())
         // refresh today track if ended
         if(todayTrack.value?.End) {
-          const data = await getLastOpenTrack(uid)
-          if(data) {
-              todayTrack.value = data as ITimeTrack
-              const timeId = todayTrack.value.id
-              if(timeId) {
-                const pauses = await getPausesOfTrack(timeId)
-                if(pauses) refreshPausesInStateTrack(pauses)
-              }
+          todayTrack.value = await getLastOpenTrack(uid)
+          const timeId = todayTrack.value.id
+          if(timeId) {
+            const pauses = await getPausesOfTrack(timeId)
+            if(pauses) refreshPausesInStateTrack(pauses)
           }
         }
       })
