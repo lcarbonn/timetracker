@@ -49,18 +49,16 @@
   })
 
   // init at setup
-  const getTodayTrackAndPauses = async () => {
-    const data = await getLastOpenTrack(uid)
-    if(data) {
-        todayTrack.value = data as ITimeTrack
-        const timeId = todayTrack.value.id
-        if(timeId) {
-          const pauses = await getPausesOfTrack(timeId)
-          if(pauses) refreshPausesInStateTrack(pauses)
-        }
-    }
+  // cannot be called in a method at setup
+  const data = await getLastOpenTrack(uid)
+  if(data) {
+      todayTrack.value = data as ITimeTrack
+      const timeId = todayTrack.value.id
+      if(timeId) {
+        const pauses = await getPausesOfTrack(timeId)
+        if(pauses) refreshPausesInStateTrack(pauses)
+      }
   }
-  getTodayTrackAndPauses()
 
   // starting the day
   const startDay = () => {
@@ -140,7 +138,15 @@
         messageToSnack("Pause changed to "+new Date(pt.Start).toLocaleString())
         // refresh today track if ended
         if(todayTrack.value?.End) {
-          getTodayTrackAndPauses()
+          const data = await getLastOpenTrack(uid)
+          if(data) {
+              todayTrack.value = data as ITimeTrack
+              const timeId = todayTrack.value.id
+              if(timeId) {
+                const pauses = await getPausesOfTrack(timeId)
+                if(pauses) refreshPausesInStateTrack(pauses)
+              }
+          }
         }
       })
     }

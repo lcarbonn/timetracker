@@ -37,9 +37,6 @@
 
   // load tracks and listen to week change
   const data = await getTracksOfTheWeek(uid, selectedWeek.value)
-  // {
-  //     watch:[selectedWeek]
-  // })
   if(data) {
     tracks.value = data as ITimeTrack[]
     tracks.value.forEach(async track => {
