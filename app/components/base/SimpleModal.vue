@@ -1,8 +1,8 @@
 <template>
-  <UModal v-model:open="isOpen" :title="title" :description="description">
-    <template #footer="{ close }">
+  <UModal v-model:open="open.show" :title="title" :description="description">
+    <template #footer>
       <UButton label="Cancel" color="info" @click="onCancel"/>
-      <UButton label="Ok" @click="emit('onOk')" />
+      <UButton label="Ok" @click="onOk" />
     </template>
   </UModal>
 </template>
@@ -11,7 +11,7 @@
   const props = defineProps<{
       title: string;
       description: string;
-      open:boolean;
+      open:ModalShow;
     }>()
 
   // emits declaration
@@ -20,14 +20,11 @@
     onCancel: [];
   }>()
 
-  const isOpen = ref(false)
-
-  watchEffect(() => {
-    isOpen.value = props.open
-  })
-
   const onCancel = () => {
-    close()
+    props.open.show = !props.open.show
     emit('onCancel')
+  }
+  const onOk = () => {
+    emit('onOk')
   }
 </script>

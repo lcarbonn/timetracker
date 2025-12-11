@@ -10,7 +10,7 @@ declare module '#auth-utils' {
 
   interface SecureSessionData {
     // Add your own fields
-    token:string
+    // token:string
     access_token:string
     refresh_token:string
   }

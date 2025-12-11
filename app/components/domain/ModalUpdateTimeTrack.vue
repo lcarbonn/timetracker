@@ -1,9 +1,8 @@
 <template>
   <div>
       <UModal
-        v-model:open="modalUpdateTrack.show"
-        id="modal-update"
         :title="titleHead +' '+ title"
+        v-model:open="modalUpdateTrack.show"
         scrollable 
         :dismissible="false">
         <template #body>
@@ -56,30 +55,18 @@
             <UTooltip :text="'Update this '+title">
               <UButton :label="titleHead" @click="preventOk" />
             </UTooltip>
+            <BaseSimpleModal 
+              :open="modalDelete"
+              :title="'Delete ' +title"
+              description="Really ?"
+              @on-ok="confirmDelete"/>
+            <BaseSimpleModal 
+              :open="modalRestart"
+              :title="'Restart ' +title"
+              description="Really ?"
+              @on-ok="confirmRestart"/>
           </template>
       </UModal>
-      <BaseSimpleModal 
-        :open="modalDelete"
-        :title="'Delete ' +title"
-        description="Really ?"
-        @on-ok="confirmDelete"/>
-      <BaseSimpleModal 
-        :open="modalRestart"
-        :title="'Restart ' +title"
-        description="Really ?"
-        @on-ok="confirmRestart"/>
-      <!-- <UModal v-model:open="modalDelete" :title="'Delete ' +title" description="Really ?">
-        <template #footer="{ close }">
-          <UButton label="Cancel" color="info"  @click="close"/>
-          <UButton label="Ok" @click="confirmDelete" />
-        </template>
-      </UModal> -->
-      <!-- <UModal v-model:open="modalRestart" :title="'Restart ' +title" description="Really ?">
-        <template #footer="{ close }">
-          <UButton label="Cancel" color="info"  @click="close"/>
-          <UButton label="Ok" @click="confirmRestart" />
-        </template>
-      </UModal> -->
   </div>
 </template>
 
@@ -109,8 +96,8 @@
   // local refs
   const startDateForm = ref(props.timeTrack.start)
   const endDateForm = ref(props.timeTrack.end)
-  const modalDelete = ref(false)
-  const modalRestart = ref(false)
+  const modalDelete = ref(new ModalShow())
+  const modalRestart = ref(new ModalShow())
   const isEnded = ref(props.timeTrack.extendedProps.isEnded)
   const isRestart = ref(props.timeTrack.extendedProps.isRestart)
   const isCloseAsked = ref(false)
@@ -167,22 +154,22 @@
 
   // ask for modal before delete
   const deleteTrack = () => {
-    modalDelete.value = !modalDelete.value
+    modalDelete.value.show = !modalDelete.value.show
   }
   // confirm delete received
   const confirmDelete = () => {
     props.modalUpdateTrack.show = false
-    modalDelete.value = !modalDelete.value
+    modalDelete.value.show = !modalDelete.value.show
     emit('deleteTrack', props.timeTrack.id)
   }
   // ask for modal before restart
   const restartTrack = () => {
-    modalRestart.value = !modalRestart.value
+    modalRestart.value.show = !modalRestart.value.show
   }
   // confirm restart received
   const confirmRestart = () => {
     props.modalUpdateTrack.show = false
-    modalRestart.value = !modalRestart.value
+    modalRestart.value.show = !modalRestart.value.show
     const start = new Date(startDateForm.value)
     emit('restartTrack', props.timeTrack.id, start, null)
   }

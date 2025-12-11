@@ -40,7 +40,7 @@
   const currentPause = useStatePause()
 
   // local refs
-  const openModalRestartDay = ref(false)
+  const openModalRestartDay = ref(new ModalShow())
   const selectedTrack = ref()
   const tracks = computed(() => {
     const tracks = []
@@ -51,10 +51,12 @@
   // init at setup
   // cannot be called in a method at setup
   todayTrack.value = await getLastOpenTrack(uid)
-  const timeId = todayTrack.value.id
-  if(timeId) {
-    const pauses = await getPausesOfTrack(timeId)
-    if(pauses) refreshPausesInStateTrack(pauses)
+  if(todayTrack.value) {
+    const timeId = todayTrack.value.id
+    if(timeId) {
+      const pauses = await getPausesOfTrack(timeId)
+      if(pauses) refreshPausesInStateTrack(pauses)
+    }
   }
 
   // starting the day
@@ -100,12 +102,12 @@
   // restart today track
   const restartDay = () => {
     selectedTrack.value = useStateTrack().value
-    openModalRestartDay.value = !openModalRestartDay.value
+    openModalRestartDay.value.show = !openModalRestartDay.value.show
   }
 
   // confirm restart received
   const confirmRestartDay = () => {
-    openModalRestartDay.value = !openModalRestartDay.value
+    openModalRestartDay.value.show = !openModalRestartDay.value.show
     reopenTimeTrack(selectedTrack.value.id)
   }
 
