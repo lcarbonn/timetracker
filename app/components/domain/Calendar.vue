@@ -2,8 +2,7 @@
     <div>
       <FullCalendar 
         ref="fullCalendar"
-        :options="calendarOptions"
-        height="100%"/>
+        :options="calendarOptions"/>
       <LazyDomainModalUpdateTimeTrack
         v-if="selectedEvent"
         :modalUpdateTrack="modalUpdateTrack"
@@ -45,6 +44,7 @@
   const emit = defineEmits(['navToWeek', 'updateTrack', 'closeTrack', 'deleteTrack', 'restartTrack', 'createTrack'])
 
   const fullCalendar = ref()
+
   const selectedEvent = ref()
   const todayWeek = getWeekNumber(new Date())
   const currentWeek = ref(props.selectedWeek?props.selectedWeek:todayWeek)
@@ -244,4 +244,13 @@
     }
     emit('deleteTrack', track)
   }
+
+  // const windowResize = () => {
+  //   const windowWidth: number = window.innerWidth;
+  //   if(windowWidth < 768) fullCalendar.value.setOptions('aspectRatio', 1.15)
+  //   else fullCalendar.value.setOptions('aspectRatio', 1,35)
+  //   // alert('The calendar has adjusted to a window resize. Current view: ' + arg.view.calendar);
+  // }
+  // windowResize()
+
 </script>
