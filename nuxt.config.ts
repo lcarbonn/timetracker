@@ -20,7 +20,15 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/ui',
     '@vite-pwa/nuxt',
-    "nuxt-auth-utils"],
+    "nuxt-auth-utils",
+    '@nuxtjs/i18n'
+  ],
+
+  i18n: {
+    locales: ['en', 'fr', 'es'],
+    defaultLocale: 'fr',
+    vueI18n: './i18n.config.ts'
+  },
 
   css: ['~/assets/css/main.css'],
 
