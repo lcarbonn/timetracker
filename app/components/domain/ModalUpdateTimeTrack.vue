@@ -6,36 +6,19 @@
         scrollable 
         :dismissible="false">
         <template #body>
-          <UFormField
-            label="Start"
-          >
-          <VueDatePicker id="startDate"
-            v-model="startDateForm"
-            :formats="{ input: 'dd/MM/yyyy - HH:mm' }"
-            auto-apply
-            enable-time-picker
-            text-input
-            :start-date="minDate"
-            :min-date="minDate"
-            :max-date="maxDate"
-            prevent-min-max-navigation
-            :state="startDateState"/>
+          <UFormField label="Start" :error="startDateState">
+            <UiDatePicker 
+              v-model="startDateForm"
+              enable-time-picker
+              :min-date="minDate"
+              :max-date="maxDate"/>
           </UFormField>
-          <UFormField
-            v-if="isEnded"
-            label="End"
-          >
-          <VueDatePicker id="endDate"
-            v-model="endDateForm"
-            :formats="{ input: 'dd/MM/yyyy - HH:mm' }"
-            auto-apply
-            enable-time-picker
-            text-input
-            :start-date="minDate"
-            :min-date="minDate"
-            :max-date="maxDate"
-            prevent-min-max-navigation
-            :state="endDateState"/>
+          <UFormField v-if="isEnded" label="End" :error="endDateState">
+            <UiDatePicker 
+              v-model="endDateForm"
+              enable-time-picker
+              :min-date="minDate"
+              :max-date="maxDate"/>
           </UFormField>
           </template>
           <template #footer>
@@ -46,7 +29,7 @@
               <UButton v-if="isRestart && isEnded" @click="restartTrack()" icon="streamline-color:arrow-round-left-flat"/>
             </UTooltip>
             <UTooltip :text="'Close this '+title">
-              <UButton v-if="!isEnded"  class="mx-1" @click="closeTrack()" icon="streamline-color:xrp-circle-flat"/>
+              <UButton v-if="!isEnded"  class="mx-1" @click="closeTrack()" icon="streamline-color:delete-1-flat"/>
             </UTooltip>
             <UTooltip text="Add a pause">
               <UButton v-if="isTrack && !isNew && isEnded" class="mx-1" @click="addPause()">Add pause</UButton>
@@ -55,12 +38,12 @@
             <UTooltip :text="'Update this '+title">
               <UButton :label="titleHead" @click="preventOk" />
             </UTooltip>
-            <BaseSimpleModal 
+            <UiSimpleModal 
               :open="modalDelete"
               :title="'Delete ' +title"
               description="Really ?"
               @on-ok="confirmDelete"/>
-            <BaseSimpleModal 
+            <UiSimpleModal 
               :open="modalRestart"
               :title="'Restart ' +title"
               description="Really ?"
@@ -71,10 +54,6 @@
 </template>
 
 <script setup lang="ts">
-
-  // import datepicker vue component
-  import { VueDatePicker } from '@vuepic/vue-datepicker'
-  import '@vuepic/vue-datepicker/dist/main.css'
 
   // props
   const props = defineProps({
@@ -120,10 +99,10 @@
     return isNew.value?"Add":"Update"
   })
   const startDateState = computed(() => {
-    return startDateForm.value != null ? true:false
+    return startDateForm.value == null ? true:false
   })
   const endDateState = computed(() => {
-    return endDateForm.value != null ? true:false
+    return endDateForm.value == null ? true:false
   })
   const isTrack = computed(() => {
     return props.timeTrack.extendedProps.isTrack

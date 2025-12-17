@@ -15,7 +15,7 @@
         @delete-track="deleteTrack"
         @create-track="createTrack"
         @restart-track="restartTrack"/>
-      <BaseSimpleModal
+      <UiSimpleModal
         :open="openModalRestartDay" 
         title="Restart day"
         description="Do you really want to restart your day ?"

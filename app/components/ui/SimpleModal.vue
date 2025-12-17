@@ -1,5 +1,9 @@
 <template>
-  <UModal v-model:open="open.show" :title="title" :description="description">
+  <UModal 
+    v-model:open="open.show"
+    :title="title"
+    :description="description"
+    :ui="{ footer: 'justify-end' }">
     <template #footer>
       <UButton label="Cancel" color="info" @click="onCancel"/>
       <UButton label="Ok" @click="onOk" />

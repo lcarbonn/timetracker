@@ -1,5 +1,5 @@
 <template>
-  <UApp :toaster="{ position: 'top-right' }">
+  <UApp :toaster="{ position: 'top-right' }" :locale="fr">
     <VitePwaManifest/>
     <BaseNavBar></BaseNavBar>
     <BaseSnackToast></BaseSnackToast>
@@ -15,6 +15,8 @@
 </template>
 <script setup lang="ts">
 
+  import { fr } from '@nuxt/ui/locale'
+  
   // imports
   import { name, version } from '../package.json';
 
